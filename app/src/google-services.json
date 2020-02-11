@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "360121486048",
+    "firebase_url": "https://jans-societyoo.firebaseio.com",
+    "project_id": "jans-societyoo",
+    "storage_bucket": "jans-societyoo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:360121486048:android:ce6a7b6fc73b4e42a3de85",
+        "android_client_info": {
+          "package_name": "com.jans.societyoo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "360121486048-5e39qnn2bul4pdc76100b9aj2gbkuuag.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jans.societyoo",
+            "certificate_hash": "1b4656f6f98d06eec74b80d70b2075edd0e725ca"
+          }
+        },
+        {
+          "client_id": "360121486048-jdvd0ho7rupq114vv91pm9gkopascgto.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjKu4MDNAtVSwJlXKkhWy5z8I2Og1qYAw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "360121486048-jdvd0ho7rupq114vv91pm9gkopascgto.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

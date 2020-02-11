@@ -1,2 +1,5 @@
-include ':app'
 rootProject.name='JANS-SocietyOO'
+
+include ':app'
+include ':libraries:tracking'
+include ':libraries:imageload'
