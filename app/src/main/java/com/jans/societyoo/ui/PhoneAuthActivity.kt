@@ -1,4 +1,4 @@
-package com.jans.societyoo.views.ui
+package com.jans.societyoo.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

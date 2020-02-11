@@ -1,4 +1,4 @@
-package com.jans.societyoo.views.ui
+package com.jans.societyoo.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.WindowManager
 import com.jans.societyoo.R
 import com.jans.societyoo.data.local.prefs.UserPreferences
+import com.jans.societyoo.ui.login.LoginActivity
+import com.jans.societyoo.ui.login.LoginActivitySample
 import com.jans.tracking.EventName
 import com.jans.tracking.PropertyName
 import com.jans.tracking.Tracking
@@ -51,6 +53,6 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        //startActivity(Intent(this, PhoneAuthActivity::class.java))
+        startActivity(Intent(this, LoginActivitySample::class.java))
     }
 }
