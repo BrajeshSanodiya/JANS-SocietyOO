@@ -1,5 +1,6 @@
 rootProject.name='JANS-SocietyOO'
 
 include ':app'
+include ':libraries:otpview'
 include ':libraries:tracking'
 include ':libraries:imageload'

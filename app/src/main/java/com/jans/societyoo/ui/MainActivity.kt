@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
                 superPropertyMap = mapOf(Pair(PropertyName.LOGIN_STATUS, "Non Logged In")),
                 trackRequestOption = TrackingOptions(firebase = true, comscore = false)
             )
+            startActivity(Intent(this, LoginActivity::class.java))
         }
 
         startActivity(Intent(this, LoginActivity::class.java))

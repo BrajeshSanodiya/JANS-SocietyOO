@@ -11,8 +11,11 @@ import com.jans.societyoo.data.remote.Result
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
-    private val _loginForm = MutableLiveData<LoginFieldState>()
-    val loginFormState: LiveData<LoginFieldState> = _loginForm
+    private val _loginFormState = MutableLiveData<LoginFieldState>()
+    val loginFormState: LiveData<LoginFieldState> = _loginFormState
+
+    private val _loginEventState = MutableLiveData<LoginEventState>()
+    val loginEventState: LiveData<LoginEventState> = _loginEventState
 
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
@@ -31,10 +34,19 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
     fun mobileDataChanged(mobile: String) {
         if (!isMobileValid(mobile)) {
+            _loginFormState.value = LoginFieldState(mobileNumberError = R.string.invalid_mobile,loginState = LoginState.MOBILE_INPUT)
+        } else {
+            _loginFormState.value = LoginFieldState(isDataValid = true,loginState = LoginState.MOBILE_INPUT)
+        }
+    }
+
+    fun loginFragmentChanged(loginState: Int) {
+       /* if (!isMobileValid(mobile)) {
             _loginForm.value = LoginFieldState(mobileNumberError = R.string.invalid_mobile,loginState = LoginState.MOBILE_INPUT)
         } else {
             _loginForm.value = LoginFieldState(isDataValid = true,loginState = LoginState.MOBILE_INPUT)
-        }
+        }*/
+        _loginEventState.value = LoginEventState(loginState)
     }
 
     // A placeholder password validation check
@@ -61,4 +73,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     private fun isPasswordValid(password: String): Boolean {
         return password.length > 5
     }
+
+
+
 }

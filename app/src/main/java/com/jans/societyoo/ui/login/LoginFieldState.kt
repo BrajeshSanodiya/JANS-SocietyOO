@@ -10,6 +10,12 @@ data class LoginFieldState(
     val isDataValid: Boolean = false,
     val loginState:Int?=null
 )
+
+data class LoginEventState(
+    val fragmentState:Int
+    //, val isDataValid: Boolean
+)
+
 class LoginState{
 companion object{
     val PRE_REGISTRATION:Int=1021
