@@ -11,11 +11,15 @@ import com.jans.societyoo.data.remote.Result
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
-    private val _loginFormState = MutableLiveData<LoginFieldState>()
-    val loginFormState: LiveData<LoginFieldState> = _loginFormState
+    private val _loginMobileViewState = MutableLiveData<LoginMobileViewState>()
+    val loginMobileViewState: LiveData<LoginMobileViewState> = _loginMobileViewState
 
-    private val _loginEventState = MutableLiveData<LoginEventState>()
-    val loginEventState: LiveData<LoginEventState> = _loginEventState
+    private val _loginOtpViewState = MutableLiveData<LoginOtpViewState>()
+    val loginOtpViewState: LiveData<LoginOtpViewState> = _loginOtpViewState
+
+
+    private val _loginViewState = MutableLiveData<LoginViewState>()
+    val loginViewState: LiveData<LoginViewState> = _loginViewState
 
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
@@ -34,25 +38,26 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
     fun mobileDataChanged(mobile: String) {
         if (!isMobileValid(mobile)) {
-            _loginFormState.value = LoginFieldState(mobileNumberError = R.string.invalid_mobile,loginState = LoginState.MOBILE_INPUT)
+            _loginMobileViewState.value = LoginMobileViewState(mobileNumberError = R.string.invalid_mobile)
         } else {
-            _loginFormState.value = LoginFieldState(isDataValid = true,loginState = LoginState.MOBILE_INPUT)
+            _loginMobileViewState.value = LoginMobileViewState(isDataValid = true)
         }
+    }
+    fun showMobileNextButton(mobile: String) {
+            _loginMobileViewState.value = LoginMobileViewState(isDataValid = isMobileValid(mobile))
+    }
+    fun showOtpNextButton(otpValue:String?, isFilled: Boolean) {
+        _loginOtpViewState.value = LoginOtpViewState(otpValue = otpValue,isDataValid = isFilled)
     }
 
     fun loginFragmentChanged(loginState: Int) {
-       /* if (!isMobileValid(mobile)) {
-            _loginForm.value = LoginFieldState(mobileNumberError = R.string.invalid_mobile,loginState = LoginState.MOBILE_INPUT)
-        } else {
-            _loginForm.value = LoginFieldState(isDataValid = true,loginState = LoginState.MOBILE_INPUT)
-        }*/
-        _loginEventState.value = LoginEventState(loginState)
+        _loginViewState.value = LoginViewState(loginState)
     }
 
-    // A placeholder password validation check
     private fun isMobileValid(mobile: String): Boolean {
         return mobile.length ==10
     }
+
 
     // A placeholder username validation check
     private fun isEmailValid(email: String): Boolean {

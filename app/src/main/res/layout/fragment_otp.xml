@@ -22,24 +22,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
+    <!--android:itemBackground="@drawable/bg_otp_item"-->
     <com.jans.otpview.OtpView
         android:id="@+id/otp_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="number"
-        android:itemBackground="@drawable/bg_otp_item"
         android:textColor="@android:color/white"
-        app:hideLineWhenFilled="true"
+        app:hideLineWhenFilled="false"
         app:itemCount="6"
         app:itemSpacing="6dp"
         app:layout_constraintBottom_toTopOf="@+id/btnNext"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
+        android:itemBackground="@drawable/bg_otp_item"
         app:lineColor="@drawable/otp_item_state"
         app:state_filled="true"
-        app:viewType="line"
+        app:viewType="rectangle"
         tools:ignore="MissingConstraints"
         android:focusableInTouchMode="true"
         android:focusable="true"

@@ -36,7 +36,7 @@ class MobileFragment : Fragment() {
         val btnNext = rootView.btnNext
         val loading = rootView.loading
         loginViewModel = ViewModelProvider(activity!!.viewModelStore, LoginViewModelFactory()).get(LoginViewModel::class.java)
-        loginViewModel.loginFormState.observe(viewLifecycleOwner, Observer {
+        loginViewModel.loginMobileViewState.observe(viewLifecycleOwner, Observer {
             val mobileState = it ?: return@Observer
             btnNext.isEnabled = mobileState.isDataValid
             if (mobileState.mobileNumberError != null) {

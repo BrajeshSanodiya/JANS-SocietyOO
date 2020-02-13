@@ -3,17 +3,18 @@ package com.jans.societyoo.ui.login
 /**
  * Data validation state of the login form.
  */
-data class LoginFieldState(
-    val nameError: Int? = null,
-    val emailError: Int? = null,
+data class LoginMobileViewState(
     val mobileNumberError: Int? = null,
-    val isDataValid: Boolean = false,
-    val loginState:Int?=null
+    val isDataValid: Boolean = false
 )
 
-data class LoginEventState(
+data class LoginOtpViewState(
+    val otpValue:String?=null,
+    val otpError: Int? = null,
+    val isDataValid: Boolean = false
+)
+data class LoginViewState(
     val fragmentState:Int
-    //, val isDataValid: Boolean
 )
 
 class LoginState{

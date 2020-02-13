@@ -40,4 +40,5 @@ dependencies {
     implementation project(':libraries:tracking')
     implementation project(':libraries:imageload')
     implementation project(':libraries:otpview')
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 }

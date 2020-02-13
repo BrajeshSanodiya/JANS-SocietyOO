@@ -53,6 +53,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, LoginActivity::class.java))
         }
 
-        startActivity(Intent(this, LoginActivity::class.java))
+        //startActivity(Intent(this, LoginActivity::class.java))
     }
 }

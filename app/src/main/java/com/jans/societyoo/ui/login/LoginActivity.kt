@@ -26,15 +26,10 @@ class LoginActivity : AppCompatActivity(), LoginCallbackListener {
             viewModelStore,
             LoginViewModelFactory()
         ).get(LoginViewModel::class.java)
-        loginViewModel.loginEventState.observe(this, Observer {
-            val loginEventState = it ?: return@Observer
 
-            //if(loginEventState.isDataValid){
+        loginViewModel.loginViewState.observe(this, Observer {
+            val loginEventState = it ?: return@Observer
                 changeFragment(loginEventState.fragmentState!!)
-//            }
-//            else{
-//
-//            }
         })
 
     }
@@ -52,9 +47,9 @@ class LoginActivity : AppCompatActivity(), LoginCallbackListener {
 
         override fun getItem(position: Int): Fragment {
             if (position == 0) {
-                return OTPFragment()
-            } else {
                 return MobileFragment()
+            } else {
+                return OTPFragment()
             }
         }
     }
