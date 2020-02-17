@@ -34,10 +34,11 @@
         android:focusableInTouchMode="true"
         android:inputType="number"
         android:itemBackground="@drawable/bg_otp_item"
-        android:textColor="@android:color/white"
         app:hideLineWhenFilled="false"
         app:itemCount="4"
         app:itemSpacing="12dp"
+        app:lineWidth="2dp"
+        app:cursorColor="@color/colorAccent"
         android:textSize="20sp"
        android:layout_below="@+id/textView"
         app:lineColor="@drawable/otp_item_state"
@@ -62,6 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:enabled="false"
+            android:background="@drawable/btn_box_bg"
             android:text="@string/verify_btn_otp" />
 
         <TextView
@@ -71,7 +73,19 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="28dp"
             android:text="@string/resend_btn_otp"
+            android:enabled="false"
+            android:textColor="@drawable/text_selector"
             android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="wait 0s"
+            android:textColor="@drawable/text_selector"
+            android:textSize="14sp" />
 
     </LinearLayout>
 

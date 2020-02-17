@@ -36,7 +36,7 @@
         android:imeActionLabel="@string/action_sign_in_short"
         android:imeOptions="actionDone"
         android:inputType="number"
-        android:background="@drawable/et_box_bg" />
+        android:background="@drawable/et_box_bg"/>
 
     <Button
         android:id="@+id/btnNext"
@@ -47,6 +47,7 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="start"
         android:enabled="false"
+        android:background="@drawable/btn_box_bg"
         android:text="@string/next_btn_mobile" />
 
     <ProgressBar

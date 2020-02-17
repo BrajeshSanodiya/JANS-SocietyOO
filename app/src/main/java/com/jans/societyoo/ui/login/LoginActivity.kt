@@ -20,6 +20,7 @@ class LoginActivity : AppCompatActivity(), LoginCallbackListener {
         setContentView(R.layout.activity_login)
 
         nonSwipeableViewPager = findViewById(R.id.login_pager)
+        nonSwipeableViewPager!!.offscreenPageLimit=0
         nonSwipeableViewPager!!.adapter = NonSwipeableLoginPagerAdapter(supportFragmentManager)
 
         loginViewModel = ViewModelProvider(
@@ -42,7 +43,7 @@ class LoginActivity : AppCompatActivity(), LoginCallbackListener {
     }
 
     private inner class NonSwipeableLoginPagerAdapter(fm: FragmentManager) :
-        FragmentStatePagerAdapter(fm) {
+        FragmentStatePagerAdapter(fm,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
         override fun getCount(): Int = 2
 
         override fun getItem(position: Int): Fragment {

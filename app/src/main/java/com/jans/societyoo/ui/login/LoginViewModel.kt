@@ -46,6 +46,8 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     fun mobileDataChanged(mobile: String) {
         if (isMobileValid(mobile)) {
             _loginMobileViewState.value = LoginMobileViewState(isDataValid = true)
+        }else{
+            _loginMobileViewState.value = LoginMobileViewState(isDataValid = false)
         }
         /*else {
             _loginMobileViewState.value = LoginMobileViewState(mobileNumberError = R.string.invalid_mobile)
@@ -56,6 +58,9 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     }
     fun showOtpNextButton(otpValue:String?, isFilled: Boolean) {
         _loginOtpViewState.value = LoginOtpViewState(otpValue = otpValue,isDataValid = isFilled)
+    }
+    fun hideNextButton() {
+        _loginOtpViewState.value = LoginOtpViewState(isDataValid = false)
     }
     fun otpResend() {
         _loginOtpViewState.value = LoginOtpViewState(isOtpResend = true)
