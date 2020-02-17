@@ -51,8 +51,10 @@ class MobileFragment : Fragment() {
                 showLoginFailed(loginResult.error)
             }
             if (loginResult.success != null) {
-                updateUiWithUser(loginResult.success)
+                //updateUiWithUser(loginResult.success)
+                loginViewModel.setMobileNumberLiveData(etMobile.text.toString())
                 loginViewModel.loginFragmentChanged(LoginState.OTP_VERIFY)
+
             }
         })
 
@@ -81,14 +83,14 @@ class MobileFragment : Fragment() {
     }
 
 
-    private fun updateUiWithUser(model: LoginUserView) {
+    /*private fun updateUiWithUser(model: LoginUserView) {
         val mobileNumber = model.mobileNumber
         Toast.makeText(
             context,
             "$mobileNumber",
             Toast.LENGTH_LONG
         ).show()
-    }
+    }*/
 
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(context, errorString, Toast.LENGTH_SHORT).show()

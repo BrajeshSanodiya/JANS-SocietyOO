@@ -38,6 +38,7 @@
         app:hideLineWhenFilled="false"
         app:itemCount="4"
         app:itemSpacing="12dp"
+        android:textSize="20sp"
        android:layout_below="@+id/textView"
         app:lineColor="@drawable/otp_item_state"
         app:state_filled="true"
@@ -69,7 +70,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="28dp"
-            android:enabled="false"
             android:text="@string/resend_btn_otp"
             android:textSize="18sp" />
 

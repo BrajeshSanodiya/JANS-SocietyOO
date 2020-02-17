@@ -11,7 +11,9 @@ data class LoginMobileViewState(
 data class LoginOtpViewState(
     val otpValue:String?=null,
     val otpError: Int? = null,
-    val isDataValid: Boolean = false
+    val isOtpResend: Boolean = false,
+    val isDataValid: Boolean = false,
+    val mobileNumber: String?=null
 )
 data class LoginViewState(
     val fragmentState:Int

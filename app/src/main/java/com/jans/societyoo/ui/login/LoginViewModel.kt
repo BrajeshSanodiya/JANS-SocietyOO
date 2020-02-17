@@ -11,18 +11,23 @@ import com.jans.societyoo.data.remote.Result
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
+    val mobileNumberLiveData = MutableLiveData<String>()
+
     private val _loginMobileViewState = MutableLiveData<LoginMobileViewState>()
     val loginMobileViewState: LiveData<LoginMobileViewState> = _loginMobileViewState
 
     private val _loginOtpViewState = MutableLiveData<LoginOtpViewState>()
     val loginOtpViewState: LiveData<LoginOtpViewState> = _loginOtpViewState
 
-
     private val _loginViewState = MutableLiveData<LoginViewState>()
     val loginViewState: LiveData<LoginViewState> = _loginViewState
 
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
+
+    fun setMobileNumberLiveData(mobile:String){
+        mobileNumberLiveData.value=mobile
+    }
 
     fun mobile(mobile: String) {
         if (isMobileValid(mobile)) {
@@ -51,6 +56,9 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     }
     fun showOtpNextButton(otpValue:String?, isFilled: Boolean) {
         _loginOtpViewState.value = LoginOtpViewState(otpValue = otpValue,isDataValid = isFilled)
+    }
+    fun otpResend() {
+        _loginOtpViewState.value = LoginOtpViewState(isOtpResend = true)
     }
 
     fun loginFragmentChanged(loginState: Int) {
