@@ -63,7 +63,10 @@ class MobileFragment : Fragment() {
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->
-                        loginViewModel.mobile(etMobile.text.toString())
+                    {
+                            loginViewModel.mobile(etMobile.text.toString())
+                    }
+
                 }
                 false
             }

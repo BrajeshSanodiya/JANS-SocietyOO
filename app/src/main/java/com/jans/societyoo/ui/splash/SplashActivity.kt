@@ -15,7 +15,7 @@ class SplashActivity : AppCompatActivity() {
     private val activityLaunchRunnable = Runnable { callNextActivity() }
 
     private fun callNextActivity() {
-        startActivity(Intent(this,LoginActivity::class.java))
+        startActivity(Intent(this, LoginActivity                                                                                                ::class.java))
         finish()
     }
 
@@ -23,10 +23,12 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_splash)
-        fullscreen_content.setOnClickListener {
-
+        tvWelcome_splash.text =resources.getString(R.string.welcome_splash, resources.getString(R.string.app_name))
+        tvContinue_splash.setOnClickListener {
+            //handler.postDelayed(activityLaunchRunnable, 100)
+            callNextActivity()
         }
 
-        handler.postDelayed(activityLaunchRunnable, 2000)
+
     }
 }

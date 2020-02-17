@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,11 +7,25 @@
     tools:context=".ui.splash.SplashActivity">
 
 
+    <TextView
+        android:id="@+id/tvWelcome_splash"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="56dp"
+        android:keepScreenOn="true"
+        android:text="@string/app_name"
+        android:textColor="@color/colorAccent"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
     <LinearLayout
-        style="?metaButtonBarStyle"
+        android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center"
+
         android:orientation="vertical"
         tools:ignore="UselessParent">
         <ImageView
@@ -25,7 +39,6 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/fullscreen_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -35,8 +48,22 @@
             android:text="@string/app_name"
             android:textColor="@color/colorAccent"
             android:textSize="28sp"
+            android:visibility="gone"
             android:textStyle="bold" />
 
     </LinearLayout>
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/tvContinue_splash"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:keepScreenOn="true"
+        android:text="@string/continue_splash"
+        android:textColor="@color/colorAccent"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+</RelativeLayout>

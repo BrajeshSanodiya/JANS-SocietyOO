@@ -1,9 +1,10 @@
 package com.jans.societyoo.ui
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import com.jans.societyoo.R
 import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.ui.login.LoginActivity
@@ -13,12 +14,18 @@ import com.jans.tracking.Tracking
 import com.jans.tracking.TrackingOptions
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.activity_main)
+
+        //val actionBar: ActionBar? = supportActionBar
+        supportActionBar!!.setDisplayShowHomeEnabled(true);
+        supportActionBar!!.setLogo(R.drawable.header_logo);
+        supportActionBar!!.setDisplayUseLogoEnabled(true);
 
         var preferences=UserPreferences(this)
         println("--------------- Pref ---------------")

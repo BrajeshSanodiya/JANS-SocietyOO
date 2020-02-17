@@ -25,23 +25,26 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     val loginResult: LiveData<LoginResult> = _loginResult
 
     fun mobile(mobile: String) {
-        // can be launched in a separate asynchronous job
+        if (isMobileValid(mobile)) {
         val result = loginRepository.mobileOTP(mobile)
-
         if (result is Result.Success) {
             _loginResult.value =
                 LoginResult(success = LoginUserView(mobileNumber = result.data.mobileNumber))
         } else {
             _loginResult.value = LoginResult(error = R.string.login_failed)
         }
+        }else{
+            _loginMobileViewState.value = LoginMobileViewState(mobileNumberError = R.string.invalid_mobile)
+        }
     }
 
     fun mobileDataChanged(mobile: String) {
-        if (!isMobileValid(mobile)) {
-            _loginMobileViewState.value = LoginMobileViewState(mobileNumberError = R.string.invalid_mobile)
-        } else {
+        if (isMobileValid(mobile)) {
             _loginMobileViewState.value = LoginMobileViewState(isDataValid = true)
         }
+        /*else {
+            _loginMobileViewState.value = LoginMobileViewState(mobileNumberError = R.string.invalid_mobile)
+        }*/
     }
     fun showMobileNextButton(mobile: String) {
             _loginMobileViewState.value = LoginMobileViewState(isDataValid = isMobileValid(mobile))

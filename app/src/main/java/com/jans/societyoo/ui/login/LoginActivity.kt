@@ -17,8 +17,8 @@ class LoginActivity : AppCompatActivity(), LoginCallbackListener {
     private var nonSwipeableViewPager: NonSwipeableViewPager? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_login)
+
         nonSwipeableViewPager = findViewById(R.id.login_pager)
         nonSwipeableViewPager!!.adapter = NonSwipeableLoginPagerAdapter(supportFragmentManager)
 
@@ -29,7 +29,7 @@ class LoginActivity : AppCompatActivity(), LoginCallbackListener {
 
         loginViewModel.loginViewState.observe(this, Observer {
             val loginEventState = it ?: return@Observer
-                changeFragment(loginEventState.fragmentState!!)
+                changeFragment(loginEventState.fragmentState)
         })
 
     }
