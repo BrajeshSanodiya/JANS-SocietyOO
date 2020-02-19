@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
 import com.jans.societyoo.R
-import com.jans.societyoo.data.remote.LoginRepository
-import com.jans.societyoo.data.remote.Result
+import com.jans.societyoo.data.repository.LoginRepository
+import com.jans.societyoo.data.remote.ResultOld
 
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
@@ -32,7 +32,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     fun mobile(mobile: String) {
         if (isMobileValid(mobile)) {
         val result = loginRepository.mobileOTP(mobile)
-        if (result is Result.Success) {
+        if (result is ResultOld.Success) {
             _loginResult.value =
                 LoginResult(success = LoginUserView(mobileNumber = result.data.mobileNumber))
         } else {

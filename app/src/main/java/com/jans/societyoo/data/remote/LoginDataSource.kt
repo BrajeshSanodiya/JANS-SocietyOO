@@ -9,23 +9,23 @@ import java.io.IOException
  */
 class LoginDataSource {
 
-    fun mobileOTP(mobile:String): Result<MobileOtpModel> {
+    fun mobileOTP(mobile:String): ResultOld<MobileOtpModel> {
         try {
             // TODO: handle loggedInUser authentication
             val fakeUser = MobileOtpModel(mobile)
-            return Result.Success(fakeUser)
+            return ResultOld.Success(fakeUser)
         } catch (e: Throwable) {
-            return Result.Error(IOException("Error logging in", e))
+            return ResultOld.Error(IOException("Error logging in", e))
         }
     }
 
-    fun login(userId:String,displayName:String,mobileNumber:String,emailID:String): Result<LoginModel> {
+    fun login(userId:String,displayName:String,mobileNumber:String,emailID:String): ResultOld<LoginModel> {
         try {
             // TODO: handle loggedInUser authentication
             val fakeUser = LoginModel(userId,displayName,mobileNumber,emailID)
-            return Result.Success(fakeUser)
+            return ResultOld.Success(fakeUser)
         } catch (e: Throwable) {
-            return Result.Error(IOException("Error logging in", e))
+            return ResultOld.Error(IOException("Error logging in", e))
         }
     }
 

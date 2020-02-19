@@ -1,7 +1,9 @@
-package com.jans.societyoo.data.remote
+package com.jans.societyoo.data.repository
 
 import com.jans.loginsample.data.model.LoginModel
 import com.jans.loginsample.data.model.MobileOtpModel
+import com.jans.societyoo.data.remote.LoginDataSource
+import com.jans.societyoo.data.remote.ResultOld
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -31,11 +33,11 @@ class LoginRepository(val dataSource: LoginDataSource) {
         dataSource.logout()
     }
 
-    fun mobileOTP(mobile: String): Result<MobileOtpModel> {
+    fun mobileOTP(mobile: String): ResultOld<MobileOtpModel> {
         // handle login
         val result = dataSource.mobileOTP(mobile)
 
-        if (result is Result.Success) {
+        if (result is ResultOld.Success) {
             //setLoggedInUser(result.data)
         }
 

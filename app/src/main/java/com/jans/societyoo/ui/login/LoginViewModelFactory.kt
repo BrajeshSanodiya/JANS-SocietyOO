@@ -3,7 +3,7 @@ package com.jans.societyoo.ui.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.jans.societyoo.data.remote.LoginDataSource
-import com.jans.societyoo.data.remote.LoginRepository
+import com.jans.societyoo.data.repository.LoginRepository
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.
