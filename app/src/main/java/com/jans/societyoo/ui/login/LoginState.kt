@@ -1,8 +1,6 @@
 package com.jans.societyoo.ui.login
 
-/**
- * Data validation state of the login form.
- */
+
 data class LoginMobileViewState(
     val mobileNumberError: Int? = null,
     val isDataValid: Boolean = false
@@ -19,7 +17,7 @@ data class LoginViewState(
     val fragmentState:Int
 )
 
-class LoginState{
+class LoginFragmentState{
 companion object{
     val PRE_REGISTRATION:Int=1021
     val MOBILE_INPUT:Int=1032
@@ -27,8 +25,3 @@ companion object{
     val REGISTRATION:Int=1054
 }
 }
-/*
-data class MobileFormState(
-    val mobileNumberError: Int? = null,
-    val isDataValid: Boolean = false
-)*/

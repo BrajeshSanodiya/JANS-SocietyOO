@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 object RetrofitInstance {
     val jsonServices by lazy {
         Retrofit.Builder()
-            .baseUrl("https://jsonplaceholder.typicode.com")
+            .baseUrl(BASE_URL)
             .client(makeHttpClient(/*accessTokenProvidingInterceptor()*/))
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build().create(JsonApi::class.java)

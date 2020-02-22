@@ -8,6 +8,7 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.jans.societyoo.R
+import com.jans.societyoo.ui.MainActivity
 import com.jans.societyoo.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_splash.*
 

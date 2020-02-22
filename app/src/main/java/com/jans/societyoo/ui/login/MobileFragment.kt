@@ -16,45 +16,26 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
 import com.jans.societyoo.R
+import com.jans.societyoo.viewmodel.LoginViewModel
+import com.jans.societyoo.viewmodel.LoginViewModelFactory
 import kotlinx.android.synthetic.main.fragment_login.view.*
 
-/**
- * A simple [Fragment] subclass.
- */
 class MobileFragment : Fragment() {
 
-    private lateinit var loginCallbackListener:LoginCallbackListener
     private lateinit var loginViewModel: LoginViewModel
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var rootView =inflater.inflate(R.layout.fragment_login, container, false);
-
         val etMobile = rootView.etMobile
         val btnNext = rootView.btnNext
         val loading = rootView.loading
-        loginViewModel = ViewModelProvider(activity!!.viewModelStore, LoginViewModelFactory()).get(LoginViewModel::class.java)
+        loginViewModel = ViewModelProvider(activity!!.viewModelStore,
+            LoginViewModelFactory()
+        ).get(LoginViewModel::class.java)
         loginViewModel.loginMobileViewState.observe(viewLifecycleOwner, Observer {
             val mobileState = it ?: return@Observer
                 btnNext.isEnabled = mobileState.isDataValid
             if (mobileState.mobileNumberError != null) {
                 etMobile.error = getString(mobileState.mobileNumberError)
-            }
-        })
-
-        loginViewModel.loginResult.observe(viewLifecycleOwner, Observer {
-            val loginResult = it ?: return@Observer
-            loading.visibility = View.GONE
-            if (loginResult.error != null) {
-                showLoginFailed(loginResult.error)
-            }
-            if (loginResult.success != null) {
-                updateUiWithUser(loginResult.success)
-                loginViewModel.setMobileNumberLiveData(etMobile.text.toString())
-                loginViewModel.loginFragmentChanged(LoginState.OTP_VERIFY)
-
             }
         })
 
@@ -66,26 +47,17 @@ class MobileFragment : Fragment() {
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->
                     {
-                            loginViewModel.mobile(etMobile.text.toString())
+                            loginViewModel.openOtpScreen(etMobile.text.toString())
                     }
-
                 }
                 false
             }
             btnNext.setOnClickListener {
                 loading.visibility = View.VISIBLE
-                loginViewModel.mobile(etMobile.text.toString().trim())
+                loginViewModel.openOtpScreen(etMobile.text.toString().trim())
             }
         }
-
-
         return rootView
-    }
-
-
-    private fun updateUiWithUser(model: LoginUserView) {
-        val mobileNumber = model.mobileNumber
-        Toast.makeText(context,"Otp Send to $mobileNumber",Toast.LENGTH_LONG).show()
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {

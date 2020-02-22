@@ -1,52 +1,29 @@
-package com.jans.societyoo.data.repository
+package com.my.retrodemo1
 
-import com.jans.loginsample.data.model.LoginModel
-import com.jans.loginsample.data.model.MobileOtpModel
 import com.jans.societyoo.data.remote.LoginDataSource
-import com.jans.societyoo.data.remote.ResultOld
+import com.jans.societyoo.model.User
+import com.jans.societyoo.model.UserData
+import com.jans.societyoo.model.UserPostData
+import com.jans.societyoo.utils.MyResult
+import com.jans.societyoo.utils.tryCatching
+import com.my.retrodemo1.retrofit.Album
+import com.my.retrodemo1.retrofit.JsonApi
+import com.my.retrodemo1.retrofit.RetrofitInstance
 
-/**
- * Class that requests authentication and user information from the remote data source and
- * maintains an in-memory cache of login status and user credentials information.
- */
+class LoginRepository {
 
-class LoginRepository(val dataSource: LoginDataSource) {
+    var loginDataSource:LoginDataSource= LoginDataSource()
 
-    // in-memory cache of the loggedInUser object
-    var login: LoginModel? = null
-        private set
-    var mobileOtp:MobileOtpModel?=null
-        private set
-
-    val isLoggedIn: Boolean
-        get() = login != null
-
-    init {
-        // If user credentials will be cached in local storage, it is recommended it be encrypted
-        // @see https://developer.android.com/training/articles/keystore
-        login = null
-        mobileOtp=null
+    suspend fun getUser(userId: Int): MyResult<User>{
+        return loginDataSource.getUser(userId)
     }
 
-    fun logout() {
-        login = null
-        dataSource.logout()
+    suspend fun getUserList(): MyResult<List<User>>{
+        return  loginDataSource.getUserList()
     }
 
-    fun mobileOTP(mobile: String): ResultOld<MobileOtpModel> {
-        // handle login
-        val result = dataSource.mobileOTP(mobile)
-
-        if (result is ResultOld.Success) {
-            //setLoggedInUser(result.data)
-        }
-
-        return result
+    suspend fun postUserData(userPostData: UserPostData): MyResult<UserData> {
+        return  loginDataSource.postUserData(userPostData)
     }
-
-    /*private fun setLoggedInUser(loggedInUser: LoginModel) {
-        this.user = loggedInUser
-        // If user credentials will be cached in local storage, it is recommended it be encrypted
-        // @see https://developer.android.com/training/articles/keystore
-    }*/
 }
+

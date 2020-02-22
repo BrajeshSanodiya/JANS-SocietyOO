@@ -10,14 +10,16 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
+const val BASE_URL = "https://jsonplaceholder.typicode.com"
+
 interface JsonApi {
 
     @GET("/users/{id}")
-    suspend fun getUser(@Path(value = "id") albumId: Int): User
+    suspend fun getUser(@Path(value = "id") userId: Int): User
 
     @GET("/users")
     suspend fun getUserList(): List<User>
 
     @POST("/posts")
-    suspend fun postUser(@Body userPostData: UserPostData): UserData
+    suspend fun postUserData(@Body userPostData: UserPostData): UserData
 }

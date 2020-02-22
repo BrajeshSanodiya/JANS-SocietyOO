@@ -9,12 +9,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.jans.societyoo.R
 import com.jans.societyoo.ui.customviews.NonSwipeableViewPager
+import com.jans.societyoo.viewmodel.LoginViewModel
+import com.jans.societyoo.viewmodel.LoginViewModelFactory
 
 
-class LoginActivity : AppCompatActivity(), LoginCallbackListener {
+class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
     private var nonSwipeableViewPager: NonSwipeableViewPager? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -23,21 +26,20 @@ class LoginActivity : AppCompatActivity(), LoginCallbackListener {
         nonSwipeableViewPager!!.offscreenPageLimit=0
         nonSwipeableViewPager!!.adapter = NonSwipeableLoginPagerAdapter(supportFragmentManager)
 
-        loginViewModel = ViewModelProvider(
-            viewModelStore,
+        loginViewModel = ViewModelProvider(viewModelStore,
             LoginViewModelFactory()
         ).get(LoginViewModel::class.java)
-
         loginViewModel.loginViewState.observe(this, Observer {
             val loginEventState = it ?: return@Observer
                 changeFragment(loginEventState.fragmentState)
         })
 
     }
+
     fun changeFragment(fragmentState: Int){
-        if(fragmentState==LoginState.MOBILE_INPUT){
+        if(fragmentState==LoginFragmentState.MOBILE_INPUT){
             nonSwipeableViewPager!!.currentItem=0
-        }else if(fragmentState==LoginState.OTP_VERIFY){
+        }else if(fragmentState==LoginFragmentState.OTP_VERIFY){
             nonSwipeableViewPager!!.currentItem=1
         }
     }
@@ -54,30 +56,6 @@ class LoginActivity : AppCompatActivity(), LoginCallbackListener {
             }
         }
     }
-
-    override fun onMobileOTPSend(mobileNumber: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-
-    }
-
-    override fun onMobileOtpResend() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onMobileOtpVerify(application: String?, otp: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 }
-
-
-/*fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {
-    this.addTextChangedListener(object : TextWatcher {
-        override fun afterTextChanged(editable: Editable?) {
-            afterTextChanged.invoke(editable.toString())
-        }
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-    })
-}*/
 
 

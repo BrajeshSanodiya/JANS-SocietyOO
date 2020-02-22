@@ -21,9 +21,9 @@ class Constants {
     }*/
 
 
-    object ErrorMessage {
+  /*  object ErrorMessage {
         const val UNKNOWN_ERROR = "An unknown error occurred!"
         const val NO_SUCH_DATA = "Data not found in the database"
-    }
+    }*/
 
 }

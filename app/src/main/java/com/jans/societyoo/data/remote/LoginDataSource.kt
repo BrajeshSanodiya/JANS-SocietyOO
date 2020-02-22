@@ -1,15 +1,33 @@
 package com.jans.societyoo.data.remote
 
-import com.jans.loginsample.data.model.LoginModel
-import com.jans.loginsample.data.model.MobileOtpModel
-import java.io.IOException
+import com.jans.societyoo.model.User
+import com.jans.societyoo.model.UserData
+import com.jans.societyoo.model.UserPostData
+import com.jans.societyoo.utils.MyResult
+import com.jans.societyoo.utils.tryCatching
+import com.my.retrodemo1.retrofit.JsonApi
+import com.my.retrodemo1.retrofit.RetrofitInstance
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
 class LoginDataSource {
 
-    fun mobileOTP(mobile:String): ResultOld<MobileOtpModel> {
+    var jsonServices: JsonApi = RetrofitInstance.jsonServices
+
+    suspend fun getUser(userId: Int): MyResult<User> = tryCatching {
+        jsonServices.getUser(userId)
+    }
+
+    suspend fun getUserList(): MyResult<List<User>> = tryCatching {
+        jsonServices.getUserList()
+    }
+
+    suspend fun postUserData(userPostData: UserPostData): MyResult<UserData> = tryCatching {
+        jsonServices.postUserData(userPostData)
+    }
+
+    /*fun mobileOTP(mobile:String): ResultOld<MobileOtpModel> {
         try {
             // TODO: handle loggedInUser authentication
             val fakeUser = MobileOtpModel(mobile)
@@ -31,6 +49,6 @@ class LoginDataSource {
 
     fun logout() {
         // TODO: revoke authentication
-    }
+    }*/
 }
 
