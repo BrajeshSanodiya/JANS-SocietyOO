@@ -1,5 +1,6 @@
 package com.jans.societyoo.ui.login
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -8,6 +9,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.jans.societyoo.R
+import com.jans.societyoo.ui.MainActivity
 import com.jans.societyoo.ui.customviews.NonSwipeableViewPager
 import com.jans.societyoo.viewmodel.LoginViewModel
 import com.jans.societyoo.viewmodel.LoginViewModelFactory
@@ -41,6 +43,9 @@ class LoginActivity : AppCompatActivity() {
             nonSwipeableViewPager!!.currentItem=0
         }else if(fragmentState==LoginFragmentState.OTP_VERIFY){
             nonSwipeableViewPager!!.currentItem=1
+        }else if(fragmentState==LoginFragmentState.AFTER_LOGIN){
+            startActivity(Intent(this,MainActivity::class.java))
+            finish();
         }
     }
 

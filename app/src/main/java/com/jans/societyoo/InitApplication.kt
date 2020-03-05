@@ -2,6 +2,7 @@ package com.jans.societyoo
 
 import android.app.Application
 import com.jans.societyoo.data.local.prefs.Preferences2
+import com.jans.societyoo.ui.login.AppSignatureHelper
 import com.jans.tracking.Tracking
 
 class InitApplication : Application() {
@@ -10,6 +11,9 @@ class InitApplication : Application() {
         super.onCreate()
         //Preferences2.init(this)
 
+        var appSignature = AppSignatureHelper(this)
+        appSignature.appSignatures
+        println("appSignature : "+appSignature.appSignatures.toString())
         Tracking.initializeTracking(this,"","",getString(R.string.app_name))
     }
 }

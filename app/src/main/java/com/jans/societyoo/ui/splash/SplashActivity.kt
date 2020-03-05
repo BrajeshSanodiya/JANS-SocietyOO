@@ -11,6 +11,10 @@ import com.jans.societyoo.R
 import com.jans.societyoo.ui.MainActivity
 import com.jans.societyoo.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_splash.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class SplashActivity : AppCompatActivity() {
@@ -40,6 +44,10 @@ class SplashActivity : AppCompatActivity() {
             callNextActivity()
         }
 
+        GlobalScope.launch(Dispatchers.Main) {
+            delay(3000)
+            callNextActivity()
+        }
 
     }
 }

@@ -26,6 +26,15 @@
         android:name=".ui.login.LoginActivity" />
 
     <activity android:name=".ui.MainActivity"/>
+
+    <receiver
+        android:name=".ui.login.MySMSBroadcastReceiver"
+        android:exported="true">
+        <intent-filter>
+            <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
+        </intent-filter>
+    </receiver>
+
 </application>
 
 </manifest>

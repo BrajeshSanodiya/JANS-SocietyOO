@@ -1,11 +1,13 @@
 package com.jans.societyoo.ui.login
 
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,61 +17,103 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.credentials.Credential
+import com.google.android.gms.auth.api.phone.SmsRetriever
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
 import com.jans.otpview.OnOtpCompletionListener
+import com.jans.otpview.OtpView
 import com.jans.societyoo.R
 import com.jans.societyoo.ui.MainActivity
 import com.jans.societyoo.viewmodel.LoginViewModel
 import com.jans.societyoo.viewmodel.LoginViewModelFactory
 import kotlinx.android.synthetic.main.fragment_otp.*
 import kotlinx.android.synthetic.main.fragment_otp.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 /**
  * A simple [Fragment] subclass.
  */
-class OTPFragment : Fragment(), OnOtpCompletionListener {
+class OTPFragment : Fragment(), OnOtpCompletionListener , GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, MySMSBroadcastReceiver.OTPReceiveListener {
+
+    var mCredentialsApiClient: GoogleApiClient? = null
+    private val KEY_IS_RESOLVING = "is_resolving"
+    private val RC_HINT = 2
+    private var otpReceiver: MySMSBroadcastReceiver.OTPReceiveListener = this
+    val smsBroadcast = MySMSBroadcastReceiver()
 
     private lateinit var loginViewModel: LoginViewModel
     var mobileNumber: String? = null
     var otpValue: String? = null
     var timerView: TextView? = null
+    var btnResend:TextView?=null
+    var otpView:OtpView?=null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mCredentialsApiClient = GoogleApiClient.Builder(activity!!)
+            .addConnectionCallbacks(this)
+            .enableAutoManage(activity!!, this)
+            .addApi(Auth.CREDENTIALS_API)
+            .build()
 
+        startSMSListener()
+
+        smsBroadcast.initOTPListener(this)
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION)
+
+        context!!.applicationContext.registerReceiver(smsBroadcast, intentFilter)
+
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         var rootView = inflater.inflate(R.layout.fragment_otp, container, false);
 
-        val otpView = rootView.otp_view
+        otpView = rootView.otp_view
         val btnNext = rootView.btnNext
-        val btnResend = rootView.btnResend
+        btnResend = rootView.btnResend
         timerView = rootView.tvTimer
         val loading = rootView.loading
 
-        otpView.setOtpCompletionListener(this)
+        otpView!!.setOtpCompletionListener(this)
         loginViewModel = ViewModelProvider(
             activity!!.viewModelStore,
             LoginViewModelFactory()
         ).get(LoginViewModel::class.java)
-        loginViewModel.loginOtpViewState.observe(this@OTPFragment, Observer {
+        loginViewModel.loginOtpViewState.observe(viewLifecycleOwner, Observer {
             val mobileState = it ?: return@Observer
             btnNext.isEnabled = mobileState.isDataValid
+            if(btnNext.isEnabled)
+            {
+                GlobalScope.launch(Dispatchers.Main) {
+                    delay(1000)
+                    nextBtnClick()
+                }
+            }
             if (mobileState.otpError != null) {
             }
             if (mobileState.isOtpResend) {
-                callOTPResend()
+                    callOTPResend()
             }
             if (!TextUtils.isEmpty(mobileState.otpValue)) {
                 otpValue = mobileState.otpValue
             }
         })
 
-        loginViewModel.mobileNumberLiveData.observe(this, Observer {
+        loginViewModel.mobileNumberLiveData.observe(viewLifecycleOwner, Observer {
             mobileNumber = it
         })
 
 
-        otpView.apply {
+        otpView!!.apply {
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE -> {
@@ -83,19 +127,33 @@ class OTPFragment : Fragment(), OnOtpCompletionListener {
         }
 
         btnNext.setOnClickListener {
-            Toast.makeText(context, "OTP : $otpValue", Toast.LENGTH_SHORT).show()
-            context!!.startActivity(Intent(context, MainActivity::class.java))
+            nextBtnClick()
         }
 
-        btnResend.setOnClickListener {
+        btnResend!!.setOnClickListener {
             loginViewModel.otpResend()
         }
+
+
+
+
         return rootView
     }
 
+    override fun onResume() {
+        super.onResume()
+        callOTPResend()
+    }
+
+
+    private fun nextBtnClick(){
+        //Toast.makeText(context, "OTP : $otpValue", Toast.LENGTH_SHORT).show()
+       // context!!.startActivity(Intent(context, MainActivity::class.java))
+        loginViewModel.openAfterLoginScreen()
+    }
     private fun callOTPResend() {
         Toast.makeText(context, "OTP Resend to $mobileNumber", Toast.LENGTH_SHORT).show()
-        btnResend.isEnabled = false
+        btnResend!!.isEnabled = false
         resentOtpTimmer()
     }
 
@@ -113,15 +171,69 @@ class OTPFragment : Fragment(), OnOtpCompletionListener {
                 if (timerView!!.getVisibility() != View.VISIBLE) {
                     timerView!!.visibility = View.VISIBLE
                 }
-                tvTimer.text = "wait ${millisUntilFinished / 1000}s"
+                timerView!!.text = "Waiting for the OTP ${millisUntilFinished / 1000}s"
             }
 
             override fun onFinish() {
-                btnResend.isEnabled = true
+                btnResend!!.isEnabled = true
                 timerView!!.visibility = View.INVISIBLE
             }
         }.start()
     }
 
+    private fun startSMSListener() {
+
+        val client = SmsRetriever.getClient(context!! /* context */)
+        val task = client.startSmsRetriever()
+        task.addOnSuccessListener {
+            // Successfully started retriever, expect broadcast intent
+            // ...
+           // otpTxtView.text = "Waiting for the OTP"
+            Toast.makeText(context, "SMS Retriever starts", Toast.LENGTH_LONG).show()
+        }
+
+        task.addOnFailureListener {
+           // otpTxtView.text = "Cannot Start SMS Retriever"
+            Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
+        }
+    }
+
+
+    override fun onConnected(p0: Bundle?) {
+
+    }
+
+    override fun onConnectionSuspended(p0: Int) {
+    }
+
+    override fun onConnectionFailed(p0: ConnectionResult) {
+
+    }
+
+    override fun onOTPReceived(otp: String) {
+        if (smsBroadcast != null && context !=null) {
+            LocalBroadcastManager.getInstance(context!!.applicationContext).unregisterReceiver(smsBroadcast)
+            Toast.makeText(context!!.applicationContext, otp, Toast.LENGTH_SHORT).show()
+            //otpTxtView.text = "Your OTP is: $otp"
+            Log.e("OTP Received", otp)
+            otpView!!.setText(otp)
+        }
+
+    }
+
+    override fun onOTPTimeOut() {
+        //otpTxtView.setText("Timeout")
+        //Toast.makeText(this.context, " SMS retriever API Timeout", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_HINT && resultCode == Activity.RESULT_OK) {
+
+            /*You will receive user selected phone number here if selected and send it to the server for request the otp*/
+            var credential: Credential = data!!.getParcelableExtra(Credential.EXTRA_KEY)
+
+        }
+    }
 
 }

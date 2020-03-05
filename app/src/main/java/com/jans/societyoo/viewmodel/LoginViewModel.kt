@@ -27,7 +27,9 @@ class LoginViewModel() : ViewModel() {
 
 
 
-
+    fun openAfterLoginScreen() {
+            loginFragmentChanged(LoginFragmentState.AFTER_LOGIN)
+    }
 
 
     fun openOtpScreen(mobile: String) {

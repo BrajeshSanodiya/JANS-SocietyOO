@@ -62,13 +62,15 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$arch_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$arch_version"
 
-
-
     implementation 'com.google.android.material:material:1.1.0'
 
+    // OTP Read
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.android.gms:play-services-auth-api-phone:17.4.0'
 
     implementation project(':libraries:tracking')
     implementation project(':libraries:imageload')
     implementation project(':libraries:otpview')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.11.4'
 }
