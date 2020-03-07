@@ -26,9 +26,15 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.jans.otpview.OnOtpCompletionListener
 import com.jans.otpview.OtpView
 import com.jans.societyoo.R
+import com.jans.societyoo.model.ApiDataArray
+import com.jans.societyoo.model.ApiDataObject
 import com.jans.societyoo.ui.MainActivity
+import com.jans.societyoo.utils.Constants
+import com.jans.societyoo.utils.MyResult
+import com.jans.societyoo.utils.PrintMsg
 import com.jans.societyoo.viewmodel.LoginViewModel
 import com.jans.societyoo.viewmodel.LoginViewModelFactory
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_otp.*
 import kotlinx.android.synthetic.main.fragment_otp.view.*
 import kotlinx.coroutines.Dispatchers
@@ -40,12 +46,9 @@ import kotlinx.coroutines.launch
 /**
  * A simple [Fragment] subclass.
  */
-class OTPFragment : Fragment(), OnOtpCompletionListener , GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, MySMSBroadcastReceiver.OTPReceiveListener {
+class OTPFragment : Fragment(), OnOtpCompletionListener ,MySMSBroadcastReceiver.OTPReceiveListener {
 
     var mCredentialsApiClient: GoogleApiClient? = null
-    private val KEY_IS_RESOLVING = "is_resolving"
-    private val RC_HINT = 2
-    private var otpReceiver: MySMSBroadcastReceiver.OTPReceiveListener = this
     val smsBroadcast = MySMSBroadcastReceiver()
 
     private lateinit var loginViewModel: LoginViewModel
@@ -57,8 +60,6 @@ class OTPFragment : Fragment(), OnOtpCompletionListener , GoogleApiClient.Connec
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mCredentialsApiClient = GoogleApiClient.Builder(activity!!)
-            .addConnectionCallbacks(this)
-            .enableAutoManage(activity!!, this)
             .addApi(Auth.CREDENTIALS_API)
             .build()
 
@@ -133,10 +134,6 @@ class OTPFragment : Fragment(), OnOtpCompletionListener , GoogleApiClient.Connec
         btnResend!!.setOnClickListener {
             loginViewModel.otpResend()
         }
-
-
-
-
         return rootView
     }
 
@@ -145,17 +142,44 @@ class OTPFragment : Fragment(), OnOtpCompletionListener , GoogleApiClient.Connec
         callOTPResend()
     }
 
-
     private fun nextBtnClick(){
-        //Toast.makeText(context, "OTP : $otpValue", Toast.LENGTH_SHORT).show()
-       // context!!.startActivity(Intent(context, MainActivity::class.java))
-        loginViewModel.openAfterLoginScreen()
+       // loginViewModel.openAfterLoginScreen()
+
+        loginViewModel.verifyOtp(mobileNumber!!,otpValue!!).observe(viewLifecycleOwner, Observer {
+            val result=it
+            if(result is MyResult.Success){
+                val data: ApiDataArray =result.data
+                if(data.dis_msg==1 && !TextUtils.isEmpty(data.msg))
+                    PrintMsg.toast(context,data.msg);
+                if(data.success_stat==1){
+                    PrintMsg.toastDebug(context,data.data_details.toString())
+                    loginViewModel.openAfterLoginScreen()
+                }
+            }else if(result is MyResult.Error){
+                PrintMsg.toastDebug(context,result.message)
+            }
+        })
+
     }
     private fun callOTPResend() {
-        Toast.makeText(context, "OTP Resend to $mobileNumber", Toast.LENGTH_SHORT).show()
-        btnResend!!.isEnabled = false
-        resentOtpTimmer()
+
+        loginViewModel.sendOtp(mobileNumber!!).observe(viewLifecycleOwner, Observer {
+            val result = it
+            if (result is MyResult.Success) {
+                val data: ApiDataObject = result.data
+                if(data.dis_msg==1 && !TextUtils.isEmpty(data.msg))
+                    PrintMsg.toast(context,data.msg);
+                if(data.success_stat==1){
+                    //PrintMsg.toast(context, "OTP Resend to $mobileNumber")
+                    btnResend!!.isEnabled = false
+                    resentOtpTimmer()
+                }
+            }else if(result is MyResult.Error){
+                PrintMsg.toastDebug(context,result.message)
+            }
+        })
     }
+
 
     override fun onOtpCompleted(otp: String?) {
         loginViewModel.showOtpNextButton(otp, true)
@@ -189,26 +213,15 @@ class OTPFragment : Fragment(), OnOtpCompletionListener , GoogleApiClient.Connec
             // Successfully started retriever, expect broadcast intent
             // ...
            // otpTxtView.text = "Waiting for the OTP"
-            Toast.makeText(context, "SMS Retriever starts", Toast.LENGTH_LONG).show()
+            //Toast.makeText(context, "SMS Retriever starts", Toast.LENGTH_LONG).show()
         }
 
         task.addOnFailureListener {
            // otpTxtView.text = "Cannot Start SMS Retriever"
-            Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
+            //Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
         }
     }
 
-
-    override fun onConnected(p0: Bundle?) {
-
-    }
-
-    override fun onConnectionSuspended(p0: Int) {
-    }
-
-    override fun onConnectionFailed(p0: ConnectionResult) {
-
-    }
 
     override fun onOTPReceived(otp: String) {
         if (smsBroadcast != null && context !=null) {
@@ -226,14 +239,5 @@ class OTPFragment : Fragment(), OnOtpCompletionListener , GoogleApiClient.Connec
         //Toast.makeText(this.context, " SMS retriever API Timeout", Toast.LENGTH_SHORT).show()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_HINT && resultCode == Activity.RESULT_OK) {
-
-            /*You will receive user selected phone number here if selected and send it to the server for request the otp*/
-            var credential: Credential = data!!.getParcelableExtra(Credential.EXTRA_KEY)
-
-        }
-    }
 
 }

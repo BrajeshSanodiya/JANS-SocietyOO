@@ -1,4 +1,4 @@
-package com.my.retrodemo1.retrofit
+package com.jans.societyoo.data.remote
 
 import com.google.gson.GsonBuilder
 import com.jans.societyoo.BuildConfig
@@ -10,6 +10,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitInstance {
+    val jsonServicesTest by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL_TEST)
+            .client(makeHttpClient(/*accessTokenProvidingInterceptor()*/))
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+            .build().create(JsonApi::class.java)
+    }
+
     val jsonServices by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)

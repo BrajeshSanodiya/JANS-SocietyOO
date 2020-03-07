@@ -1,12 +1,10 @@
 package com.jans.societyoo.data.remote
 
-import com.jans.societyoo.model.User
-import com.jans.societyoo.model.UserData
-import com.jans.societyoo.model.UserPostData
+import com.jans.societyoo.model.*
+import com.jans.societyoo.model.login.OtpRequest
+import com.jans.societyoo.model.login.OtpVerifyRequest
 import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.tryCatching
-import com.my.retrodemo1.retrofit.JsonApi
-import com.my.retrodemo1.retrofit.RetrofitInstance
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
@@ -14,6 +12,13 @@ import com.my.retrodemo1.retrofit.RetrofitInstance
 class LoginDataSource {
 
     var jsonServices: JsonApi = RetrofitInstance.jsonServices
+
+    suspend fun sendOTP(otpRequest: OtpRequest): MyResult<ApiDataObject> = tryCatching {
+        jsonServices.sendOTP(otpRequest)
+    }
+    suspend fun verifyOTP(otpVerifyRequest: OtpVerifyRequest): MyResult<ApiDataArray> = tryCatching {
+        jsonServices.verifyOTP(otpVerifyRequest)
+    }
 
     suspend fun getUser(userId: Int): MyResult<User> = tryCatching {
         jsonServices.getUser(userId)

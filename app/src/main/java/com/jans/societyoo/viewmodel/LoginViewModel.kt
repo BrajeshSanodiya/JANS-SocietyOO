@@ -4,8 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
+import androidx.lifecycle.liveData
+import com.jans.societyoo.model.login.OtpRequest
+import com.jans.societyoo.model.login.OtpVerifyRequest
 import com.jans.societyoo.ui.login.*
-import com.my.retrodemo1.LoginRepository
+import com.jans.societyoo.utils.PrintMsg
+import com.jans.societyoo.data.repository.LoginRepository
 
 
 class LoginViewModel() : ViewModel() {
@@ -21,16 +25,29 @@ class LoginViewModel() : ViewModel() {
     private val _loginViewState = MutableLiveData<LoginViewState>()
     val loginViewState: LiveData<LoginViewState> = _loginViewState
 
+
+    fun sendOtp(mobile: String) = liveData {
+        var otpRequest= OtpRequest(mobile)
+        val result = loginRepository.sendOtp(otpRequest)
+        PrintMsg.printlnDebug("API Response : sendOtp : ${result.toString()}")
+        emit(result)
+    }
+
+    fun verifyOtp(mobile: String,otpValue: String) = liveData {
+        var otpVerifyRequest=OtpVerifyRequest(mobile,otpValue)
+        val result = loginRepository.verifyOtp(otpVerifyRequest)
+        PrintMsg.printlnDebug("API Response : verifyOtp : ${result.toString()}")
+        emit(result)
+    }
+
+
     fun setMobileNumberLiveData(mobile:String){
         mobileNumberLiveData.value=mobile
     }
 
-
-
     fun openAfterLoginScreen() {
             loginFragmentChanged(LoginFragmentState.AFTER_LOGIN)
     }
-
 
     fun openOtpScreen(mobile: String) {
         if (isMobileValid(mobile)) {

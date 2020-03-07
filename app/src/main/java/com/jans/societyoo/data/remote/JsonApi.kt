@@ -1,18 +1,24 @@
-package com.my.retrodemo1.retrofit
+package com.jans.societyoo.data.remote
 
-import com.jans.societyoo.model.User
-import com.jans.societyoo.model.UserData
-import com.jans.societyoo.model.UserPostData
-import com.jans.societyoo.utils.MyResult
-import retrofit2.Response
+import com.jans.societyoo.model.*
+import com.jans.societyoo.model.login.OtpRequest
+import com.jans.societyoo.model.login.OtpVerifyRequest
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-const val BASE_URL = "https://jsonplaceholder.typicode.com"
+const val BASE_URL_TEST = "https://jsonplaceholder.typicode.com"
+const val BASE_URL = "https://myapartment.janstechnologies.com/societyooapi/public/api/"
 
 interface JsonApi {
+
+    @POST("getotp")
+    suspend fun sendOTP(@Body otpRequest: OtpRequest): ApiDataObject
+
+    @POST("validotp")
+    suspend fun verifyOTP(@Body otpVerifyRequest: OtpVerifyRequest): ApiDataArray
+
 
     @GET("/users/{id}")
     suspend fun getUser(@Path(value = "id") userId: Int): User

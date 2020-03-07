@@ -61,6 +61,14 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onBackPressed() {
+        if(nonSwipeableViewPager!!.currentItem==1){
+            loginViewModel.loginFragmentChanged(LoginFragmentState.MOBILE_INPUT)
+        }else
+        super.onBackPressed()
+
+    }
 }
 
 

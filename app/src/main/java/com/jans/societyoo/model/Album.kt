@@ -1,4 +1,4 @@
-package com.my.retrodemo1.retrofit
+package com.jans.societyoo.model
 
 
 import com.google.gson.annotations.SerializedName

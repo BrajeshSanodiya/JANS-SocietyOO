@@ -26,6 +26,7 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.Phonenumber
 import com.jans.societyoo.R
+import com.jans.societyoo.utils.PrintMsg
 import com.jans.societyoo.viewmodel.LoginViewModel
 import com.jans.societyoo.viewmodel.LoginViewModelFactory
 import kotlinx.android.synthetic.main.fragment_login.view.*
@@ -39,8 +40,9 @@ import kotlinx.coroutines.launch
 class MobileFragment : Fragment() {
     var mCredentialsApiClient: GoogleApiClient? = null
     private val RC_HINT = 2
-    var etMobile:EditText?=null
-    var loading:ProgressBar?=null
+    var etMobile: EditText? = null
+    var loading: ProgressBar? = null
+    var btnNextActionAutoPerformed: Boolean = true
     private lateinit var loginViewModel: LoginViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,20 +51,26 @@ class MobileFragment : Fragment() {
             .build()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
-        var rootView =inflater.inflate(R.layout.fragment_login, container, false);
+        var rootView = inflater.inflate(R.layout.fragment_login, container, false);
         etMobile = rootView.etMobile
         val btnNext = rootView.btnNext
         loading = rootView.loading
-        loginViewModel = ViewModelProvider(activity!!.viewModelStore,
+        loginViewModel = ViewModelProvider(
+            activity!!.viewModelStore,
             LoginViewModelFactory()
         ).get(LoginViewModel::class.java)
         loginViewModel.loginMobileViewState.observe(viewLifecycleOwner, Observer {
             val mobileState = it ?: return@Observer
-                btnNext.isEnabled = mobileState.isDataValid
-            if(btnNext.isEnabled){
-                GlobalScope.launch (Dispatchers.Main){
+            btnNext.isEnabled = mobileState.isDataValid
+            if (btnNext.isEnabled && btnNextActionAutoPerformed) {
+                btnNextActionAutoPerformed=false
+                GlobalScope.launch(Dispatchers.Main) {
                     delay(1000)
                     nextButtonClick()
                 }
@@ -70,28 +78,29 @@ class MobileFragment : Fragment() {
             if (mobileState.mobileNumberError != null) {
                 etMobile!!.error = getString(mobileState.mobileNumberError)
             }
+
+
         })
 
-    /*    etMobile.setOnTouchListener(object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                when (event?.action) {
-                    MotionEvent.ACTION_DOWN -> //Do Something
-                        requestHint()
+        /*    etMobile.setOnTouchListener(object : View.OnTouchListener {
+                override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                    when (event?.action) {
+                        MotionEvent.ACTION_DOWN -> //Do Something
+                            requestHint()
+                    }
+
+                    return v?.onTouchEvent(event) ?: true
                 }
-
-                return v?.onTouchEvent(event) ?: true
-            }
-        })
-*/
-        etMobile!!.apply{
+            })
+    */
+        etMobile!!.apply {
             afterTextChanged {
                 loginViewModel.mobileDataChanged(etMobile.text.toString())
             }
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
-                    EditorInfo.IME_ACTION_DONE ->
-                    {
-                            loginViewModel.openOtpScreen(etMobile.text.toString())
+                    EditorInfo.IME_ACTION_DONE -> {
+                        loginViewModel.openOtpScreen(etMobile.text.toString())
                     }
                 }
                 false
@@ -110,10 +119,10 @@ class MobileFragment : Fragment() {
         return rootView
     }
 
-    private fun nextButtonClick(){
-        loading!!.visibility = View.VISIBLE
+    private fun nextButtonClick() {
         loginViewModel.openOtpScreen(etMobile!!.text.toString().trim())
     }
+
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(context, errorString, Toast.LENGTH_SHORT).show()
     }
@@ -123,6 +132,7 @@ class MobileFragment : Fragment() {
             override fun afterTextChanged(editable: Editable?) {
                 afterTextChanged.invoke(editable.toString())
             }
+
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
@@ -134,10 +144,11 @@ class MobileFragment : Fragment() {
             .build()
 
         val intent = Auth.CredentialsApi.getHintPickerIntent(
-            mCredentialsApiClient, hintRequest)
+            mCredentialsApiClient, hintRequest
+        )
 
         try {
-            startIntentSenderForResult(intent.intentSender, RC_HINT, null, 0, 0, 0,null)
+            startIntentSenderForResult(intent.intentSender, RC_HINT, null, 0, 0, 0, null)
         } catch (e: Exception) {
             Log.e("TAG", e.message)
         }
@@ -152,20 +163,21 @@ class MobileFragment : Fragment() {
             val phoneInstance = PhoneNumberUtil.getInstance()
             val phoneNumber = phoneInstance.parse(credential.id, null)
             val isValid: Boolean = phoneInstance.isValidNumber(phoneNumber);
-            Log.e("number is",credential.id)
-            if(isValid){
-                val number=deleteCountry(credential.id)
+            Log.e("number is", credential.id)
+            if (isValid) {
+                val number = deleteCountry(credential.id)
                 Log.e("valid number is", number)
                 etMobile!!.setText(number)
             }
         }
     }
-    fun deleteCountry(phone: String) : String{
+
+    fun deleteCountry(phone: String): String {
         val phoneInstance = PhoneNumberUtil.getInstance()
         try {
             val phoneNumber = phoneInstance.parse(phone, null)
-            return phoneNumber?.nationalNumber?.toString()?:phone
-        }catch (_ : Exception) {
+            return phoneNumber?.nationalNumber?.toString() ?: phone
+        } catch (_: Exception) {
         }
         return phone
     }

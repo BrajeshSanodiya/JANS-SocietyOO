@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="148dp"
-        android:text="Wellcome to OTP"
+        android:text="Welcome to OTP"
         android:textAlignment="center"
         android:textSize="28sp"
         android:layout_alignParentTop="true"

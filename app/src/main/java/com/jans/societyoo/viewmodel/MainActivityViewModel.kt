@@ -3,7 +3,7 @@ package com.jans.societyoo.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.jans.societyoo.model.UserPostData
-import com.my.retrodemo1.LoginRepository
+import com.jans.societyoo.data.repository.LoginRepository
 
 class MainActivityViewModel() : ViewModel() {
     val userRepository = LoginRepository()
