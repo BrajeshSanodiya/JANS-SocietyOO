@@ -29,7 +29,7 @@
     <activity android:name=".ui.MainActivity"/>
 
     <receiver
-        android:name=".ui.login.MySMSBroadcastReceiver"
+        android:name=".MySMSBroadcastReceiver"
         android:exported="true">
         <intent-filter>
             <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />

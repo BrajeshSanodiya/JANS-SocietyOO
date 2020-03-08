@@ -11,7 +11,7 @@ import com.jans.societyoo.R
 /**
  * A simple [Fragment] subclass.
  */
-class UserProfile : Fragment() {
+class UserProfileFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

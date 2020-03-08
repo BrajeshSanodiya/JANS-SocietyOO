@@ -1,4 +1,4 @@
-package com.jans.societyoo.ui.login;
+package com.jans.societyoo;
 
 import android.content.Context;
 import android.content.ContextWrapper;

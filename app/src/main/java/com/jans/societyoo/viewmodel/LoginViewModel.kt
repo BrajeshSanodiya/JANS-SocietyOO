@@ -10,11 +10,18 @@ import com.jans.societyoo.model.login.OtpVerifyRequest
 import com.jans.societyoo.ui.login.*
 import com.jans.societyoo.utils.PrintMsg
 import com.jans.societyoo.data.repository.LoginRepository
+import com.jans.societyoo.model.login.Flat
+import com.jans.societyoo.model.login.UserProfile
 
 
 class LoginViewModel() : ViewModel() {
     private val loginRepository: LoginRepository = LoginRepository();
     val mobileNumberLiveData = MutableLiveData<String>()
+    //val flatsDataLiveData = MutableLiveData<List<Flat>>()
+
+    val loginFlatViewState = MutableLiveData<LoginFlatsViewState>()
+
+    val loginUserProfileViewState = MutableLiveData<List<Flat>>()
 
     private val _loginMobileViewState = MutableLiveData<LoginMobileViewState>()
     val loginMobileViewState: LiveData<LoginMobileViewState> = _loginMobileViewState
@@ -40,10 +47,18 @@ class LoginViewModel() : ViewModel() {
         emit(result)
     }
 
+    fun setFlatsConfirm(selectedId:Int,checked:Boolean){
+        loginFlatViewState.value=LoginFlatsViewState(null,null,selectedId,checked)
+    }
+    fun setFlatsUsers(flats:List<Flat>?, userProfile: UserProfile?){
+        loginFlatViewState.value=LoginFlatsViewState(flats=flats,userProfile = userProfile)
+    }
+
 
     fun setMobileNumberLiveData(mobile:String){
         mobileNumberLiveData.value=mobile
     }
+
 
     fun openAfterLoginScreen() {
             loginFragmentChanged(LoginFragmentState.AFTER_LOGIN)

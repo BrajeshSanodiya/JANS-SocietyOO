@@ -1,5 +1,8 @@
 package com.jans.societyoo.ui.login
 
+import com.jans.societyoo.model.login.Flat
+import com.jans.societyoo.model.login.UserProfile
+
 
 data class LoginMobileViewState(
     val mobileNumberError: Int? = null,
@@ -13,6 +16,19 @@ data class LoginOtpViewState(
     val isDataValid: Boolean = false,
     val mobileNumber: String?=null
 )
+data class LoginFlatsViewState(
+    val flats:List<Flat>?=null,
+    val userProfile: UserProfile?=null,
+    val selectedFlatId:Int?=null,
+    val isItemChecked: Boolean = false
+)
+
+data class LoginUserProfileViewState(
+    val mobileNumberError: Int? = null,
+    val isDataValid: Boolean = false
+)
+
+
 data class LoginViewState(
     val fragmentState:Int
 )
@@ -22,7 +38,8 @@ companion object{
     val PRE_REGISTRATION:Int=1
     val MOBILE_INPUT:Int=2
     val OTP_VERIFY:Int=3
-    val USER_PROFILE:Int=4
-    val AFTER_LOGIN:Int=5
+    val FLAT_CONFIRM:Int=4
+    val USER_PROFILE:Int=5
+    val AFTER_LOGIN:Int=6
 }
 }

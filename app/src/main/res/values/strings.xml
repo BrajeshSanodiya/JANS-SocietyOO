@@ -9,17 +9,31 @@
     <string name="welcome_mobile">Welcome to %s</string>
     <string name="prompt_mobile">Enter Mobile Number</string>
     <string name="next_btn_mobile">Next</string>
-    <string name="welcome_otp">Verify OTP</string>
+    <string name="header_otp">Welcome to OTP</string>
     <string name="verify_btn_otp">Verify</string>
     <string name="resend_btn_otp">Resend OTP</string>
     <string name="invalid_mobile">Not a valid mobile</string>
+    <string name="header_login">Welcome to Cherry County</string>
+    <string name="action_sign_in_short">Sign in</string>
 
-
+    <string name="header_user_profile">Please Enter Your Details</string>
     <string name="prompt_name">FullName</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_mobile_secondary">Secondary Mobile (Optional)</string>
+    <string name="prompt_gender">Gender</string>
+    <string name="invalid_name_length">Name must be >2 characters</string>
+    <string name="invalid_password_length">Password must be >5 characters</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="header_flats">You have multiple flats Register with Us.</string>
+    <string name="prompt_flats">Please Select your preference</string>
+
+
+    <!-- <string name="prompt_name">FullName</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
+
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
@@ -37,18 +51,20 @@
     <string name="resend_phone_auth">Resend</string>
     <string name="sign_out">Sign Out</string>
 
+
+
     <string name="status_code_sent">Code Sent</string>
     <string name="status_verification_failed">Verification failed</string>
     <string name="status_verification_succeeded">Verification succeeded</string>
     <string name="status_sign_in_failed">Sign-in failed</string>
     <string name="instant_validation">(instant validation)</string>
     <string name="firebase_status_fmt">Firebase UID: %s</string>
-    <string name="login_welcome">Welcome to Cherry County</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+
+    &lt;!&ndash; TODO: Remove or change this placeholder text &ndash;&gt;
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="title_activity_splash">SplashActivity</string>
     <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>-->
 </resources>

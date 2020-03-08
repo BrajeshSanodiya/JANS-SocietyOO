@@ -1,8 +1,6 @@
 package com.jans.societyoo
 
 import android.app.Application
-import com.jans.societyoo.data.local.prefs.Preferences2
-import com.jans.societyoo.ui.login.AppSignatureHelper
 import com.jans.tracking.Tracking
 
 class InitApplication : Application() {

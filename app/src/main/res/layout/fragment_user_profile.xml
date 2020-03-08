@@ -1,14 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.login.UserProfile">
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/tvHeader_UserProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:text="@string/header_user_profile"
+        android:textAlignment="center"
+        android:textSize="28sp" />
 
-</FrameLayout>
+    <EditText
+        android:id="@+id/etName_UserProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/tvHeader_UserProfile"
+        android:padding="10dp"
+        android:hint="@string/prompt_name"
+        android:maxLength="50"
+        android:textSize="20sp"
+        android:imeActionLabel="@string/action_sign_in_short"
+        android:imeOptions="actionDone"
+        android:inputType="textPersonName"
+        android:background="@drawable/et_box_bg"/>
+
+    <EditText
+        android:id="@+id/etEmail_UserProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/etName_UserProfile"
+        android:padding="10dp"
+        android:hint="@string/prompt_email"
+        android:textSize="20sp"
+        android:imeActionLabel="@string/action_sign_in_short"
+        android:imeOptions="actionDone"
+        android:inputType="textEmailAddress"
+        android:background="@drawable/et_box_bg"/>
+
+    <EditText
+        android:id="@+id/etMobileSec_UserProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/etEmail_UserProfile"
+        android:padding="10dp"
+        android:hint="@string/prompt_mobile_secondary"
+        android:maxLength="10"
+        android:textSize="20sp"
+        android:imeActionLabel="@string/action_sign_in_short"
+        android:imeOptions="actionDone"
+        android:inputType="number"
+        android:background="@drawable/et_box_bg"/>
+
+
+    <LinearLayout
+        android:id="@+id/llGender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:layout_below="@+id/etMobileSec_UserProfile"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_gender"
+            android:textAlignment="center"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:textSize="20sp" />
+        <RadioGroup
+            android:id="@+id/radioGrp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            >
+            <RadioButton
+                android:id="@+id/radioM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:drawableEnd="@drawable/ic_male"
+                android:textSize="16sp"
+                android:layout_weight=".8"
+                android:text="Male"
+                />
+            <RadioButton
+                android:id="@+id/radioF"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:drawableEnd="@drawable/ic_female"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:textSize="16sp"
+                android:layout_weight="1.2"
+                android:text="Female"
+                />
+            <RadioButton
+                android:id="@+id/radioT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:drawableEnd="@drawable/ic_transgender"
+                android:textSize="16sp"
+                android:layout_weight=".8"
+                android:text="Other"
+                />
+        </RadioGroup>
+
+    </LinearLayout>
+
+
+
+    <Button
+        android:id="@+id/btnNext_UserProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_below="@+id/llGender"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="start"
+        android:enabled="false"
+        android:background="@drawable/btn_box_bg"
+        android:text="@string/next_btn_mobile" />
+
+
+
+
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+
+</RelativeLayout>

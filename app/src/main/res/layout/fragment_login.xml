@@ -16,7 +16,7 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="104dp"
-        android:text="@string/login_welcome"
+        android:text="@string/header_login"
         android:textAlignment="center"
         android:textSize="28sp" />
 

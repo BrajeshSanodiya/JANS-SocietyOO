@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin">
+
+    <TextView
+        android:id="@+id/tvHeader_Flats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:text="@string/header_flats"
+        android:textAlignment="center"
+        android:textSize="28sp" />
+
+    <LinearLayout
+        android:id="@+id/llFlats_Flats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp"
+        android:layout_below="@+id/tvHeader_Flats"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_flats"
+            android:textAlignment="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:textSize="20sp" />
+        <RadioGroup
+            android:id="@+id/rgFlats_Flats"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="8dp"
+            >
+            <!--<RadioButton
+                android:id="@+id/radioM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:drawableTintMode="multiply"
+                android:drawableTint="@color/md_red_100"
+                android:drawableEnd="@drawable/ic_flat"
+                android:textSize="16sp"
+                android:layout_weight=".8"
+                android:text="Male"
+                />-->
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+
+
+    <Button
+        android:id="@+id/btnNext_Flats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_below="@+id/llFlats_Flats"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="start"
+        android:enabled="false"
+        android:background="@drawable/btn_box_bg"
+        android:text="@string/next_btn_mobile" />
+
+
+
+
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+
+</RelativeLayout>
