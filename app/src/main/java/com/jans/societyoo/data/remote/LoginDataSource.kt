@@ -1,8 +1,10 @@
 package com.jans.societyoo.data.remote
 
 import com.jans.societyoo.model.*
+import com.jans.societyoo.model.login.OTPVerifyData
 import com.jans.societyoo.model.login.OtpRequest
 import com.jans.societyoo.model.login.OtpVerifyRequest
+import com.jans.societyoo.model.login.SendOTPData
 import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.tryCatching
 
@@ -13,10 +15,10 @@ class LoginDataSource {
 
     var jsonServices: JsonApi = RetrofitInstance.jsonServices
 
-    suspend fun sendOTP(otpRequest: OtpRequest): MyResult<ApiDataObject> = tryCatching {
+    suspend fun sendOTP(otpRequest: OtpRequest): MyResult<ApiDataObject<SendOTPData>> = tryCatching {
         jsonServices.sendOTP(otpRequest)
     }
-    suspend fun verifyOTP(otpVerifyRequest: OtpVerifyRequest): MyResult<ApiDataArray> = tryCatching {
+    suspend fun verifyOTP(otpVerifyRequest: OtpVerifyRequest): MyResult<ApiDataObject<OTPVerifyData>> = tryCatching {
         jsonServices.verifyOTP(otpVerifyRequest)
     }
 

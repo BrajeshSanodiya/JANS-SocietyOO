@@ -43,6 +43,8 @@ class LoginActivity : AppCompatActivity() {
             nonSwipeableViewPager!!.currentItem=0
         }else if(fragmentState==LoginFragmentState.OTP_VERIFY){
             nonSwipeableViewPager!!.currentItem=1
+        }else if(fragmentState==LoginFragmentState.USER_PROFILE){
+            nonSwipeableViewPager!!.currentItem=2
         }else if(fragmentState==LoginFragmentState.AFTER_LOGIN){
             startActivity(Intent(this,MainActivity::class.java))
             finish();
@@ -51,13 +53,15 @@ class LoginActivity : AppCompatActivity() {
 
     private inner class NonSwipeableLoginPagerAdapter(fm: FragmentManager) :
         FragmentStatePagerAdapter(fm,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-        override fun getCount(): Int = 2
+        override fun getCount(): Int = 3
 
         override fun getItem(position: Int): Fragment {
             if (position == 0) {
                 return MobileFragment()
-            } else {
+            } else if(position == 1){
                 return OTPFragment()
+            } else{
+                return UserProfile()
             }
         }
     }

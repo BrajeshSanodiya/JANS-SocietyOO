@@ -1,8 +1,9 @@
 package com.jans.societyoo.model.login
 
+
 import com.google.gson.annotations.SerializedName
 
-data class UserFlat(
+data class Flat(
     @SerializedName("flat_alias")
     val flatAlias: String,
     @SerializedName("flat_area")
@@ -36,5 +37,3 @@ data class UserFlat(
     @SerializedName("user_type")
     val userType: String
 )
-
-

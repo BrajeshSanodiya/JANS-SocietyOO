@@ -4,6 +4,7 @@ import android.content.Context
 
 
 class UserPreferences(context: Context) : Preferences(context){
+    var flats by stringPref()
     var userName by stringPref()
     var emailAccount by stringPref()
     var mobileNum by stringPref()

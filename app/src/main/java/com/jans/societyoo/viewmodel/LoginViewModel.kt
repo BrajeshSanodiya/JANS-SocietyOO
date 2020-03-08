@@ -29,14 +29,14 @@ class LoginViewModel() : ViewModel() {
     fun sendOtp(mobile: String) = liveData {
         var otpRequest= OtpRequest(mobile)
         val result = loginRepository.sendOtp(otpRequest)
-        PrintMsg.printlnDebug("API Response : sendOtp : ${result.toString()}")
+        PrintMsg.println("API Response : sendOtp : ${result.toString()}")
         emit(result)
     }
 
     fun verifyOtp(mobile: String,otpValue: String) = liveData {
         var otpVerifyRequest=OtpVerifyRequest(mobile,otpValue)
         val result = loginRepository.verifyOtp(otpVerifyRequest)
-        PrintMsg.printlnDebug("API Response : verifyOtp : ${result.toString()}")
+        PrintMsg.println("API Response : verifyOtp : ${result.toString()}")
         emit(result)
     }
 

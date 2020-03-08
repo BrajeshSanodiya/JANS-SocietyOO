@@ -14,6 +14,7 @@ import com.jans.societyoo.model.UserData
 import com.jans.societyoo.model.UserPostData
 import com.jans.societyoo.ui.login.LoginActivity
 import com.jans.societyoo.utils.MyResult
+import com.jans.societyoo.utils.PrintMsg
 import com.jans.societyoo.viewmodel.MainActivityViewModel
 import com.jans.tracking.PropertyName
 import com.jans.tracking.Tracking
@@ -71,6 +72,8 @@ class MainActivity : AppCompatActivity() {
         btnPostData_dashboard.setOnClickListener { postUser(userPostData) }
 
         //startActivity(Intent(this, LoginActivity::class.java))s
+
+        PrintMsg.toastDebug(this,""+preferences.flats)
     }
 
 

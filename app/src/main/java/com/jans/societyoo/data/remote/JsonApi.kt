@@ -1,8 +1,10 @@
 package com.jans.societyoo.data.remote
 
 import com.jans.societyoo.model.*
+import com.jans.societyoo.model.login.OTPVerifyData
 import com.jans.societyoo.model.login.OtpRequest
 import com.jans.societyoo.model.login.OtpVerifyRequest
+import com.jans.societyoo.model.login.SendOTPData
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -14,10 +16,10 @@ const val BASE_URL = "https://myapartment.janstechnologies.com/societyooapi/publ
 interface JsonApi {
 
     @POST("getotp")
-    suspend fun sendOTP(@Body otpRequest: OtpRequest): ApiDataObject
+    suspend fun sendOTP(@Body otpRequest: OtpRequest): ApiDataObject<SendOTPData>
 
     @POST("validotp")
-    suspend fun verifyOTP(@Body otpVerifyRequest: OtpVerifyRequest): ApiDataArray
+    suspend fun verifyOTP(@Body otpVerifyRequest: OtpVerifyRequest): ApiDataObject<OTPVerifyData>
 
 
     @GET("/users/{id}")
