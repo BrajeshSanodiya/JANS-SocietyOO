@@ -3,7 +3,7 @@ package com.jans.societyoo.model.login
 
 import com.google.gson.annotations.SerializedName
 
-data class Flat(
+data class FlatDetail(
     @SerializedName("flat_alias")
     val flatAlias: String,
     @SerializedName("flat_area")

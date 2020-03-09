@@ -14,9 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.jans.societyoo.R
-import com.jans.societyoo.model.login.Flat
-import com.jans.societyoo.model.login.UserProfile
-import com.jans.societyoo.utils.PrintMsg
+import com.jans.societyoo.model.login.FlatDetail
+import com.jans.societyoo.model.login.UserDetail
 import com.jans.societyoo.viewmodel.LoginViewModel
 import com.jans.societyoo.viewmodel.LoginViewModelFactory
 
@@ -26,8 +25,8 @@ import com.jans.societyoo.viewmodel.LoginViewModelFactory
  */
 class FlatsFragment : Fragment() {
     private lateinit var loginViewModel: LoginViewModel
-    var flats: List<Flat>? = null
-    var userProfile:UserProfile?=null
+    var flats: List<FlatDetail>? = null
+    var userDetail:UserDetail?=null
     var rgFlats:RadioGroup?=null
     @SuppressLint("FragmentLiveDataObserve")
     override fun onCreateView(
@@ -49,15 +48,15 @@ class FlatsFragment : Fragment() {
                 flats=result.flats
                 showFlats()
             }
-            if(result.userProfile!=null){
-                userProfile=result.userProfile
+            if(result.userDetail!=null){
+                userDetail=result.userDetail
             }
             btnNext.isEnabled=result.isItemChecked
         })
         btnNext.setOnClickListener {
             //var loginFlatViewState:LoginFlatsViewState= loginViewModel.loginFlatViewState.value!!
             //PrintMsg.toastDebug(context,loginFlatViewState.toString());
-            if (userProfile == null)
+            if (userDetail == null || userDetail!!.userProfileId==0)
                 loginViewModel.loginFragmentChanged(LoginFragmentState.USER_PROFILE)
             else
                 loginViewModel.openAfterLoginScreen()

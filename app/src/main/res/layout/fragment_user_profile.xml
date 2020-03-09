@@ -135,6 +135,36 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/llDate_UserProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/llGender"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/prompt_dob"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/etDate_UserProfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:padding="10dp"
+            android:hint="@string/prompt_dob_dailog"
+            android:maxLength="10"
+            android:textSize="20sp"
+            android:background="@drawable/et_box_bg"/>
+    </LinearLayout>
 
 
     <Button
@@ -142,14 +172,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:layout_below="@+id/llGender"
+        android:layout_below="@+id/llDate_UserProfile"
         android:layout_centerHorizontal="true"
         android:layout_gravity="start"
         android:enabled="false"
         android:background="@drawable/btn_box_bg"
         android:text="@string/next_btn_mobile" />
 
-
+  <!--  <DatePicker
+        android:layout_marginTop="24dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/dpResult"
+        android:layout_below="@+id/btnNext_UserProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />-->
 
 
     <ProgressBar

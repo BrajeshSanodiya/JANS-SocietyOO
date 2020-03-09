@@ -149,18 +149,19 @@ class OTPFragment : Fragment(), OnOtpCompletionListener,
                 if (data.dis_msg == 1 && !TextUtils.isEmpty(data.msg))
                     PrintMsg.toast(context, data.msg);
                 if (data.success_stat == 1) {
-                    if (data.data_details.flats.size > 0) {
-                        PrintMsg.println("flatDetails : " + data.data_details.flats.size)
-
-                        if (data.data_details.flats.size > 1)
+                    if (data.data_details.flatsDetails.size > 0) {
+                        PrintMsg.println("flatDetails : " + data.data_details.flatsDetails.size)
+                        if (data.data_details.flatsDetails.size > 1)
                         {
-                            loginViewModel.setFlatsUsers(data.data_details.flats,data.data_details.userProfile)
+                            loginViewModel.setFlatsUsers(data.data_details.flatsDetails,data.data_details.userDetails)
                             loginViewModel.loginFragmentChanged(LoginFragmentState.FLAT_CONFIRM)
                         }
-                        else if (data.data_details.userProfile == null)
+                        else if (data.data_details.userDetails == null && data.data_details.userDetails.userProfileId==0){
                             loginViewModel.loginFragmentChanged(LoginFragmentState.USER_PROFILE)
-                        else
+                        }
+                        else{
                             loginViewModel.openAfterLoginScreen()
+                        }
                     }
                 }
             } else if (result is MyResult.Error) {
@@ -179,7 +180,6 @@ class OTPFragment : Fragment(), OnOtpCompletionListener,
                 if (data.dis_msg == 1 && !TextUtils.isEmpty(data.msg))
                     PrintMsg.toast(context, data.msg);
                 if (data.success_stat == 1) {
-                    // var sendOTPData:SendOTPData=data.data_details
                     PrintMsg.toast(context, "OTP Resend to $mobileNumber")
                     PrintMsg.toastDebug(context, "Your OTP is ${data.data_details.data_details}")
                     btnResend!!.isEnabled = false

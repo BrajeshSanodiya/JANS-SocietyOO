@@ -10,8 +10,8 @@ import com.jans.societyoo.model.login.OtpVerifyRequest
 import com.jans.societyoo.ui.login.*
 import com.jans.societyoo.utils.PrintMsg
 import com.jans.societyoo.data.repository.LoginRepository
-import com.jans.societyoo.model.login.Flat
-import com.jans.societyoo.model.login.UserProfile
+import com.jans.societyoo.model.login.FlatDetail
+import com.jans.societyoo.model.login.UserDetail
 
 
 class LoginViewModel() : ViewModel() {
@@ -21,7 +21,7 @@ class LoginViewModel() : ViewModel() {
 
     val loginFlatViewState = MutableLiveData<LoginFlatsViewState>()
 
-    val loginUserProfileViewState = MutableLiveData<List<Flat>>()
+    val loginUserProfileViewState = MutableLiveData<List<FlatDetail>>()
 
     private val _loginMobileViewState = MutableLiveData<LoginMobileViewState>()
     val loginMobileViewState: LiveData<LoginMobileViewState> = _loginMobileViewState
@@ -48,10 +48,10 @@ class LoginViewModel() : ViewModel() {
     }
 
     fun setFlatsConfirm(selectedId:Int,checked:Boolean){
-        loginFlatViewState.value=LoginFlatsViewState(null,null,selectedId,checked)
+        loginFlatViewState.value=LoginFlatsViewState(flats = loginFlatViewState.value!!.flats,selectedFlatId=selectedId,isItemChecked = checked)
     }
-    fun setFlatsUsers(flats:List<Flat>?, userProfile: UserProfile?){
-        loginFlatViewState.value=LoginFlatsViewState(flats=flats,userProfile = userProfile)
+    fun setFlatsUsers(flats:List<FlatDetail>?, userDetail: UserDetail?){
+        loginFlatViewState.value=LoginFlatsViewState(flats=flats,userDetail = userDetail)
     }
 
 

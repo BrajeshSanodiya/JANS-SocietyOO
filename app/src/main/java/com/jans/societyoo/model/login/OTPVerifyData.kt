@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class OTPVerifyData(
     @SerializedName("flat_details")
-    val flats: List<Flat>,
-    @SerializedName("user_profile")
-    val userProfile: UserProfile
+    val flatsDetails: List<FlatDetail>,
+    @SerializedName("user_details")
+    val userDetails: UserDetail
 )

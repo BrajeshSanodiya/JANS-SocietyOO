@@ -5,9 +5,12 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.jans.societyoo.R
 import com.jans.societyoo.ui.MainActivity
 import com.jans.societyoo.ui.customviews.NonSwipeableViewPager
@@ -52,22 +55,34 @@ class LoginActivity : AppCompatActivity() {
             finish();
         }
     }
+    class MyAdapter(fm: FragmentManager, behavior: Int) : FragmentPagerAdapter(fm, behavior) {
+        private val NUM_ITEMS = 4
+        override fun getCount(): Int {
+            return NUM_ITEMS
+        }
+        override fun getItem(position: Int): Fragment {
+            return when (position) {
+                0 -> return MobileFragment()
+                1 -> return OTPFragment()
+                2 -> return FlatsFragment()
+                3 -> return  UserProfileFragment()
+                else ->return MobileFragment()
+            }
+        }
+    }
 
     private inner class NonSwipeableLoginPagerAdapter(fm: FragmentManager) :
         FragmentStatePagerAdapter(fm,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-        override fun getCount(): Int = 4
+        private val NUM_ITEMS = 4
+        override fun getCount(): Int = NUM_ITEMS
 
         override fun getItem(position: Int): Fragment {
-           if (position == 0) {
-                return MobileFragment()
-            } else if(position == 1){
-                return OTPFragment()
-            } else if(position == 2){
-                return FlatsFragment()
-            } else if(position == 3){
-                return UserProfileFragment()
-            }else{
-                return MobileFragment()
+            return when (position) {
+                0 -> return MobileFragment()
+                1 -> return OTPFragment()
+                2 -> return FlatsFragment()
+                3 -> return  UserProfileFragment()
+                else ->return MobileFragment()
             }
         }
     }

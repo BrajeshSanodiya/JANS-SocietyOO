@@ -1,7 +1,7 @@
 package com.jans.societyoo.ui.login
 
-import com.jans.societyoo.model.login.Flat
-import com.jans.societyoo.model.login.UserProfile
+import com.jans.societyoo.model.login.FlatDetail
+import com.jans.societyoo.model.login.UserDetail
 
 
 data class LoginMobileViewState(
@@ -17,8 +17,8 @@ data class LoginOtpViewState(
     val mobileNumber: String?=null
 )
 data class LoginFlatsViewState(
-    val flats:List<Flat>?=null,
-    val userProfile: UserProfile?=null,
+    val flats:List<FlatDetail>?=null,
+    val userDetail: UserDetail?=null,
     val selectedFlatId:Int?=null,
     val isItemChecked: Boolean = false
 )
