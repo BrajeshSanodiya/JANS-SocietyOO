@@ -75,8 +75,8 @@ class MobileFragment : Fragment() {
                     nextButtonClick()
                 }
             }
-            if (mobileState.mobileNumberError != null) {
-                etMobile!!.error = getString(mobileState.mobileNumberError)
+            if (mobileState.mobileNumberError) {
+                etMobile!!.error = getString(R.string.invalid_mobile)
             }
 
 
@@ -121,10 +121,6 @@ class MobileFragment : Fragment() {
 
     private fun nextButtonClick() {
         loginViewModel.openOtpScreen(etMobile!!.text.toString().trim())
-    }
-
-    private fun showLoginFailed(@StringRes errorString: Int) {
-        Toast.makeText(context, errorString, Toast.LENGTH_SHORT).show()
     }
 
     fun EditText.afterTextChanged(afterTextChanged: (String) -> Unit) {

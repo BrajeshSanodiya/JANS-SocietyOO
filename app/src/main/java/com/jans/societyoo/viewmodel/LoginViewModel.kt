@@ -21,7 +21,6 @@ class LoginViewModel() : ViewModel() {
 
     val loginFlatViewState = MutableLiveData<LoginFlatsViewState>()
 
-    val loginUserProfileViewState = MutableLiveData<List<FlatDetail>>()
 
     private val _loginMobileViewState = MutableLiveData<LoginMobileViewState>()
     val loginMobileViewState: LiveData<LoginMobileViewState> = _loginMobileViewState
@@ -48,7 +47,7 @@ class LoginViewModel() : ViewModel() {
     }
 
     fun setFlatsConfirm(selectedId:Int,checked:Boolean){
-        loginFlatViewState.value=LoginFlatsViewState(flats = loginFlatViewState.value!!.flats,selectedFlatId=selectedId,isItemChecked = checked)
+        loginFlatViewState.value=LoginFlatsViewState(selectedFlatId=selectedId,isItemChecked = checked)
     }
     fun setFlatsUsers(flats:List<FlatDetail>?, userDetail: UserDetail?){
         loginFlatViewState.value=LoginFlatsViewState(flats=flats,userDetail = userDetail)
@@ -76,7 +75,7 @@ class LoginViewModel() : ViewModel() {
                 LoginMobileViewState(isDataValid = true)
         }else{
             _loginMobileViewState.value =
-                LoginMobileViewState(isDataValid = false)
+                LoginMobileViewState(true,isDataValid = false)
         }
     }
     fun showMobileNextButton(mobile: String) {
@@ -119,7 +118,7 @@ class LoginViewModel() : ViewModel() {
         }
     }
 
-    // A placeholder username validation check
+      // A placeholder username validation check
     private fun isNameValid(username: String): Boolean {
         return username.length > 5
     }

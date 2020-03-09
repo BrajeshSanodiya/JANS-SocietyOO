@@ -78,11 +78,11 @@ class LoginActivity : AppCompatActivity() {
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 -> return MobileFragment()
+               0 -> return MobileFragment()
                 1 -> return OTPFragment()
                 2 -> return FlatsFragment()
                 3 -> return  UserProfileFragment()
-                else ->return MobileFragment()
+                else ->return UserProfileFragment()
             }
         }
     }
