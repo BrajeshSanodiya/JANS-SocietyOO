@@ -8,10 +8,13 @@ import android.text.TextUtils
 import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import com.jans.onboarding.OnBoardingScreen
+import com.jans.onboarding.OnBoardingView
 import com.jans.societyoo.R
 import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.ui.MainActivity
 import com.jans.societyoo.ui.login.LoginActivity
+import com.jans.societyoo.ui.onboard.OnBoardActivity
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -22,13 +25,16 @@ import kotlinx.coroutines.launch
 class SplashActivity : AppCompatActivity() {
     private val handler = Handler()
     private val activityLaunchRunnable = Runnable { callNextActivity() }
-    var preferences= UserPreferences(this)
+    var preferences = UserPreferences(this)
     private fun callNextActivity() {
-        if(TextUtils.isEmpty(preferences.mobileNum))
-        {
-            startActivity(Intent(this, LoginActivity::class.java))
-        }else{
-            startActivity(Intent(this, MainActivity::class.java))
+        if (preferences.appOpenFirstTime!!) {
+            if (TextUtils.isEmpty(preferences.mobileNum)) {
+                startActivity(Intent(this, LoginActivity::class.java))
+            } else {
+                startActivity(Intent(this, MainActivity::class.java))
+            }
+        } else{
+            startActivity(Intent(this, OnBoardActivity::class.java))
         }
         finish()
     }
@@ -45,7 +51,8 @@ class SplashActivity : AppCompatActivity() {
             window.navigationBarColor=resources.getColor(R.color.colorPrimaryDark)
         }*/
 
-        tvWelcome_splash.text =resources.getString(R.string.welcome_splash, resources.getString(R.string.app_name))
+        tvWelcome_splash.text =
+            resources.getString(R.string.welcome_splash, resources.getString(R.string.app_name))
         tvContinue_splash.setOnClickListener {
             //handler.postDelayed(activityLaunchRunnable, 100)
             callNextActivity()
@@ -55,6 +62,7 @@ class SplashActivity : AppCompatActivity() {
             delay(2000)
             callNextActivity()
         }
+        //handler.postDelayed(activityLaunchRunnable, 2000)
 
     }
 }

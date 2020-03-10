@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
             UserPreferences::flatsDetail.set(preferences,"");
             UserPreferences::userDetail.set(preferences,"");
             UserPreferences::mobileNum.set(preferences,"");
+            UserPreferences::appOpenFirstTime.set(preferences,false)
             Toast.makeText(this,"LogOut Successfully! Kill the app and Open again..",Toast.LENGTH_LONG).show()
         }
 

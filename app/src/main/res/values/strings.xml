@@ -31,9 +31,9 @@
     <string name="invalid_gender">Please select Gender</string>
     <string name="invalid_dob">Please select DOB</string>
 
-
-
-
+    <string name="title_activity_on_board">OnBoardActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 
     <!-- <string name="prompt_name">FullName</string>
@@ -74,4 +74,19 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>-->
+
+    <string-array name="feature_title">
+        <item>Know Your Society</item>
+        <item>Local Market Shopping</item>
+        <item>Connect with You Society</item>
+        <item>News and Event</item>
+    </string-array>
+
+    <string-array name="feature_desc">
+        <item>Here You can explore you society and services offering by other people inside society</item>
+        <item>Using this app you can fount near by local shops and you can order item at your doorstep</item>
+        <item>You can connect with your tower/block group in society, where you can ask anything you need</item>
+        <item>Be updated about you society and near by events or news. Here you can find the events hosted for your Society, Block/Tower.</item>
+    </string-array>
+
 </resources>

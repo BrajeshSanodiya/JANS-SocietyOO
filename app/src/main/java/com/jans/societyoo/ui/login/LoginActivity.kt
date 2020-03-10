@@ -41,7 +41,6 @@ class LoginActivity : AppCompatActivity() {
             val loginEventState = it ?: return@Observer
                 changeFragment(loginEventState.fragmentState)
         })
-
     }
 
     fun changeFragment(fragmentState: Int){
@@ -73,10 +72,10 @@ class LoginActivity : AppCompatActivity() {
         }
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 -> return MobileFragment()
-                1 -> return OTPFragment()
-                2 -> return FlatsFragment()
-                3 -> return  UserProfileFragment()
+                LoginFragmentState.MOBILE_INPUT -> return MobileFragment()
+                LoginFragmentState.OTP_VERIFY -> return OTPFragment()
+                LoginFragmentState.FLAT_CONFIRM -> return FlatsFragment()
+                LoginFragmentState.USER_PROFILE -> return  UserProfileFragment()
                 else ->return MobileFragment()
             }
         }

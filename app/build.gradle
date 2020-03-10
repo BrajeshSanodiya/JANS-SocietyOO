@@ -71,6 +71,7 @@ dependencies {
     implementation project(':libraries:tracking')
     implementation project(':libraries:imageload')
     implementation project(':libraries:otpview')
+    implementation project(':libraries:onboarding')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.11.4'
 }

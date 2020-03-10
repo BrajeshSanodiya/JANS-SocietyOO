@@ -22,7 +22,6 @@ interface JsonApi {
     @POST("inseruserdetails")
     suspend fun updateUserProfile(@Body userDetail: UserDetail): ApiDataObject<UserData>
 
-
     @GET("/users/{id}")
     suspend fun getUser(@Path(value = "id") userId: Int): User
 
