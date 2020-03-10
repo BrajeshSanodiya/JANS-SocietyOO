@@ -1,10 +1,8 @@
 package com.jans.societyoo.data.remote
 
 import com.jans.societyoo.model.*
-import com.jans.societyoo.model.login.OTPVerifyData
-import com.jans.societyoo.model.login.OtpRequest
-import com.jans.societyoo.model.login.OtpVerifyRequest
-import com.jans.societyoo.model.login.SendOTPData
+import com.jans.societyoo.model.login.*
+import com.jans.societyoo.model.login.UserData
 import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.tryCatching
 
@@ -14,24 +12,29 @@ import com.jans.societyoo.utils.tryCatching
 class LoginDataSource {
 
     var jsonServices: JsonApi = RetrofitInstance.jsonServices
+    var jsonServicesTest: JsonApi = RetrofitInstance.jsonServicesTest
 
     suspend fun sendOTP(otpRequest: OtpRequest): MyResult<ApiDataObject<SendOTPData>> = tryCatching {
         jsonServices.sendOTP(otpRequest)
     }
-    suspend fun verifyOTP(otpVerifyRequest: OtpVerifyRequest): MyResult<ApiDataObject<OTPVerifyData>> = tryCatching {
+    suspend fun verifyOTP(otpVerifyRequest: OtpVerifyRequest): MyResult<ApiDataObject<UserData>> = tryCatching {
         jsonServices.verifyOTP(otpVerifyRequest)
     }
 
+    suspend fun updateUserProfile(userDetail: UserDetail): MyResult<ApiDataObject<UserData>> = tryCatching {
+        jsonServices.updateUserProfile(userDetail)
+    }
+
     suspend fun getUser(userId: Int): MyResult<User> = tryCatching {
-        jsonServices.getUser(userId)
+        jsonServicesTest.getUser(userId)
     }
 
     suspend fun getUserList(): MyResult<List<User>> = tryCatching {
-        jsonServices.getUserList()
+        jsonServicesTest.getUserList()
     }
 
     suspend fun postUserData(userPostData: UserPostData): MyResult<UserData> = tryCatching {
-        jsonServices.postUserData(userPostData)
+        jsonServicesTest.postUserData(userPostData)
     }
 
     /*fun mobileOTP(mobile:String): ResultOld<MobileOtpModel> {

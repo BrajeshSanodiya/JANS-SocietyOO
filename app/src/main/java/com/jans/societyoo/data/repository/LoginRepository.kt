@@ -2,10 +2,8 @@ package com.jans.societyoo.data.repository
 
 import com.jans.societyoo.data.remote.LoginDataSource
 import com.jans.societyoo.model.*
-import com.jans.societyoo.model.login.OTPVerifyData
-import com.jans.societyoo.model.login.OtpRequest
-import com.jans.societyoo.model.login.OtpVerifyRequest
-import com.jans.societyoo.model.login.SendOTPData
+import com.jans.societyoo.model.login.*
+import com.jans.societyoo.model.login.UserData
 import com.jans.societyoo.utils.MyResult
 
 class LoginRepository {
@@ -16,9 +14,15 @@ class LoginRepository {
         return loginDataSource.sendOTP(otpRequest)
     }
 
-    suspend fun verifyOtp(otpVerifyRequest: OtpVerifyRequest): MyResult<ApiDataObject<OTPVerifyData>>{
+    suspend fun verifyOtp(otpVerifyRequest: OtpVerifyRequest): MyResult<ApiDataObject<UserData>>{
         return loginDataSource.verifyOTP(otpVerifyRequest)
     }
+
+    suspend fun updateUserProfile(userDetail: UserDetail): MyResult<ApiDataObject<UserData>>{
+        return loginDataSource.updateUserProfile(userDetail)
+    }
+
+
 
     suspend fun getUser(userId: Int): MyResult<User>{
         return loginDataSource.getUser(userId)

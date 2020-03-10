@@ -12,14 +12,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.jans.societyoo.R
+import com.jans.societyoo.data.local.prefs.UserPreferences
+import com.jans.societyoo.model.login.FlatDetail
 import com.jans.societyoo.ui.MainActivity
 import com.jans.societyoo.ui.customviews.NonSwipeableViewPager
 import com.jans.societyoo.viewmodel.LoginViewModel
 import com.jans.societyoo.viewmodel.LoginViewModelFactory
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class LoginActivity : AppCompatActivity() {
-
+    var preferences= UserPreferences(this)
     private lateinit var loginViewModel: LoginViewModel
     private var nonSwipeableViewPager: NonSwipeableViewPager? = null
 
@@ -51,6 +54,14 @@ class LoginActivity : AppCompatActivity() {
         }else if(fragmentState==LoginFragmentState.USER_PROFILE){
             nonSwipeableViewPager!!.currentItem=3
         }else if(fragmentState==LoginFragmentState.AFTER_LOGIN){
+
+            var flatsDetail=loginViewModel.flatsDetailLiveData.value
+            var mobile= loginViewModel.mobileNumberLiveData.value
+            var userDetail= loginViewModel.userDetailLiveData.value
+            UserPreferences::flatsDetail.set(preferences,flatsDetail.toString());
+            UserPreferences::userDetail.set(preferences,userDetail.toString());
+            UserPreferences::mobileNum.set(preferences,mobile);
+
             startActivity(Intent(this,MainActivity::class.java))
             finish();
         }

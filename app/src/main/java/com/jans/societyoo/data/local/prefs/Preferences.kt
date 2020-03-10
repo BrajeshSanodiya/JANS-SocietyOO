@@ -123,6 +123,7 @@ abstract class Preferences(private var context: Context) {
     fun stringSetPref(prefKey: String? = null, defaultValue: Set<String> = HashSet()) =
         GenericPrefDelegate(prefKey, defaultValue, StorableType.StringSet)
 
+
     private fun onPrefChanged(property: KProperty<*>) {
         listeners.forEach { it.onSharedPrefChanged(property) }
     }

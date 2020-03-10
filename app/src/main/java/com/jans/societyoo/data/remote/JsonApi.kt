@@ -1,10 +1,8 @@
 package com.jans.societyoo.data.remote
 
 import com.jans.societyoo.model.*
-import com.jans.societyoo.model.login.OTPVerifyData
-import com.jans.societyoo.model.login.OtpRequest
-import com.jans.societyoo.model.login.OtpVerifyRequest
-import com.jans.societyoo.model.login.SendOTPData
+import com.jans.societyoo.model.login.*
+import com.jans.societyoo.model.login.UserData
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -19,7 +17,10 @@ interface JsonApi {
     suspend fun sendOTP(@Body otpRequest: OtpRequest): ApiDataObject<SendOTPData>
 
     @POST("validotp")
-    suspend fun verifyOTP(@Body otpVerifyRequest: OtpVerifyRequest): ApiDataObject<OTPVerifyData>
+    suspend fun verifyOTP(@Body otpVerifyRequest: OtpVerifyRequest): ApiDataObject<UserData>
+
+    @POST("inseruserdetails")
+    suspend fun updateUserProfile(@Body userDetail: UserDetail): ApiDataObject<UserData>
 
 
     @GET("/users/{id}")

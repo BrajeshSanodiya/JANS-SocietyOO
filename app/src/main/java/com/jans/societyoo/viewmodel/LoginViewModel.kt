@@ -18,6 +18,8 @@ class LoginViewModel() : ViewModel() {
     private val loginRepository: LoginRepository = LoginRepository();
     val mobileNumberLiveData = MutableLiveData<String>()
     //val flatsDataLiveData = MutableLiveData<List<Flat>>()
+    val flatsDetailLiveData=MutableLiveData<List<FlatDetail>>()
+    val userDetailLiveData=MutableLiveData<UserDetail>()
 
     val loginFlatViewState = MutableLiveData<LoginFlatsViewState>()
 
@@ -49,8 +51,11 @@ class LoginViewModel() : ViewModel() {
     fun setFlatsConfirm(selectedId:Int,checked:Boolean){
         loginFlatViewState.value=LoginFlatsViewState(selectedFlatId=selectedId,isItemChecked = checked)
     }
-    fun setFlatsUsers(flats:List<FlatDetail>?, userDetail: UserDetail?){
-        loginFlatViewState.value=LoginFlatsViewState(flats=flats,userDetail = userDetail)
+    fun setFlatsUsers(flats:List<FlatDetail>, userDetail: UserDetail,mobile: String){
+        //loginFlatViewState.value=LoginFlatsViewState(flats=flats,userDetail = userDetail)
+        flatsDetailLiveData.value=flats
+        userDetailLiveData.value=userDetail
+        mobileNumberLiveData.value=mobile
     }
 
 
@@ -60,9 +65,12 @@ class LoginViewModel() : ViewModel() {
 
 
     fun openAfterLoginScreen() {
-            loginFragmentChanged(LoginFragmentState.AFTER_LOGIN)
+        loginFragmentChanged(LoginFragmentState.AFTER_LOGIN)
     }
-
+    /*fun callAfterLoginScreen() {
+        _loginViewState.value =LoginViewState(loginState)
+    }
+*/
     fun openOtpScreen(mobile: String) {
         if (isMobileValid(mobile)) {
             setMobileNumberLiveData(mobile)

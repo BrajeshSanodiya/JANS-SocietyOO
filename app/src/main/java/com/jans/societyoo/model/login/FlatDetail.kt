@@ -28,12 +28,12 @@ data class FlatDetail(
     val towerId: Int,
     @SerializedName("tower_name")
     val towerName: String,
+    @SerializedName("um_mobile")
+    val umMobile: String,
     @SerializedName("user_id")
     val userId: Int,
     @SerializedName("user_master_id")
     val userMasterId: Int,
-    @SerializedName("user_mobile")
-    val userMobile: String,
     @SerializedName("user_type")
     val userType: String
 )

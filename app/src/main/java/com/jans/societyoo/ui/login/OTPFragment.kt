@@ -27,7 +27,7 @@ import com.jans.societyoo.MySMSBroadcastReceiver
 import com.jans.societyoo.R
 import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.model.ApiDataObject
-import com.jans.societyoo.model.login.OTPVerifyData
+import com.jans.societyoo.model.login.UserData
 import com.jans.societyoo.model.login.SendOTPData
 import com.jans.societyoo.ui.MainActivity
 import com.jans.societyoo.utils.MyResult
@@ -145,7 +145,7 @@ class OTPFragment : Fragment(), OnOtpCompletionListener,
         loginViewModel.verifyOtp(mobileNumber!!, otpValue!!).observe(viewLifecycleOwner, Observer {
             val result = it
             if (result is MyResult.Success) {
-                val data: ApiDataObject<OTPVerifyData> = result.data
+                val data: ApiDataObject<UserData> = result.data
                 if (data.dis_msg == 1 && !TextUtils.isEmpty(data.msg))
                     PrintMsg.toast(context, data.msg);
                 if (data.success_stat == 1) {
@@ -153,10 +153,11 @@ class OTPFragment : Fragment(), OnOtpCompletionListener,
                         PrintMsg.println("flatDetails : " + data.data_details.flatsDetails.size)
                         if (data.data_details.flatsDetails.size > 1)
                         {
-                            loginViewModel.setFlatsUsers(data.data_details.flatsDetails,data.data_details.userDetails)
+                            loginViewModel.setFlatsUsers(data.data_details.flatsDetails,data.data_details.userDetails,data.data_details.flatsDetails.get(0).umMobile)
                             loginViewModel.loginFragmentChanged(LoginFragmentState.FLAT_CONFIRM)
                         }
-                        else if (data.data_details.userDetails == null && data.data_details.userDetails.userProfileId==0){
+                        else if (data.data_details.userDetails == null && data.data_details.userDetails.profileId==0){
+                            loginViewModel.setFlatsUsers(data.data_details.flatsDetails,data.data_details.userDetails,data.data_details.flatsDetails.get(0).umMobile)
                             loginViewModel.loginFragmentChanged(LoginFragmentState.USER_PROFILE)
                         }
                         else{
@@ -180,8 +181,8 @@ class OTPFragment : Fragment(), OnOtpCompletionListener,
                 if (data.dis_msg == 1 && !TextUtils.isEmpty(data.msg))
                     PrintMsg.toast(context, data.msg);
                 if (data.success_stat == 1) {
-                    PrintMsg.toast(context, "OTP Resend to $mobileNumber")
                     PrintMsg.toastDebug(context, "Your OTP is ${data.data_details.data_details}")
+                    PrintMsg.println("Your OTP is ${data.data_details.data_details}")
                     btnResend!!.isEnabled = false
                     resentOtpTimmer()
                 }

@@ -27,6 +27,7 @@ class FlatsFragment : Fragment() {
     private lateinit var loginViewModel: LoginViewModel
     var flats: List<FlatDetail>? = null
     var userDetail:UserDetail?=null
+    var mobileNumber: String? = null
     var rgFlats:RadioGroup?=null
     @SuppressLint("FragmentLiveDataObserve")
     override fun onCreateView(
@@ -37,29 +38,40 @@ class FlatsFragment : Fragment() {
         rgFlats = rootView.findViewById(R.id.rgFlats_Flats)
         var btnNext:Button=rootView.findViewById(R.id.btnNext_Flats)
 
-        loginViewModel = ViewModelProvider(
-            activity!!.viewModelStore,
-            LoginViewModelFactory()
-        ).get(LoginViewModel::class.java)
-        loginViewModel.loginFlatViewState.observe(viewLifecycleOwner, Observer {
-            val result = it
-            if(result.flats!=null && result.flats.size>0)
+        loginViewModel = ViewModelProvider(activity!!.viewModelStore,LoginViewModelFactory()).get(LoginViewModel::class.java)
+        loginViewModel.flatsDetailLiveData.observe(viewLifecycleOwner, Observer {
+            val _flats=it
+            if(_flats!=null && _flats.size>0)
             {
-                flats=result.flats
+                flats=_flats
                 showFlats()
             }
-            if(result.userDetail!=null){
-                userDetail=result.userDetail
+        })
+
+        loginViewModel.userDetailLiveData.observe(viewLifecycleOwner, Observer {
+            val _userDetail=it
+            if(_userDetail!=null){
+                userDetail=_userDetail
             }
+        })
+        loginViewModel.mobileNumberLiveData.observe(this, Observer {
+            mobileNumber = it
+        })
+
+
+        loginViewModel.loginFlatViewState.observe(viewLifecycleOwner, Observer {
+            val result = it
             btnNext.isEnabled=result.isItemChecked
         })
         btnNext.setOnClickListener {
-            //var loginFlatViewState:LoginFlatsViewState= loginViewModel.loginFlatViewState.value!!
-            //PrintMsg.toastDebug(context,loginFlatViewState.toString());
-            if (userDetail == null || userDetail!!.userProfileId==0)
+            if (userDetail == null || userDetail!!.profileId==null || userDetail!!.profileId==0){
+                loginViewModel.setFlatsUsers(flats!!,userDetail!!,mobileNumber!!)
                 loginViewModel.loginFragmentChanged(LoginFragmentState.USER_PROFILE)
-            else
+            }
+            else{
+                loginViewModel.setFlatsUsers(flats!!,userDetail!!,mobileNumber!!)
                 loginViewModel.openAfterLoginScreen()
+            }
         }
 
         rgFlats!!.setOnCheckedChangeListener(object : RadioGroup.OnCheckedChangeListener {

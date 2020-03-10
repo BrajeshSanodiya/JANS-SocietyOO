@@ -37,6 +37,13 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
 
+        btnDeleteShared_dashboard.setOnClickListener{
+            UserPreferences::flatsDetail.set(preferences,"");
+            UserPreferences::userDetail.set(preferences,"");
+            UserPreferences::mobileNum.set(preferences,"");
+            Toast.makeText(this,"LogOut Successfully! Kill the app and Open again..",Toast.LENGTH_LONG).show()
+        }
+
         btnSaveShared_dashboard.setOnClickListener{
             UserPreferences::userName.set(preferences,etSaveShared_dashboard.text.toString().trim());
             UserPreferences::emailAccount.set(preferences,"sanodiya.brajesh@gmail.com");
@@ -73,7 +80,7 @@ class MainActivity : AppCompatActivity() {
 
         //startActivity(Intent(this, LoginActivity::class.java))s
 
-        PrintMsg.toastDebug(this,""+preferences.flats)
+       // PrintMsg.toastDebug(this,""+preferences.flats)
     }
 
 

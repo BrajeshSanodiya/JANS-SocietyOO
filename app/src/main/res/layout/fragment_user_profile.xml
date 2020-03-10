@@ -93,7 +93,7 @@
             android:layout_marginRight="12dp"
             android:textSize="20sp" />
         <RadioGroup
-            android:id="@+id/radioGrp"
+            android:id="@+id/rgGender_UserProfile"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"

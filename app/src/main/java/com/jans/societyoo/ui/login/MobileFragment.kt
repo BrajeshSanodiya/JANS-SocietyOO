@@ -71,7 +71,7 @@ class MobileFragment : Fragment() {
             if (btnNext.isEnabled && btnNextActionAutoPerformed) {
                 btnNextActionAutoPerformed=false
                 GlobalScope.launch(Dispatchers.Main) {
-                    delay(1000)
+                    delay(500)
                     nextButtonClick()
                 }
             }
@@ -82,17 +82,6 @@ class MobileFragment : Fragment() {
 
         })
 
-        /*    etMobile.setOnTouchListener(object : View.OnTouchListener {
-                override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                    when (event?.action) {
-                        MotionEvent.ACTION_DOWN -> //Do Something
-                            requestHint()
-                    }
-
-                    return v?.onTouchEvent(event) ?: true
-                }
-            })
-    */
         etMobile!!.apply {
             afterTextChanged {
                 loginViewModel.mobileDataChanged(etMobile.text.toString())
@@ -110,9 +99,8 @@ class MobileFragment : Fragment() {
             }
         }
 
-        // Start a coroutine
         GlobalScope.launch {
-            delay(1000)
+            delay(500)
             requestHint()
         }
 

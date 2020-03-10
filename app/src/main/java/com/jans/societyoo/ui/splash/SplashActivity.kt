@@ -4,10 +4,12 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.text.TextUtils
 import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.jans.societyoo.R
+import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.ui.MainActivity
 import com.jans.societyoo.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_splash.*
@@ -20,9 +22,14 @@ import kotlinx.coroutines.launch
 class SplashActivity : AppCompatActivity() {
     private val handler = Handler()
     private val activityLaunchRunnable = Runnable { callNextActivity() }
-
+    var preferences= UserPreferences(this)
     private fun callNextActivity() {
-        startActivity(Intent(this, LoginActivity::class.java))
+        if(TextUtils.isEmpty(preferences.mobileNum))
+        {
+            startActivity(Intent(this, LoginActivity::class.java))
+        }else{
+            startActivity(Intent(this, MainActivity::class.java))
+        }
         finish()
     }
 
@@ -45,7 +52,7 @@ class SplashActivity : AppCompatActivity() {
         }
 
         GlobalScope.launch(Dispatchers.Main) {
-            delay(3000)
+            delay(2000)
             callNextActivity()
         }
 
