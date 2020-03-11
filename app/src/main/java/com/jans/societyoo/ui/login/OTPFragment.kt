@@ -29,7 +29,8 @@ import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.model.ApiDataObject
 import com.jans.societyoo.model.login.UserData
 import com.jans.societyoo.model.login.SendOTPData
-import com.jans.societyoo.ui.MainActivity
+import com.jans.societyoo.ui.main.MainActivity
+import com.jans.societyoo.utils.Constants
 import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.PrintMsg
 import com.jans.societyoo.viewmodel.LoginViewModel
@@ -44,8 +45,8 @@ import kotlinx.coroutines.launch
 /**
  * A simple [Fragment] subclass.
  */
-class OTPFragment : Fragment(), OnOtpCompletionListener,
-    MySMSBroadcastReceiver.OTPReceiveListener {
+class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.OTPReceiveListener  {
+
 
     var mCredentialsApiClient: GoogleApiClient? = null
     val smsBroadcast = MySMSBroadcastReceiver()
@@ -58,20 +59,31 @@ class OTPFragment : Fragment(), OnOtpCompletionListener,
     var otpView: OtpView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mCredentialsApiClient = GoogleApiClient.Builder(activity!!)
+        mCredentialsApiClient = GoogleApiClient.Builder(requireActivity())
             .addApi(Auth.CREDENTIALS_API)
             .build()
 
-        startSMSListener()
+        preferences = UserPreferences(requireContext())
+        Constants.autoOTPSendAllow=true
+    }
 
+    override fun onStart() {
+        super.onStart()
+        startSMSListener()
         smsBroadcast.initOTPListener(this)
         val intentFilter = IntentFilter()
         intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION)
 
-        context!!.applicationContext.registerReceiver(smsBroadcast, intentFilter)
-        preferences = UserPreferences(context!!)
+        requireContext().applicationContext.registerReceiver(smsBroadcast, intentFilter)
     }
 
+    override fun onStop() {
+        super.onStop()
+        if (smsBroadcast != null && context != null) {
+            LocalBroadcastManager.getInstance(requireContext().applicationContext)
+                .unregisterReceiver(smsBroadcast)
+        }
+    }
     @SuppressLint("FragmentLiveDataObserve")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,7 +99,7 @@ class OTPFragment : Fragment(), OnOtpCompletionListener,
 
         otpView!!.setOtpCompletionListener(this)
         loginViewModel = ViewModelProvider(
-            activity!!.viewModelStore,
+            requireActivity().viewModelStore,
             LoginViewModelFactory()
         ).get(LoginViewModel::class.java)
         loginViewModel.loginOtpViewState.observe(viewLifecycleOwner, Observer {
@@ -119,7 +131,7 @@ class OTPFragment : Fragment(), OnOtpCompletionListener,
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE -> {
                         Toast.makeText(context, "OTP : $otpValue", Toast.LENGTH_SHORT).show()
-                        context!!.startActivity(Intent(context, MainActivity::class.java))
+                        requireContext().startActivity(Intent(context, MainActivity::class.java))
                     }
                 }
                 false
@@ -138,7 +150,10 @@ class OTPFragment : Fragment(), OnOtpCompletionListener,
 
     override fun onResume() {
         super.onResume()
-        callOTPResend()
+        if(Constants.autoOTPSendAllow){
+            callOTPResend()
+            Constants.autoOTPSendAllow=false
+        }
     }
 
     private fun nextBtnClick() {
@@ -202,7 +217,7 @@ class OTPFragment : Fragment(), OnOtpCompletionListener,
     }
 
     fun resentOtpTimmer() {
-        object : CountDownTimer(10000, 1000) {
+        object : CountDownTimer(60000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 if (timerView!!.getVisibility() != View.VISIBLE) {
                     timerView!!.visibility = View.VISIBLE
@@ -219,7 +234,7 @@ class OTPFragment : Fragment(), OnOtpCompletionListener,
 
     private fun startSMSListener() {
 
-        val client = SmsRetriever.getClient(context!! /* context */)
+        val client = SmsRetriever.getClient(requireContext() /* context */)
         val task = client.startSmsRetriever()
         task.addOnSuccessListener {
             // Successfully started retriever, expect broadcast intent
@@ -230,18 +245,16 @@ class OTPFragment : Fragment(), OnOtpCompletionListener,
 
         task.addOnFailureListener {
             // otpTxtView.text = "Cannot Start SMS Retriever"
-            //Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
+           //Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
         }
     }
 
 
     override fun onOTPReceived(otp: String) {
         if (smsBroadcast != null && context != null) {
-            LocalBroadcastManager.getInstance(context!!.applicationContext)
+            LocalBroadcastManager.getInstance(requireContext().applicationContext)
                 .unregisterReceiver(smsBroadcast)
-            Toast.makeText(context!!.applicationContext, otp, Toast.LENGTH_SHORT).show()
-            //otpTxtView.text = "Your OTP is: $otp"
-            Log.e("OTP Received", otp)
+            PrintMsg.println("OTP Received " +otp)
             otpView!!.setText(otp)
         }
 
@@ -249,7 +262,7 @@ class OTPFragment : Fragment(), OnOtpCompletionListener,
 
     override fun onOTPTimeOut() {
         //otpTxtView.setText("Timeout")
-        //Toast.makeText(this.context, " SMS retriever API Timeout", Toast.LENGTH_SHORT).show()
+        PrintMsg.println("SMS retriever API Timeout")
     }
 
 

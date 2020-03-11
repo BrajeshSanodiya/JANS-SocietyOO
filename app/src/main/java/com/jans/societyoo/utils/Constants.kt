@@ -8,8 +8,9 @@ import android.net.ConnectivityManager
 
 
 class Constants {
-
-
+    companion object{
+        var autoOTPSendAllow:Boolean=false
+    }
     /*object Endpoints {
         const val BASE_ENDPOINT = "http://prod.bhaskarapi.com/"
     }

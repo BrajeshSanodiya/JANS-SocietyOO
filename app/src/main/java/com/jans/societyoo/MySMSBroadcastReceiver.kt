@@ -11,6 +11,10 @@ import com.google.android.gms.common.api.Status
  * Created by Chintan on 08-11-2017.
  */
 
+
+//https://github.com/WaveTechStudio/SMSRetrieverAPIMaster
+
+
 class MySMSBroadcastReceiver : BroadcastReceiver() {
 
     private var otpReceiver: OTPReceiveListener? = null

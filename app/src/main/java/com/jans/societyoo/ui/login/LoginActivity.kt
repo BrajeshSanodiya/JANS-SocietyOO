@@ -9,16 +9,13 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.viewpager.widget.ViewPager
-import androidx.viewpager2.widget.ViewPager2
 import com.jans.societyoo.R
 import com.jans.societyoo.data.local.prefs.UserPreferences
-import com.jans.societyoo.model.login.FlatDetail
-import com.jans.societyoo.ui.MainActivity
+import com.jans.societyoo.ui.main.MainActivity
 import com.jans.societyoo.ui.customviews.NonSwipeableViewPager
+import com.jans.societyoo.utils.Constants
 import com.jans.societyoo.viewmodel.LoginViewModel
 import com.jans.societyoo.viewmodel.LoginViewModelFactory
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 class LoginActivity : AppCompatActivity() {
@@ -47,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
         if(fragmentState==LoginFragmentState.MOBILE_INPUT){
             nonSwipeableViewPager!!.currentItem=0
         }else if(fragmentState==LoginFragmentState.OTP_VERIFY){
+            Constants.autoOTPSendAllow=true
             nonSwipeableViewPager!!.currentItem=1
         }else if(fragmentState==LoginFragmentState.FLAT_CONFIRM){
             nonSwipeableViewPager!!.currentItem=2
@@ -61,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
             UserPreferences::userDetail.set(preferences,userDetail.toString());
             UserPreferences::mobileNum.set(preferences,mobile);
 
-            startActivity(Intent(this,MainActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
             finish();
         }
     }

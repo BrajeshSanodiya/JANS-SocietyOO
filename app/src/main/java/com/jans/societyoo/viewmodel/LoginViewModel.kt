@@ -33,7 +33,6 @@ class LoginViewModel() : ViewModel() {
     private val _loginViewState = MutableLiveData<LoginViewState>()
     val loginViewState: LiveData<LoginViewState> = _loginViewState
 
-
     fun sendOtp(mobile: String) = liveData {
         var otpRequest= OtpRequest(mobile)
         val result = loginRepository.sendOtp(otpRequest)

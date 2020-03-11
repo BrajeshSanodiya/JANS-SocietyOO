@@ -1,18 +1,13 @@
 package com.jans.societyoo.ui.splash
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
-import android.view.Window
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import com.jans.onboarding.OnBoardingScreen
-import com.jans.onboarding.OnBoardingView
 import com.jans.societyoo.R
 import com.jans.societyoo.data.local.prefs.UserPreferences
-import com.jans.societyoo.ui.MainActivity
+import com.jans.societyoo.ui.main.MainActivity
 import com.jans.societyoo.ui.login.LoginActivity
 import com.jans.societyoo.ui.onboard.OnBoardActivity
 import kotlinx.android.synthetic.main.activity_splash.*
