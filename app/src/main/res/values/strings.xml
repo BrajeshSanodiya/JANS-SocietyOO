@@ -9,6 +9,7 @@
     <string name="welcome_mobile">Welcome to %s</string>
     <string name="prompt_mobile">Enter Mobile Number</string>
     <string name="next_btn_mobile">Next</string>
+    <string name="save_btn">Save</string>
     <string name="header_otp">Welcome to OTP</string>
     <string name="verify_btn_otp">Verify</string>
     <string name="resend_btn_otp">Resend OTP</string>

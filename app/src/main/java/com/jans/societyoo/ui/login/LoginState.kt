@@ -20,7 +20,7 @@ data class LoginOtpViewState(
 data class LoginFlatsViewState(
     /*val flats: List<FlatDetail>? = null,
     val userDetail: UserDetail? = null,*/
-    val selectedFlatId: Int? = null,
+    val selectedUserId: Int = 0,
     val isItemChecked: Boolean = false
 )
 

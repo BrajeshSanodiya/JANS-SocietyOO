@@ -1,10 +1,8 @@
 package com.jans.societyoo.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.content.Context
 import android.util.Patterns
-import androidx.lifecycle.liveData
+import androidx.lifecycle.*
 import com.jans.societyoo.model.login.OtpRequest
 import com.jans.societyoo.model.login.OtpVerifyRequest
 import com.jans.societyoo.ui.login.*
@@ -12,10 +10,13 @@ import com.jans.societyoo.utils.PrintMsg
 import com.jans.societyoo.data.repository.LoginRepository
 import com.jans.societyoo.model.login.FlatDetail
 import com.jans.societyoo.model.login.UserDetail
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.flow
+import okhttp3.internal.wait
 
 
-class LoginViewModel() : ViewModel() {
-    private val loginRepository: LoginRepository = LoginRepository();
+class LoginViewModel(context: Context) : ViewModel() {
+    private val loginRepository: LoginRepository = LoginRepository(context);
     val mobileNumberLiveData = MutableLiveData<String>()
     //val flatsDataLiveData = MutableLiveData<List<Flat>>()
     val flatsDetailLiveData=MutableLiveData<List<FlatDetail>>()
@@ -40,6 +41,48 @@ class LoginViewModel() : ViewModel() {
         emit(result)
     }
 
+  /*  fun getAllFlatsDB()= liveData{
+            GlobalScope.launch {
+                val result=loginRepository.getAllFlatsDB()
+                PrintMsg.println("Room DB : All Flats : "+result.toString())
+                emit(result)
+            }
+
+    }*/
+
+    fun getAllFlatsDB(){
+        GlobalScope.launch {
+            val result=loginRepository.getAllFlatsDB()
+            PrintMsg.println("Room DB : getAllFlatsDB : "+result.toString())
+            flatsDetailLiveData.postValue(result)
+        }
+    }
+
+    fun getUserDetailDB(){
+        GlobalScope.launch {
+            val result=loginRepository.getUserDetailDB()
+            PrintMsg.println("Room DB : getUserDetailDB : "+result.toString())
+            userDetailLiveData.postValue(result)
+        }
+    }
+
+    fun setUserDetailDB(userDetail: UserDetail){
+        GlobalScope.launch {
+            loginRepository.deleteAllUsersDB()
+            loginRepository.setUserDetailDB(userDetail)
+            PrintMsg.println("Room DB : setUserDetailDB : "+userDetail.toString())
+        }
+    }
+
+    fun setFlatDetailsDB(flatDetails:List<FlatDetail>){
+        GlobalScope.launch {
+            loginRepository.getAllFlatsDB()
+            loginRepository.setFlatDetailsDB(flatDetails)
+            PrintMsg.println("Room DB : setFlatDetailsDB : "+flatDetails.toString())
+        }
+    }
+
+
     fun verifyOtp(mobile: String,otpValue: String) = liveData {
         var otpVerifyRequest=OtpVerifyRequest(mobile,otpValue)
         val result = loginRepository.verifyOtp(otpVerifyRequest)
@@ -48,13 +91,13 @@ class LoginViewModel() : ViewModel() {
     }
 
     fun setFlatsConfirm(selectedId:Int,checked:Boolean){
-        loginFlatViewState.value=LoginFlatsViewState(selectedFlatId=selectedId,isItemChecked = checked)
+        loginFlatViewState.value=LoginFlatsViewState(selectedUserId= selectedId,isItemChecked = checked)
     }
     fun setFlatsUsers(flats:List<FlatDetail>, userDetail: UserDetail,mobile: String){
         //loginFlatViewState.value=LoginFlatsViewState(flats=flats,userDetail = userDetail)
         flatsDetailLiveData.value=flats
         userDetailLiveData.value=userDetail
-        mobileNumberLiveData.value=mobile
+        //mobileNumberLiveData.value=mobile
     }
 
 

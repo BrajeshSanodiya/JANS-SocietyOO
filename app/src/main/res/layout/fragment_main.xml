@@ -43,6 +43,18 @@
         app:layout_constraintTop_toBottomOf="@+id/btnUpdateProfile_dashboard"
         />
 
+    <Button
+        android:id="@+id/btnDatabase_dashboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Room Database"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnDeleteShared_dashboard"
+        />
+
     <EditText
         android:id="@+id/etSaveShared_dashboard"
         android:layout_width="wrap_content"
@@ -54,7 +66,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnDeleteShared_dashboard"/>
+        app:layout_constraintTop_toBottomOf="@+id/btnDatabase_dashboard"/>
 
     <Button
         android:id="@+id/btnSaveShared_dashboard"

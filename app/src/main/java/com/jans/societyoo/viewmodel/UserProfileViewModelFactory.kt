@@ -23,11 +23,11 @@ import androidx.lifecycle.ViewModelProvider
     }
 }*/
 
-class LoginViewModelFactory(private val context : Context) : ViewModelProvider.Factory {
+class UserProfileViewModelFactory(private val context : Context) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
-            return LoginViewModel(context) as T
+        if (modelClass.isAssignableFrom(UserProfileViewModel::class.java)) {
+            return UserProfileViewModel(context) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

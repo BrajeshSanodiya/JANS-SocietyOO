@@ -3,22 +3,27 @@ package com.jans.societyoo.ui.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.jans.roomexplorer.RoomExplorer
 import com.jans.societyoo.R
+import com.jans.societyoo.data.local.db.DatabaseInstance
 import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.model.User
 import com.jans.societyoo.model.UserPostData
 import com.jans.societyoo.ui.FragmentSwitcher
 import com.jans.societyoo.ui.login.FlatsFragment
 import com.jans.societyoo.ui.login.LoginActivity
+import com.jans.societyoo.ui.login.UserProfileFragment
 import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.PrintMsg
 import com.jans.societyoo.viewmodel.MainActivityViewModel
+import com.jans.societyoo.viewmodel.MainActivityViewModelFactory
 import com.jans.tracking.PropertyName
 import com.jans.tracking.Tracking
 import com.jans.tracking.TrackingOptions
@@ -28,7 +33,12 @@ class MainFragment : Fragment() {
     lateinit var fragmentSwitcher: FragmentSwitcher
     lateinit var preferences:UserPreferences
     lateinit var viewModel: MainActivityViewModel
-
+    companion object {
+        @JvmStatic
+        fun newInstance() =
+            MainFragment().apply {
+            }
+    }
     override fun onAttach(context: Context) {
         super.onAttach(context)
         fragmentSwitcher=context as FragmentSwitcher
@@ -45,12 +55,16 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+        viewModel = ViewModelProvider(viewModelStore,MainActivityViewModelFactory(requireContext())).get(MainActivityViewModel::class.java)
+
 
         view.btnDefaultFlat_dashboard.setOnClickListener{
-            fragmentSwitcher.siwtchFragment(FlatsFragment(),true)
+            fragmentSwitcher.siwtchFragment(FlatsFragment.newInstance(isFromLogin = false),true)
         }
 
+        view.btnUpdateProfile_dashboard.setOnClickListener{
+            fragmentSwitcher.siwtchFragment(UserProfileFragment.newInstance(isFromLogin = false),true)
+        }
 
         view.btnDeleteShared_dashboard.setOnClickListener{
             UserPreferences::flatsDetail.set(preferences,"");
@@ -58,6 +72,10 @@ class MainFragment : Fragment() {
             UserPreferences::mobileNum.set(preferences,"");
             UserPreferences::appOpenFirstTime.set(preferences,false)
             PrintMsg.toast(requireContext(),"LogOut Successfully! Kill the app and Open again..")
+        }
+
+        view.btnDatabase_dashboard.setOnClickListener{
+            RoomExplorer.show(requireContext(), DatabaseInstance::class.java, DatabaseInstance.DB_NAME)
         }
 
         view.btnSaveShared_dashboard.setOnClickListener{
@@ -96,12 +114,6 @@ class MainFragment : Fragment() {
 
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-            MainFragment().apply {
-            }
-    }
 
 
 

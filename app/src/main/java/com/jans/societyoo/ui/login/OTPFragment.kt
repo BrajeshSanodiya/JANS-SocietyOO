@@ -100,7 +100,7 @@ class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.
         otpView!!.setOtpCompletionListener(this)
         loginViewModel = ViewModelProvider(
             requireActivity().viewModelStore,
-            LoginViewModelFactory()
+            LoginViewModelFactory(requireContext())
         ).get(LoginViewModel::class.java)
         loginViewModel.loginOtpViewState.observe(viewLifecycleOwner, Observer {
             val mobileState = it ?: return@Observer
@@ -164,6 +164,9 @@ class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.
                 if (data.dis_msg == 1 && !TextUtils.isEmpty(data.msg))
                     PrintMsg.toast(context, data.msg);
                 if (data.success_stat == 1) {
+                    loginViewModel.setFlatDetailsDB(result.data.data_details.flatsDetails)
+                    loginViewModel.setUserDetailDB(result.data.data_details.userDetails)
+
                     if (data.data_details.flatsDetails.size > 0) {
                         PrintMsg.println("flatDetails : " + data.data_details.flatsDetails.size)
                         if (data.data_details.flatsDetails.size > 1)

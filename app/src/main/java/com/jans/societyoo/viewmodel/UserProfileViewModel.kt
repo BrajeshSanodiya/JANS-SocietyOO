@@ -1,6 +1,7 @@
 package com.jans.societyoo.viewmodel
 
 
+import android.content.Context
 import android.util.Patterns
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,11 +15,11 @@ import com.jans.societyoo.utils.PrintMsg
 import java.text.SimpleDateFormat
 import java.util.*
 
-public class UserProfileViewModel : ViewModel() {
+public class UserProfileViewModel(context: Context) : ViewModel() {
 
     val userProfileViewState=MutableLiveData<LoginUserProfileViewState>()
 
-    private val loginRepository: LoginRepository = LoginRepository();
+    private val loginRepository: LoginRepository = LoginRepository(context);
 
     // A placeholder username validation check
     fun checkEmail(email:String) {

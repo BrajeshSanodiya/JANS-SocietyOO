@@ -46,7 +46,7 @@ class MobileFragment : Fragment() {
     private lateinit var loginViewModel: LoginViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mCredentialsApiClient = GoogleApiClient.Builder(activity!!)
+        mCredentialsApiClient = GoogleApiClient.Builder(requireActivity())
             .addApi(Auth.CREDENTIALS_API)
             .build()
     }
@@ -62,8 +62,8 @@ class MobileFragment : Fragment() {
         val btnNext = rootView.btnNext
         loading = rootView.loading
         loginViewModel = ViewModelProvider(
-            activity!!.viewModelStore,
-            LoginViewModelFactory()
+            requireActivity().viewModelStore,
+            LoginViewModelFactory(requireContext())
         ).get(LoginViewModel::class.java)
         loginViewModel.loginMobileViewState.observe(viewLifecycleOwner, Observer {
             val mobileState = it ?: return@Observer

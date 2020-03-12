@@ -31,9 +31,7 @@ class LoginActivity : AppCompatActivity() {
         nonSwipeableViewPager!!.offscreenPageLimit=0
         nonSwipeableViewPager!!.adapter = NonSwipeableLoginPagerAdapter(supportFragmentManager)
 
-        loginViewModel = ViewModelProvider(viewModelStore,
-            LoginViewModelFactory()
-        ).get(LoginViewModel::class.java)
+        loginViewModel = ViewModelProvider(viewModelStore, LoginViewModelFactory(this)).get(LoginViewModel::class.java)
         loginViewModel.loginViewState.observe(this, Observer {
             val loginEventState = it ?: return@Observer
                 changeFragment(loginEventState.fragmentState)
@@ -53,7 +51,7 @@ class LoginActivity : AppCompatActivity() {
         }else if(fragmentState==LoginFragmentState.AFTER_LOGIN){
 
             var flatsDetail=loginViewModel.flatsDetailLiveData.value
-            var mobile= loginViewModel.mobileNumberLiveData.value
+            var mobile= flatsDetail?.get(0)!!.umMobile
             var userDetail= loginViewModel.userDetailLiveData.value
             UserPreferences::flatsDetail.set(preferences,flatsDetail.toString());
             UserPreferences::userDetail.set(preferences,userDetail.toString());
@@ -88,9 +86,9 @@ class LoginActivity : AppCompatActivity() {
             return when (position) {
                0 -> return MobileFragment()
                 1 -> return OTPFragment()
-                2 -> return FlatsFragment()
-                3 -> return  UserProfileFragment()
-                else ->return UserProfileFragment()
+                2 -> return FlatsFragment.newInstance(isFromLogin = true)
+                3 -> return  UserProfileFragment.newInstance(isFromLogin = true)
+                else ->return UserProfileFragment.newInstance(isFromLogin = true)
             }
         }
     }
