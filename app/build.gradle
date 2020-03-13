@@ -85,4 +85,16 @@ dependencies {
     implementation project(':libraries:roomexplorer')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.11.4'
+
+
+    // FB Flipper
+    debugImplementation 'com.facebook.flipper:flipper:0.33.1'
+    debugImplementation 'com.facebook.soloader:soloader:0.8.2'
+    releaseImplementation 'com.facebook.flipper:flipper-noop:0.33.1' // for remove error for release
+    debugImplementation 'com.facebook.flipper:flipper-network-plugin:0.33.1'
+
+    // FB Stetho
+    implementation 'com.facebook.stetho:stetho:1.5.1'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
+
 }

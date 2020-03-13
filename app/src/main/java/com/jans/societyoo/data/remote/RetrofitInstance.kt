@@ -1,5 +1,8 @@
 package com.jans.societyoo.data.remote
 
+import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
+import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.GsonBuilder
 import com.jans.societyoo.BuildConfig
 import okhttp3.Interceptor
@@ -26,10 +29,13 @@ object RetrofitInstance {
             .build().create(JsonApi::class.java)
     }
 
+
     fun makeHttpClient(/*interceptors: Interceptor*/) = OkHttpClient.Builder()
         .connectTimeout(60, TimeUnit.SECONDS)
         .readTimeout(60, TimeUnit.SECONDS)
         .addInterceptor(headersInterceptor())
+        .addNetworkInterceptor(FlipperOkhttpInterceptor(NetworkFlipperPlugin()))
+        .addNetworkInterceptor(StethoInterceptor())
         //.apply { interceptors().add(interceptors) }
         .addInterceptor(loggingInterceptor())
         .build()
