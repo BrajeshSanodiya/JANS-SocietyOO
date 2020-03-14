@@ -67,18 +67,25 @@ class LoginViewModel(context: Context) : ViewModel() {
     }
 
     fun setUserDetailDB(userDetail: UserDetail){
-        GlobalScope.launch {
-            loginRepository.deleteAllUsersDB()
-            loginRepository.setUserDetailDB(userDetail)
-            PrintMsg.println("Room DB : setUserDetailDB : "+userDetail.toString())
+        if(userDetail!=null && userDetail.profileId>0){
+            GlobalScope.launch {
+                var resultDeleted=loginRepository.deleteAllUsersDB()
+                var resultadded=loginRepository.setUserDetailDB(userDetail)
+                PrintMsg.println("Room DB : setUserDetailDB : resultDeleted->"+resultDeleted.toString()+" resultAdded->"+resultadded.toString())
+                PrintMsg.println("Room DB : setUserDetailDB : "+userDetail.toString())
+            }
         }
+
     }
 
     fun setFlatDetailsDB(flatDetails:List<FlatDetail>){
-        GlobalScope.launch {
-            loginRepository.getAllFlatsDB()
-            loginRepository.setFlatDetailsDB(flatDetails)
-            PrintMsg.println("Room DB : setFlatDetailsDB : "+flatDetails.toString())
+        if(flatDetails!=null && flatDetails.size>0 && flatDetails.get(0).flatId>0) {
+            GlobalScope.launch {
+                var resultDeleted = loginRepository.deleteAllFlatsDB()
+                var resultadded = loginRepository.setFlatDetailsDB(flatDetails)
+                PrintMsg.println("Room DB : setFlatDetailsDB : resultDeleted->" + resultDeleted.toString() + " resultAdded->" + resultadded.toString())
+                PrintMsg.println("Room DB : setFlatDetailsDB : " + flatDetails.toString())
+            }
         }
     }
 

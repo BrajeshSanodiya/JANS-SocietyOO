@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.RelativeLayout
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -82,14 +83,24 @@ class FlatsFragment : Fragment() {
 
         loginViewModel = ViewModelProvider(
             requireActivity().viewModelStore,
-            LoginViewModelFactory(requireContext())
+            LoginViewModelFactory(requireActivity())
         ).get(LoginViewModel::class.java)
         loginViewModel.flatsDetailLiveData.observe(viewLifecycleOwner, Observer {
             val _flats = it
             if (_flats != null && _flats.size > 0) {
                 flats = _flats
-                mobileNumber=_flats[0].umMobile
+                mobileNumber = _flats[0].umMobile
                 showFlats()
+                /*if(userDetail!=null && userDetail!!.defultUserId!=null && userDetail!!.defultUserId!=0){
+                    var index = 0
+                    for (item in flats!!) {
+                        if (userDetail!!.defultUserId == item.userId) {
+                            var btnRadio: RadioButton = rgFlats!!.get(index) as RadioButton
+                            btnRadio.isChecked = true
+                        }
+                        index++
+                    }
+                }*/
             }
         })
 
@@ -97,16 +108,28 @@ class FlatsFragment : Fragment() {
             val _userDetail = it
             if (_userDetail != null) {
                 userDetail = _userDetail
+
+              /*  var index = 0
+                if (flats != null && flats!!.size > 0) {
+                    for (item in flats!!) {
+                        if (userDetail!!.defultUserId == item.userId) {
+                            var btnRadio: RadioButton = rgFlats!!.get(index) as RadioButton
+                            btnRadio.isChecked = true
+                        }
+                        index++
+                    }
+                }*/
             }
         })
-       /* loginViewModel.mobileNumberLiveData.observe(this, Observer {
-            mobileNumber = it
-        })*/
+        /* loginViewModel.mobileNumberLiveData.observe(this, Observer {
+             mobileNumber = it
+         })*/
 
 
         loginViewModel.loginFlatViewState.observe(viewLifecycleOwner, Observer {
             val result = it
-            if(isFromLogin) btnNext.isEnabled = result.isItemChecked else btnSave.isEnabled = result.isItemChecked
+            if (isFromLogin) btnNext.isEnabled = result.isItemChecked else btnSave.isEnabled =
+                result.isItemChecked
             checkedUserId = result.selectedUserId
         })
         btnNext.setOnClickListener {
@@ -125,7 +148,9 @@ class FlatsFragment : Fragment() {
 
         rgFlats!!.setOnCheckedChangeListener(object : RadioGroup.OnCheckedChangeListener {
             override fun onCheckedChanged(group: RadioGroup?, checkedId: Int) {
-                loginViewModel.setFlatsConfirm(flats!!.get(checkedId).userId, true)
+               if(checkedId!!>=0 && checkedId!!<flats!!.size){
+                   loginViewModel.setFlatsConfirm(flats!!.get(checkedId).userId, true)
+               }
             }
         })
         return rootView
@@ -134,7 +159,7 @@ class FlatsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         loginViewModel.getAllFlatsDB()
-        if(!isFromLogin){
+        if (!isFromLogin) {
             loginViewModel.getUserDetailDB()
         }
     }
@@ -173,8 +198,6 @@ class FlatsFragment : Fragment() {
                     if (data.success_stat == 1) {
                         loginViewModel.setFlatDetailsDB(result.data.data_details.flatsDetails)
                         loginViewModel.setUserDetailDB(result.data.data_details.userDetails)
-                        //fragmentSwitcher.siwtchFragment(Main.newInstance(isFromLogin = false),true)
-                        //getActivity().getFragmentManager().popBackStack();
                         requireActivity().supportFragmentManager.popBackStack()
                     }
                 } else if (result is MyResult.Error) {
