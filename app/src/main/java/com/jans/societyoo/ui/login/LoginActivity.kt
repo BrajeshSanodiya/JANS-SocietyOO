@@ -5,63 +5,91 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.jans.societyoo.R
 import com.jans.societyoo.data.local.prefs.UserPreferences
+import com.jans.societyoo.ui.FragmentSwitcher
 import com.jans.societyoo.ui.main.MainActivity
-import com.jans.societyoo.ui.customviews.NonSwipeableViewPager
-import com.jans.societyoo.utils.Constants
 import com.jans.societyoo.viewmodel.LoginViewModel
 import com.jans.societyoo.viewmodel.LoginViewModelFactory
 
 
-class LoginActivity : AppCompatActivity() {
-    var preferences= UserPreferences(this)
+class LoginActivity : AppCompatActivity(), FragmentSwitcher {
+    var preferences = UserPreferences(this)
     private lateinit var loginViewModel: LoginViewModel
-    private var nonSwipeableViewPager: NonSwipeableViewPager? = null
+    // private var nonSwipeableViewPager: NonSwipeableViewPager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        nonSwipeableViewPager = findViewById(R.id.login_pager)
-        nonSwipeableViewPager!!.offscreenPageLimit=0
-        nonSwipeableViewPager!!.adapter = NonSwipeableLoginPagerAdapter(supportFragmentManager)
+        /* nonSwipeableViewPager = findViewById(R.id.fragment_container)
+         nonSwipeableViewPager!!.offscreenPageLimit=0
+         nonSwipeableViewPager!!.adapter = NonSwipeableLoginPagerAdapter(supportFragmentManager)*/
 
-        loginViewModel = ViewModelProvider(viewModelStore, LoginViewModelFactory(this)).get(LoginViewModel::class.java)
+        loginViewModel = ViewModelProvider(
+            viewModelStore,
+            LoginViewModelFactory(this)
+        ).get(LoginViewModel::class.java)
         loginViewModel.loginViewState.observe(this, Observer {
             val loginEventState = it ?: return@Observer
-                changeFragment(loginEventState.fragmentState)
+            changeFragment(loginEventState.fragmentState)
         })
+
+        changeFragment(LoginFragmentState.MOBILE_INPUT)
     }
 
-    fun changeFragment(fragmentState: Int){
-        if(fragmentState==LoginFragmentState.MOBILE_INPUT){
-            nonSwipeableViewPager!!.currentItem=0
-        }else if(fragmentState==LoginFragmentState.OTP_VERIFY){
-            Constants.autoOTPSendAllow=true
-            nonSwipeableViewPager!!.currentItem=1
-        }else if(fragmentState==LoginFragmentState.FLAT_CONFIRM){
-            nonSwipeableViewPager!!.currentItem=2
-        }else if(fragmentState==LoginFragmentState.USER_PROFILE){
-            nonSwipeableViewPager!!.currentItem=3
-        }else if(fragmentState==LoginFragmentState.AFTER_LOGIN){
+    fun addFragments(fragment: Fragment, addToBackStack: Boolean) {
+        val manager = supportFragmentManager
+        val transaction = manager.beginTransaction()
 
-            var flatsDetail=loginViewModel.flatsDetailLiveData.value
-            var mobile= flatsDetail?.get(0)!!.umMobile
-            var userDetail= loginViewModel.userDetailLiveData.value
-            UserPreferences::flatsDetail.set(preferences,flatsDetail.toString());
-            UserPreferences::userDetail.set(preferences,userDetail.toString());
-            UserPreferences::mobileNum.set(preferences,mobile);
+        //manager!!.findFragmentById(R.id.fragment_container_login)?.let { transaction.remove(it) }
 
-            startActivity(Intent(this, MainActivity::class.java))
-            finish();
+        if (addToBackStack)
+            transaction.addToBackStack(fragment::class.java.name)
+        transaction.replace(R.id.fragment_container_login, fragment, fragment::class.java.name)
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+
+
+        transaction.commit()
+    }
+
+    override fun siwtchFragment(fragment: Fragment, addToBackStack: Boolean) {
+        addFragments(fragment, addToBackStack)
+    }
+
+    fun changeFragment(fragmentState: Int) {
+        when (fragmentState) {
+            LoginFragmentState.MOBILE_INPUT -> {
+                siwtchFragment(MobileFragment.newInstance(isFromLogin = true), false)
+            }
+            LoginFragmentState.OTP_VERIFY -> {
+                //Constants.autoOTPSendAllow=true
+                siwtchFragment(OTPFragment.newInstance(isFromLogin = true), true)
+            }
+            LoginFragmentState.FLAT_CONFIRM -> {
+                siwtchFragment(FlatsFragment.newInstance(isFromLogin = true), false)
+            }
+            LoginFragmentState.USER_PROFILE -> {
+                siwtchFragment(UserProfileFragment.newInstance(isFromLogin = true), true)
+            }
+            LoginFragmentState.AFTER_LOGIN -> {
+                var flatsDetail = loginViewModel.flatsDetailLiveData.value
+                var mobile = flatsDetail?.get(0)!!.umMobile
+                var userDetail = loginViewModel.userDetailLiveData.value
+                UserPreferences::flatsDetail.set(preferences, flatsDetail.toString());
+                UserPreferences::userDetail.set(preferences, userDetail.toString());
+                UserPreferences::mobileNum.set(preferences, mobile);
+
+                startActivity(Intent(this, MainActivity::class.java))
+                finish();
+            }
         }
     }
-    class MyAdapter(fm: FragmentManager, behavior: Int) : FragmentPagerAdapter(fm, behavior) {
+
+/*    class MyAdapter(fm: FragmentManager, behavior: Int) : FragmentPagerAdapter(fm, behavior) {
         private val NUM_ITEMS = 4
         override fun getCount(): Int {
             return NUM_ITEMS
@@ -91,15 +119,28 @@ class LoginActivity : AppCompatActivity() {
                 else ->return UserProfileFragment.newInstance(isFromLogin = true)
             }
         }
-    }
+    }*/
 
-    override fun onBackPressed() {
+
+    /*override fun onBackPressed() {
         if(nonSwipeableViewPager!!.currentItem==1){
             loginViewModel.loginFragmentChanged(LoginFragmentState.MOBILE_INPUT)
         }else
         super.onBackPressed()
 
+    }*/
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        //finish()
+       /* if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack(
+                MobileFragment::class.java.name,
+                FragmentManager.POP_BACK_STACK_INCLUSIVE
+            )
+        }*/
     }
+
 }
 
 

@@ -7,10 +7,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.RelativeLayout
+import android.widget.*
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -26,6 +23,11 @@ import com.jans.societyoo.viewmodel.LoginViewModel
 import com.jans.societyoo.viewmodel.LoginViewModelFactory
 import com.jans.societyoo.viewmodel.UserProfileViewModel
 import com.jans.societyoo.viewmodel.UserProfileViewModelFactory
+import kotlinx.android.synthetic.main.fragment_otp.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 private const val ARG_IS_FROM_LOGIN = "is_from_login"
@@ -38,14 +40,8 @@ class FlatsFragment : Fragment() {
     var mobileNumber: String? = null
     var rgFlats: RadioGroup? = null
     var checkedUserId: Int = 0
+    var progressBar:ProgressBar?=null
     private var isFromLogin: Boolean = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            isFromLogin = it.getBoolean(ARG_IS_FROM_LOGIN)
-        }
-    }
 
     companion object {
         @JvmStatic
@@ -57,6 +53,12 @@ class FlatsFragment : Fragment() {
             }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            isFromLogin = it.getBoolean(ARG_IS_FROM_LOGIN)
+        }
+    }
 
     @SuppressLint("FragmentLiveDataObserve")
     override fun onCreateView(
@@ -65,7 +67,8 @@ class FlatsFragment : Fragment() {
     ): View? {
         var rootView = inflater.inflate(R.layout.fragment_flats, container, false)
         rgFlats = rootView.findViewById(R.id.rgFlats_Flats)
-
+        progressBar = rootView.progress_bar
+        progressBar!!.visibility=View.VISIBLE
         var btnNext: Button = rootView.findViewById(R.id.btnNext_Flats)
         var btnSave: Button = rootView.findViewById(R.id.btnSave_Flats)
         if (isFromLogin) {
@@ -108,17 +111,7 @@ class FlatsFragment : Fragment() {
             val _userDetail = it
             if (_userDetail != null) {
                 userDetail = _userDetail
-
-              /*  var index = 0
-                if (flats != null && flats!!.size > 0) {
-                    for (item in flats!!) {
-                        if (userDetail!!.defultUserId == item.userId) {
-                            var btnRadio: RadioButton = rgFlats!!.get(index) as RadioButton
-                            btnRadio.isChecked = true
-                        }
-                        index++
-                    }
-                }*/
+                loginViewModel.getAllFlatsDB()
             }
         })
         /* loginViewModel.mobileNumberLiveData.observe(this, Observer {
@@ -133,11 +126,9 @@ class FlatsFragment : Fragment() {
             checkedUserId = result.selectedUserId
         })
         btnNext.setOnClickListener {
-            if (userDetail == null || userDetail!!.profileId == null || userDetail!!.profileId == 0) {
-                loginViewModel.setFlatsUsers(flats!!, userDetail!!, mobileNumber!!)
+            if (userDetail == null || userDetail!!.profileId == 0) {
                 loginViewModel.loginFragmentChanged(LoginFragmentState.USER_PROFILE)
             } else {
-                loginViewModel.setFlatsUsers(flats!!, userDetail!!, mobileNumber!!)
                 loginViewModel.openAfterLoginScreen()
             }
         }
@@ -153,18 +144,21 @@ class FlatsFragment : Fragment() {
                }
             }
         })
+
+
+
+        if (!isFromLogin) {
+            loginViewModel.getUserDetailDB()
+        }else{
+            loginViewModel.getAllFlatsDB()
+        }
+
+
         return rootView
     }
 
-    override fun onStart() {
-        super.onStart()
-        loginViewModel.getAllFlatsDB()
-        if (!isFromLogin) {
-            loginViewModel.getUserDetailDB()
-        }
-    }
-
     fun showFlats() {
+        progressBar!!.visibility=View.GONE
         if (flats != null && rgFlats != null) {
             rgFlats!!.removeAllViews()
             var index: Int = 0
@@ -178,9 +172,12 @@ class FlatsFragment : Fragment() {
                 radioButton.id = index
                 radioButton.tag = flat.flatId
                 radioButton.layoutParams = lp
-                radioButton.text =
-                    "Flat No. " + flat.flatNu + ", " + flat.flatFloorNu + " Floor, " + flat.towerName + " Tower, " + flat.societyName + ", " + flat.societyAddress + ", " + flat.societyCity
+                radioButton.text ="Flat No. " + flat.flatNu + ", " + flat.flatFloorNu + " Floor, " + flat.towerName + " Tower, " + flat.societyName + ", " + flat.societyAddress + ", " + flat.societyCity
                 radioButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16.0f)
+                if(userDetail!=null && userDetail!!.defultUserId!=null && userDetail!!.defultUserId!=0){
+                    if(flat.userId==userDetail!!.defultUserId)
+                        radioButton.isChecked=true
+                }
                 index++
                 rgFlats!!.addView(radioButton)
             }
@@ -188,6 +185,7 @@ class FlatsFragment : Fragment() {
     }
 
     private fun updateUserProfile() {
+        progressBar!!.visibility=View.VISIBLE
         userProfileModel.updateProfile(userDetail!!)
             .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
                 val result = it
@@ -198,9 +196,16 @@ class FlatsFragment : Fragment() {
                     if (data.success_stat == 1) {
                         loginViewModel.setFlatDetailsDB(result.data.data_details.flatsDetails)
                         loginViewModel.setUserDetailDB(result.data.data_details.userDetails)
-                        requireActivity().supportFragmentManager.popBackStack()
+                        GlobalScope.launch(Dispatchers.Main) {
+                            delay(500)
+                            progressBar!!.visibility=View.GONE
+                            requireActivity().supportFragmentManager.popBackStack()
+                        }
+                    }else{
+                        progressBar!!.visibility=View.GONE
                     }
                 } else if (result is MyResult.Error) {
+                    progressBar!!.visibility=View.GONE
                     PrintMsg.toastDebug(context, result.message)
                 }
             })

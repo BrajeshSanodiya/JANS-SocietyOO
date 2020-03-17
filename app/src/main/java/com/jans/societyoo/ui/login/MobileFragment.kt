@@ -13,42 +13,56 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ProgressBar
-import android.widget.Toast
-import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.credentials.Credential
 import com.google.android.gms.auth.api.credentials.HintRequest
-import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.i18n.phonenumbers.PhoneNumberUtil
-import com.google.i18n.phonenumbers.Phonenumber
 import com.jans.societyoo.R
-import com.jans.societyoo.utils.PrintMsg
 import com.jans.societyoo.viewmodel.LoginViewModel
 import com.jans.societyoo.viewmodel.LoginViewModelFactory
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
+private const val ARG_IS_FROM_LOGIN = "is_from_login"
 class MobileFragment : Fragment() {
     var mCredentialsApiClient: GoogleApiClient? = null
     private val RC_HINT = 2
     var etMobile: EditText? = null
-    var loading: ProgressBar? = null
+    var progressBar: ProgressBar? = null
     var btnNextActionAutoPerformed: Boolean = true
     private lateinit var loginViewModel: LoginViewModel
+    private var isFromLogin: Boolean = false
+
+    companion object {
+        @JvmStatic
+        fun newInstance(isFromLogin: Boolean) =
+            MobileFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean(ARG_IS_FROM_LOGIN, isFromLogin)
+                }
+            }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        arguments?.let {
+            isFromLogin = it.getBoolean(ARG_IS_FROM_LOGIN)
+        }
         mCredentialsApiClient = GoogleApiClient.Builder(requireActivity())
             .addApi(Auth.CREDENTIALS_API)
             .build()
+
+        GlobalScope.launch {
+            delay(500)
+            requestHint()
+        }
     }
 
     override fun onCreateView(
@@ -60,7 +74,7 @@ class MobileFragment : Fragment() {
         var rootView = inflater.inflate(R.layout.fragment_login, container, false);
         etMobile = rootView.etMobile
         val btnNext = rootView.btnNext
-        loading = rootView.loading
+        progressBar = rootView.progress_bar
         loginViewModel = ViewModelProvider(
             requireActivity().viewModelStore,
             LoginViewModelFactory(requireContext())
@@ -70,7 +84,7 @@ class MobileFragment : Fragment() {
             btnNext.isEnabled = mobileState.isDataValid
             if (btnNext.isEnabled && btnNextActionAutoPerformed) {
                 btnNextActionAutoPerformed=false
-                GlobalScope.launch(Dispatchers.Main) {
+                GlobalScope.launch(Dispatchers.Main ) {
                     delay(500)
                     nextButtonClick()
                 }
@@ -99,10 +113,7 @@ class MobileFragment : Fragment() {
             }
         }
 
-        GlobalScope.launch {
-            delay(500)
-            requestHint()
-        }
+
 
         return rootView
     }

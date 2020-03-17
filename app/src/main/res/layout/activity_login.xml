@@ -6,17 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".ui.login.LoginActivity">
 
-    <com.jans.societyoo.ui.customviews.NonSwipeableViewPager
+    <!--<com.jans.societyoo.ui.customviews.NonSwipeableViewPager
         android:id="@+id/login_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.login.LoginPagerActivity" />
+        tools:context=".ui.login.LoginPagerActivity" />-->
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fragment_container_login"
+        android:orientation="vertical"
+        >
+
+    </LinearLayout>
 
 </RelativeLayout>

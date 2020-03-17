@@ -35,11 +35,11 @@ data class UserDetail(
 
     @ColumnInfo(name = "dob")
     @SerializedName("dob")
-    val dob: String?=null,
+    var dob: String?=null,
 
     @ColumnInfo(name = "email")
     @SerializedName("email")
-    val email: String?=null,
+    var email: String?=null,
 
     @ColumnInfo(name = "ext_number")
     @SerializedName("ext_number")
@@ -47,7 +47,7 @@ data class UserDetail(
 
     @ColumnInfo(name = "gender")
     @SerializedName("gender")
-    val gender: String?=null,
+    var gender: String?=null,
 
     @ColumnInfo(name = "hobbies")
     @SerializedName("hobbies")
@@ -59,15 +59,15 @@ data class UserDetail(
 
     @ColumnInfo(name = "mobile")
     @SerializedName("mobile")
-    val mobile: String?=null,
+    var mobile: String?=null,
 
     @ColumnInfo(name = "mobile2")
     @SerializedName("mobile2")
-    val mobile2: String?=null,
+    var mobile2: String?=null,
 
     @ColumnInfo(name = "name")
     @SerializedName("name")
-    val name: String?=null,
+    var name: String?=null,
 
     @ColumnInfo(name = "occupation")
     @SerializedName("occupation")

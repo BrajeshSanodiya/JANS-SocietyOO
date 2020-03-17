@@ -43,11 +43,10 @@ data class LoginViewState(
 
 class LoginFragmentState {
     companion object {
-        val PRE_REGISTRATION: Int = 1
-        val MOBILE_INPUT: Int = 2
-        val OTP_VERIFY: Int = 3
-        val FLAT_CONFIRM: Int = 4
-        val USER_PROFILE: Int = 5
-        val AFTER_LOGIN: Int = 6
+        val MOBILE_INPUT: Int = 1
+        val OTP_VERIFY: Int = 2
+        val FLAT_CONFIRM: Int = 3
+        val USER_PROFILE: Int = 4
+        val AFTER_LOGIN: Int = 5
     }
 }

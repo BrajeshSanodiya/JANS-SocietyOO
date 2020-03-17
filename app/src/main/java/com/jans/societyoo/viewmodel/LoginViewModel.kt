@@ -53,16 +53,20 @@ class LoginViewModel(context: Context) : ViewModel() {
     fun getAllFlatsDB(){
         GlobalScope.launch {
             val result=loginRepository.getAllFlatsDB()
-            PrintMsg.println("Room DB : getAllFlatsDB : "+result.toString())
-            flatsDetailLiveData.postValue(result)
+            if(result!=null){
+                PrintMsg.println("Room DB : getAllFlatsDB : "+result.toString())
+                flatsDetailLiveData.postValue(result)
+            }
         }
     }
 
     fun getUserDetailDB(){
         GlobalScope.launch {
             val result=loginRepository.getUserDetailDB()
-            PrintMsg.println("Room DB : getUserDetailDB : "+result.toString())
             userDetailLiveData.postValue(result)
+            if(result!=null){
+                PrintMsg.println("Room DB : getUserDetailDB : "+result.toString())
+            }
         }
     }
 
@@ -102,8 +106,8 @@ class LoginViewModel(context: Context) : ViewModel() {
     }
     fun setFlatsUsers(flats:List<FlatDetail>, userDetail: UserDetail,mobile: String){
         //loginFlatViewState.value=LoginFlatsViewState(flats=flats,userDetail = userDetail)
-        flatsDetailLiveData.value=flats
-        userDetailLiveData.value=userDetail
+        //flatsDetailLiveData.value=flats
+        //userDetailLiveData.value=userDetail
         //mobileNumberLiveData.value=mobile
     }
 

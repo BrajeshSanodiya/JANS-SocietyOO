@@ -7,11 +7,11 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -27,25 +27,30 @@ import com.jans.societyoo.MySMSBroadcastReceiver
 import com.jans.societyoo.R
 import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.model.ApiDataObject
-import com.jans.societyoo.model.login.UserData
 import com.jans.societyoo.model.login.SendOTPData
+import com.jans.societyoo.model.login.UserData
 import com.jans.societyoo.ui.main.MainActivity
 import com.jans.societyoo.utils.Constants
 import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.PrintMsg
 import com.jans.societyoo.viewmodel.LoginViewModel
 import com.jans.societyoo.viewmodel.LoginViewModelFactory
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.fragment_otp.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 
 
 /**
  * A simple [Fragment] subclass.
  */
-class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.OTPReceiveListener  {
+
+private const val ARG_IS_FROM_LOGIN = "is_from_login"
+
+class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.OTPReceiveListener {
 
 
     var mCredentialsApiClient: GoogleApiClient? = null
@@ -57,33 +62,52 @@ class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.
     var timerView: TextView? = null
     var btnResend: TextView? = null
     var otpView: OtpView? = null
+    var progressBar:ProgressBar? =null
+    private var isFromLogin: Boolean = false
+
+    companion object {
+        @JvmStatic
+        fun newInstance(isFromLogin: Boolean) =
+            OTPFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean(ARG_IS_FROM_LOGIN, isFromLogin)
+                }
+            }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        arguments?.let {
+            isFromLogin = it.getBoolean(ARG_IS_FROM_LOGIN)
+        }
         mCredentialsApiClient = GoogleApiClient.Builder(requireActivity())
             .addApi(Auth.CREDENTIALS_API)
             .build()
 
         preferences = UserPreferences(requireContext())
-        Constants.autoOTPSendAllow=true
+        //Constants.autoOTPSendAllow=true
     }
 
-    override fun onStart() {
-        super.onStart()
-        startSMSListener()
-        smsBroadcast.initOTPListener(this)
-        val intentFilter = IntentFilter()
-        intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION)
 
-        requireContext().applicationContext.registerReceiver(smsBroadcast, intentFilter)
-    }
+    /* override fun onStart() {
+         super.onStart()
+         startSMSListener()
+         smsBroadcast.initOTPListener(this)
+         val intentFilter = IntentFilter()
+         intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION)
 
-    override fun onStop() {
+         requireContext().applicationContext.registerReceiver(smsBroadcast, intentFilter)
+     }
+ */
+/*    override fun onStop() {
         super.onStop()
         if (smsBroadcast != null && context != null) {
             LocalBroadcastManager.getInstance(requireContext().applicationContext)
                 .unregisterReceiver(smsBroadcast)
         }
-    }
+    }*/
+
+
     @SuppressLint("FragmentLiveDataObserve")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -95,12 +119,12 @@ class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.
         val btnNext = rootView.btnNext
         btnResend = rootView.btnResend
         timerView = rootView.tvTimer
-        val loading = rootView.loading
+        progressBar = rootView.progress_bar
 
         otpView!!.setOtpCompletionListener(this)
         loginViewModel = ViewModelProvider(
             requireActivity().viewModelStore,
-            LoginViewModelFactory(requireContext())
+            LoginViewModelFactory(requireActivity())
         ).get(LoginViewModel::class.java)
         loginViewModel.loginOtpViewState.observe(viewLifecycleOwner, Observer {
             val mobileState = it ?: return@Observer
@@ -145,18 +169,40 @@ class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.
         btnResend!!.setOnClickListener {
             loginViewModel.otpResend()
         }
+
+        startSMSListener()
+        smsBroadcast.initOTPListener(this)
+        GlobalScope.launch(Dispatchers.Main) {
+            delay(500)
+            callOTPResend()
+        }
         return rootView
     }
 
     override fun onResume() {
         super.onResume()
-        if(Constants.autoOTPSendAllow){
+        /*if(Constants.autoOTPSendAllow){
             callOTPResend()
             Constants.autoOTPSendAllow=false
+        }*/
+        if (smsBroadcast != null && context != null) {
+            requireContext().applicationContext.registerReceiver(
+                smsBroadcast,
+                IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
+            )
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (smsBroadcast != null && context != null) {
+            LocalBroadcastManager.getInstance(requireContext().applicationContext)
+                .unregisterReceiver(smsBroadcast)
         }
     }
 
     private fun nextBtnClick() {
+        progressBar!!.visibility=View.VISIBLE
         loginViewModel.verifyOtp(mobileNumber!!, otpValue!!).observe(viewLifecycleOwner, Observer {
             val result = it
             if (result is MyResult.Success) {
@@ -164,26 +210,29 @@ class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.
                 if (data.dis_msg == 1 && !TextUtils.isEmpty(data.msg))
                     PrintMsg.toast(context, data.msg);
                 if (data.success_stat == 1) {
-                    loginViewModel.setFlatDetailsDB(result.data.data_details.flatsDetails)
-                    loginViewModel.setUserDetailDB(result.data.data_details.userDetails)
-
                     if (data.data_details.flatsDetails.size > 0) {
-                        PrintMsg.println("flatDetails : " + data.data_details.flatsDetails.size)
-                        if (data.data_details.flatsDetails.size > 1)
-                        {
-                            loginViewModel.setFlatsUsers(data.data_details.flatsDetails,data.data_details.userDetails,data.data_details.flatsDetails.get(0).umMobile)
-                            loginViewModel.loginFragmentChanged(LoginFragmentState.FLAT_CONFIRM)
+                        loginViewModel.setFlatDetailsDB(result.data.data_details.flatsDetails)
+                        loginViewModel.setUserDetailDB(result.data.data_details.userDetails)
+                        GlobalScope.launch(Dispatchers.Main) {
+                            delay(500)
+                            progressBar!!.visibility=View.GONE
+                            if (data.data_details.flatsDetails.size > 1) {
+                                loginViewModel.loginFragmentChanged(LoginFragmentState.FLAT_CONFIRM)
+                            } else if (data.data_details.userDetails == null && data.data_details.userDetails.profileId == 0) {
+                                loginViewModel.loginFragmentChanged(LoginFragmentState.USER_PROFILE)
+                            } else {
+                                loginViewModel.openAfterLoginScreen()
+                            }
                         }
-                        else if (data.data_details.userDetails == null && data.data_details.userDetails.profileId==0){
-                            loginViewModel.setFlatsUsers(data.data_details.flatsDetails,data.data_details.userDetails,data.data_details.flatsDetails.get(0).umMobile)
-                            loginViewModel.loginFragmentChanged(LoginFragmentState.USER_PROFILE)
-                        }
-                        else{
-                            loginViewModel.openAfterLoginScreen()
-                        }
+                    }else{
+                        progressBar!!.visibility=View.GONE
                     }
                 }
+                else{
+                    progressBar!!.visibility=View.GONE
+                }
             } else if (result is MyResult.Error) {
+                progressBar!!.visibility=View.GONE
                 PrintMsg.toastDebug(context, result.message)
             }
         })
@@ -191,10 +240,11 @@ class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.
     }
 
     private fun callOTPResend() {
-
+        progressBar!!.visibility=View.VISIBLE
         loginViewModel.sendOtp(mobileNumber!!).observe(viewLifecycleOwner, Observer {
             val result = it
             if (result is MyResult.Success) {
+                progressBar!!.visibility=View.GONE
                 val data: ApiDataObject<SendOTPData> = result.data
                 if (data.dis_msg == 1 && !TextUtils.isEmpty(data.msg))
                     PrintMsg.toast(context, data.msg);
@@ -205,6 +255,7 @@ class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.
                     resentOtpTimmer()
                 }
             } else if (result is MyResult.Error) {
+                progressBar!!.visibility=View.GONE
                 PrintMsg.toastDebug(context, result.message)
             }
         })
@@ -248,7 +299,7 @@ class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.
 
         task.addOnFailureListener {
             // otpTxtView.text = "Cannot Start SMS Retriever"
-           //Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
+            //Toast.makeText(context, "Error", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -257,7 +308,7 @@ class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.
         if (smsBroadcast != null && context != null) {
             LocalBroadcastManager.getInstance(requireContext().applicationContext)
                 .unregisterReceiver(smsBroadcast)
-            PrintMsg.println("OTP Received " +otp)
+            PrintMsg.println("OTP Received " + otp)
             otpView!!.setText(otp)
         }
 

@@ -26,6 +26,11 @@ import com.jans.societyoo.viewmodel.LoginViewModel
 import com.jans.societyoo.viewmodel.LoginViewModelFactory
 import com.jans.societyoo.viewmodel.UserProfileViewModel
 import com.jans.societyoo.viewmodel.UserProfileViewModelFactory
+import kotlinx.android.synthetic.main.fragment_otp.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 private const val ARG_IS_FROM_LOGIN = "is_from_login"
@@ -41,6 +46,7 @@ class UserProfileFragment : Fragment() {
     private var month = 0
     private var day = 0
     private var etDate: TextView? = null
+    var progressBar:ProgressBar?=null
     private var isFromLogin: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,6 +75,10 @@ class UserProfileFragment : Fragment() {
         etDate = rootView.findViewById(R.id.etDate_UserProfile)
         setCurrentDateOnView()
         addListenerOnButton()
+
+        progressBar = rootView.progress_bar
+        progressBar!!.visibility=View.VISIBLE
+
         var etName: EditText = rootView.findViewById(R.id.etName_UserProfile)
         var etEmail: EditText = rootView.findViewById(R.id.etEmail_UserProfile)
         var etMobile2: EditText = rootView.findViewById(R.id.etMobileSec_UserProfile)
@@ -80,7 +90,7 @@ class UserProfileFragment : Fragment() {
             btnNext.isEnabled=true
         }
 
-        loginViewModel = ViewModelProvider(requireActivity().viewModelStore,LoginViewModelFactory(requireContext())).get(LoginViewModel::class.java)
+        loginViewModel = ViewModelProvider(requireActivity().viewModelStore,LoginViewModelFactory(requireActivity())).get(LoginViewModel::class.java)
         userProfileModel = ViewModelProvider(viewModelStore,  UserProfileViewModelFactory(requireContext())).get(UserProfileViewModel::class.java)
 
         /*loginViewModel.mobileNumberLiveData.observe(viewLifecycleOwner,androidx.lifecycle.Observer {
@@ -99,7 +109,8 @@ class UserProfileFragment : Fragment() {
 
         loginViewModel.userDetailLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             val _userDetail = it
-            if (_userDetail != null) {
+            progressBar!!.visibility=View.GONE
+            if (_userDetail != null && _userDetail.profileId != 0) {
                 userDetail = _userDetail
                 if(!TextUtils.isEmpty(_userDetail.name)) etName.setText(_userDetail.name)
                 if(!TextUtils.isEmpty(_userDetail.email)) etEmail.setText(_userDetail.email)
@@ -167,10 +178,22 @@ class UserProfileFragment : Fragment() {
         btnNext.setOnClickListener {
 
             if (userProfileModel.checkDOB(etDate!!.text.toString())) {
-                var postUserDetail=UserDetail(name=etName.text.toString(),email = etEmail.text.toString(), mobile = mobileNo!!,mobile2 = etMobile2.text.toString(),gender = gender, dob = etDate!!.text.toString())
-                updateUserProfile(postUserDetail)
+                if(userDetail==null){
+                    userDetail=UserDetail(name=etName.text.toString(),email = etEmail.text.toString(), mobile = mobileNo!!,mobile2 = etMobile2.text.toString(),gender = gender, dob = etDate!!.text.toString())
+                }else{
+                    userDetail!!.name=etName.text.toString()
+                    userDetail!!.email=etEmail.text.toString()
+                    userDetail!!.mobile=mobileNo
+                    userDetail!!.mobile2=etMobile2.text.toString()
+                    userDetail!!.gender=gender
+                    userDetail!!.dob=etDate!!.text.toString()
+                }
+                updateUserProfile(userDetail!!)
             }
         }
+
+        loginViewModel.getAllFlatsDB()
+        loginViewModel.getUserDetailDB()
 
         return rootView
     }
@@ -191,13 +214,8 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        loginViewModel.getAllFlatsDB()
-        loginViewModel.getUserDetailDB()
-    }
-
     private fun updateUserProfile(userDetail: UserDetail) {
+        progressBar!!.visibility=View.VISIBLE
         userProfileModel.updateProfile(userDetail!!)
             .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
                 val result = it
@@ -208,15 +226,19 @@ class UserProfileFragment : Fragment() {
                     if (data.success_stat == 1) {
                         loginViewModel.setFlatDetailsDB(result.data.data_details.flatsDetails)
                         loginViewModel.setUserDetailDB(result.data.data_details.userDetails)
-
-                        //loginViewModel.userDetailLiveData.value = data.data_details.userDetails
-                        //loginViewModel.setFlatsUsers(flats!!,userDetail!!,mobileNo!!)
-                        if(isFromLogin)
-                        loginViewModel.openAfterLoginScreen()
-                        else
-                            requireActivity().supportFragmentManager.popBackStack()
+                        GlobalScope.launch(Dispatchers.Main){
+                            delay(500)
+                            progressBar!!.visibility=View.GONE
+                            if(isFromLogin)
+                                loginViewModel.openAfterLoginScreen()
+                            else
+                                requireActivity().supportFragmentManager.popBackStack()
+                        }
+                    }else{
+                        progressBar!!.visibility=View.GONE
                     }
                 } else if (result is MyResult.Error) {
+                    progressBar!!.visibility=View.GONE
                     PrintMsg.toastDebug(context, result.message)
                 }
             })
@@ -250,11 +272,18 @@ class UserProfileFragment : Fragment() {
             year = selectedYear
             month = selectedMonth
             day = selectedDay
+            var disDay:String=""
+            var disMonth:String=""
+            if(month < 10) disMonth="0"
+            disMonth+=month+1
+            if(day < 10) disDay ="0"
+            disDay+=day
+
             etDate!!.setText(
-                StringBuilder().append(day).append("-").append(month + 1)
-                    .append("-").append(year)
-                    .append(" ")
+                StringBuilder().append(year).append("-").append(disMonth)
+                    .append("-").append(disDay)
             )
+
             etDate!!.error = null
         }
 

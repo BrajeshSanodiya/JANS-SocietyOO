@@ -69,7 +69,7 @@ public class UserProfileViewModel(context: Context) : ViewModel() {
     }
 
     fun compareDates(givenDateString: String?): Boolean {
-        val format = SimpleDateFormat("dd-MM-yyyy")
+        val format = SimpleDateFormat("yyyy-MM-dd")
         var True = false
         try {
             val givenDate: Date = format.parse(givenDateString)
