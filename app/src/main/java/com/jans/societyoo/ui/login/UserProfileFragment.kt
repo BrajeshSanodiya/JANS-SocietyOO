@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.*
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
@@ -77,7 +78,7 @@ class UserProfileFragment : Fragment() {
         addListenerOnButton()
 
         progressBar = rootView.progress_bar
-        progressBar!!.visibility=View.VISIBLE
+        setProgressBarVisibility(true)
 
         var etName: EditText = rootView.findViewById(R.id.etName_UserProfile)
         var etEmail: EditText = rootView.findViewById(R.id.etEmail_UserProfile)
@@ -87,17 +88,10 @@ class UserProfileFragment : Fragment() {
 
         if(!isFromLogin){
             btnNext.text=resources.getString(R.string.save_btn)
-            btnNext.isEnabled=true
         }
 
         loginViewModel = ViewModelProvider(requireActivity().viewModelStore,LoginViewModelFactory(requireActivity())).get(LoginViewModel::class.java)
         userProfileModel = ViewModelProvider(viewModelStore,  UserProfileViewModelFactory(requireContext())).get(UserProfileViewModel::class.java)
-
-        /*loginViewModel.mobileNumberLiveData.observe(viewLifecycleOwner,androidx.lifecycle.Observer {
-            val mobile=it
-            if(!TextUtils.isEmpty(mobile))
-                mobileNo=mobile
-        })*/
 
         loginViewModel.flatsDetailLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             val _flats = it
@@ -109,9 +103,10 @@ class UserProfileFragment : Fragment() {
 
         loginViewModel.userDetailLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             val _userDetail = it
-            progressBar!!.visibility=View.GONE
+            setProgressBarVisibility(false)
             if (_userDetail != null && _userDetail.profileId != 0) {
                 userDetail = _userDetail
+                btnNext.isEnabled=true
                 if(!TextUtils.isEmpty(_userDetail.name)) etName.setText(_userDetail.name)
                 if(!TextUtils.isEmpty(_userDetail.email)) etEmail.setText(_userDetail.email)
                 if(!TextUtils.isEmpty(_userDetail.mobile2)) etMobile2.setText(_userDetail.mobile2)
@@ -197,6 +192,20 @@ class UserProfileFragment : Fragment() {
 
         return rootView
     }
+
+    fun setProgressBarVisibility(visible:Boolean){
+        if(progressBar!=null){
+            if(visible){
+                progressBar!!.visibility=View.VISIBLE
+                requireActivity().window.setFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            }else{
+                progressBar!!.visibility=View.GONE
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        }
+    }
     fun setGenderRadioBox(gender:String){
         when (gender) {
             "M"->{
@@ -215,7 +224,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun updateUserProfile(userDetail: UserDetail) {
-        progressBar!!.visibility=View.VISIBLE
+        setProgressBarVisibility(true)
         userProfileModel.updateProfile(userDetail!!)
             .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
                 val result = it
@@ -228,17 +237,17 @@ class UserProfileFragment : Fragment() {
                         loginViewModel.setUserDetailDB(result.data.data_details.userDetails)
                         GlobalScope.launch(Dispatchers.Main){
                             delay(500)
-                            progressBar!!.visibility=View.GONE
+                            setProgressBarVisibility(false)
                             if(isFromLogin)
                                 loginViewModel.openAfterLoginScreen()
                             else
                                 requireActivity().supportFragmentManager.popBackStack()
                         }
                     }else{
-                        progressBar!!.visibility=View.GONE
+                        setProgressBarVisibility(false)
                     }
                 } else if (result is MyResult.Error) {
-                    progressBar!!.visibility=View.GONE
+                    setProgressBarVisibility(false)
                     PrintMsg.toastDebug(context, result.message)
                 }
             })
@@ -258,7 +267,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun onCreateDialog() {
-        var datePicker: DatePickerDialog = DatePickerDialog(
+        var datePicker = DatePickerDialog(
             requireContext(), datePickerListener,
             year, month, day
         )
@@ -268,12 +277,11 @@ class UserProfileFragment : Fragment() {
 
     private val datePickerListener =
         OnDateSetListener { view, selectedYear, selectedMonth, selectedDay ->
-            // when dialog box is closed, below method will be called.
             year = selectedYear
             month = selectedMonth
             day = selectedDay
-            var disDay:String=""
-            var disMonth:String=""
+            var disDay=""
+            var disMonth=""
             if(month < 10) disMonth="0"
             disMonth+=month+1
             if(day < 10) disDay ="0"

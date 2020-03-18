@@ -10,6 +10,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -120,7 +121,6 @@ class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.
         btnResend = rootView.btnResend
         timerView = rootView.tvTimer
         progressBar = rootView.progress_bar
-
         otpView!!.setOtpCompletionListener(this)
         loginViewModel = ViewModelProvider(
             requireActivity().viewModelStore,
@@ -179,6 +179,20 @@ class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.
         return rootView
     }
 
+    fun setProgressBarVisibility(visible:Boolean){
+        if(progressBar!=null){
+            if(visible){
+                progressBar!!.visibility=View.VISIBLE
+                requireActivity().window.setFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            }else{
+                progressBar!!.visibility=View.GONE
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         /*if(Constants.autoOTPSendAllow){
@@ -202,7 +216,7 @@ class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.
     }
 
     private fun nextBtnClick() {
-        progressBar!!.visibility=View.VISIBLE
+        setProgressBarVisibility(true)
         loginViewModel.verifyOtp(mobileNumber!!, otpValue!!).observe(viewLifecycleOwner, Observer {
             val result = it
             if (result is MyResult.Success) {
@@ -215,7 +229,7 @@ class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.
                         loginViewModel.setUserDetailDB(result.data.data_details.userDetails)
                         GlobalScope.launch(Dispatchers.Main) {
                             delay(500)
-                            progressBar!!.visibility=View.GONE
+                            setProgressBarVisibility(false)
                             if (data.data_details.flatsDetails.size > 1) {
                                 loginViewModel.loginFragmentChanged(LoginFragmentState.FLAT_CONFIRM)
                             } else if (data.data_details.userDetails == null && data.data_details.userDetails.profileId == 0) {
@@ -225,14 +239,14 @@ class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.
                             }
                         }
                     }else{
-                        progressBar!!.visibility=View.GONE
+                        setProgressBarVisibility(false)
                     }
                 }
                 else{
-                    progressBar!!.visibility=View.GONE
+                    setProgressBarVisibility(false)
                 }
             } else if (result is MyResult.Error) {
-                progressBar!!.visibility=View.GONE
+                setProgressBarVisibility(false)
                 PrintMsg.toastDebug(context, result.message)
             }
         })
@@ -240,11 +254,11 @@ class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.
     }
 
     private fun callOTPResend() {
-        progressBar!!.visibility=View.VISIBLE
+        setProgressBarVisibility(true)
         loginViewModel.sendOtp(mobileNumber!!).observe(viewLifecycleOwner, Observer {
             val result = it
             if (result is MyResult.Success) {
-                progressBar!!.visibility=View.GONE
+                setProgressBarVisibility(false)
                 val data: ApiDataObject<SendOTPData> = result.data
                 if (data.dis_msg == 1 && !TextUtils.isEmpty(data.msg))
                     PrintMsg.toast(context, data.msg);
@@ -255,7 +269,7 @@ class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.
                     resentOtpTimmer()
                 }
             } else if (result is MyResult.Error) {
-                progressBar!!.visibility=View.GONE
+                setProgressBarVisibility(false)
                 PrintMsg.toastDebug(context, result.message)
             }
         })

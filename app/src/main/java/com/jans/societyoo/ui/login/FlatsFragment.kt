@@ -7,6 +7,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.*
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
@@ -68,7 +69,7 @@ class FlatsFragment : Fragment() {
         var rootView = inflater.inflate(R.layout.fragment_flats, container, false)
         rgFlats = rootView.findViewById(R.id.rgFlats_Flats)
         progressBar = rootView.progress_bar
-        progressBar!!.visibility=View.VISIBLE
+        setProgressBarVisibility(true)
         var btnNext: Button = rootView.findViewById(R.id.btnNext_Flats)
         var btnSave: Button = rootView.findViewById(R.id.btnSave_Flats)
         if (isFromLogin) {
@@ -157,8 +158,22 @@ class FlatsFragment : Fragment() {
         return rootView
     }
 
+    fun setProgressBarVisibility(visible:Boolean){
+        if(progressBar!=null){
+            if(visible){
+                progressBar!!.visibility=View.VISIBLE
+                requireActivity().window.setFlags(
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            }else{
+                progressBar!!.visibility=View.GONE
+                requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        }
+    }
+
     fun showFlats() {
-        progressBar!!.visibility=View.GONE
+        setProgressBarVisibility(false)
         if (flats != null && rgFlats != null) {
             rgFlats!!.removeAllViews()
             var index: Int = 0
@@ -185,7 +200,7 @@ class FlatsFragment : Fragment() {
     }
 
     private fun updateUserProfile() {
-        progressBar!!.visibility=View.VISIBLE
+        setProgressBarVisibility(true)
         userProfileModel.updateProfile(userDetail!!)
             .observe(viewLifecycleOwner, androidx.lifecycle.Observer {
                 val result = it
@@ -198,14 +213,14 @@ class FlatsFragment : Fragment() {
                         loginViewModel.setUserDetailDB(result.data.data_details.userDetails)
                         GlobalScope.launch(Dispatchers.Main) {
                             delay(500)
-                            progressBar!!.visibility=View.GONE
+                            setProgressBarVisibility(false)
                             requireActivity().supportFragmentManager.popBackStack()
                         }
                     }else{
-                        progressBar!!.visibility=View.GONE
+                        setProgressBarVisibility(false)
                     }
                 } else if (result is MyResult.Error) {
-                    progressBar!!.visibility=View.GONE
+                    setProgressBarVisibility(false)
                     PrintMsg.toastDebug(context, result.message)
                 }
             })
