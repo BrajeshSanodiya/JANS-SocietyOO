@@ -6,9 +6,7 @@ import android.util.Patterns
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import com.jans.societyoo.data.repository.LoginRepository
-import com.jans.societyoo.model.login.FlatDetail
-import com.jans.societyoo.model.login.OtpRequest
+import com.jans.societyoo.data.repository.DataRepository
 import com.jans.societyoo.model.login.UserDetail
 import com.jans.societyoo.ui.login.LoginUserProfileViewState
 import com.jans.societyoo.utils.PrintMsg
@@ -19,7 +17,8 @@ public class UserProfileViewModel(context: Context) : ViewModel() {
 
     val userProfileViewState=MutableLiveData<LoginUserProfileViewState>()
 
-    private val loginRepository: LoginRepository = LoginRepository(context);
+    private val dataRepository: DataRepository =
+        DataRepository(context);
 
     // A placeholder username validation check
     fun checkEmail(email:String) {
@@ -63,7 +62,7 @@ public class UserProfileViewModel(context: Context) : ViewModel() {
     }
 
     fun updateProfile(userDetail: UserDetail) = liveData {
-        val result = loginRepository.updateUserProfile(userDetail)
+        val result = dataRepository.updateUserProfile(userDetail)
         PrintMsg.println("API Response : updateProfile : ${result.toString()}")
         emit(result)
     }

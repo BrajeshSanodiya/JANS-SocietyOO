@@ -9,7 +9,7 @@ import com.jans.onboarding.OnBoardingScreen
 import com.jans.onboarding.OnBoardingView
 import com.jans.societyoo.R
 import com.jans.societyoo.data.local.prefs.UserPreferences
-import com.jans.societyoo.ui.main.MainActivity
+import com.jans.societyoo.ui.dashboard.DashboardActivity
 import com.jans.societyoo.ui.login.LoginActivity
 import com.jans.societyoo.utils.PrintMsg
 
@@ -21,7 +21,7 @@ class OnBoardActivity : AppCompatActivity() {
         if (TextUtils.isEmpty(preferences.mobileNum)) {
             startActivity(Intent(this, LoginActivity::class.java))
         } else {
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, DashboardActivity::class.java))
         }
         finish()
     }

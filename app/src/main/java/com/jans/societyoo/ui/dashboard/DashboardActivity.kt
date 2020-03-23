@@ -1,34 +1,18 @@
-package com.jans.societyoo.ui.main
+package com.jans.societyoo.ui.dashboard
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Switch
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.jans.societyoo.R
-import com.jans.societyoo.data.local.prefs.UserPreferences
-import com.jans.societyoo.model.User
-import com.jans.societyoo.model.UserPostData
 import com.jans.societyoo.ui.FragmentSwitcher
-import com.jans.societyoo.ui.login.FlatsFragment
-import com.jans.societyoo.ui.login.LoginActivity
-import com.jans.societyoo.utils.MyResult
-import com.jans.societyoo.viewmodel.MainActivityViewModel
-import com.jans.tracking.PropertyName
-import com.jans.tracking.Tracking
-import com.jans.tracking.TrackingOptions
 
 
-class MainActivity : AppCompatActivity() , FragmentSwitcher{
+class DashboardActivity : AppCompatActivity() , FragmentSwitcher{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_dashboard)
 
         //val actionBar: ActionBar? = supportActionBar
         supportActionBar!!.setDisplayShowHomeEnabled(true);
@@ -38,7 +22,7 @@ class MainActivity : AppCompatActivity() , FragmentSwitcher{
         //startActivity(Intent(this, LoginActivity::class.java))s
 
        // PrintMsg.toastDebug(this,""+preferences.flats)
-        addFragments(MainFragment.newInstance(),false)
+        addFragments(DashboardFragment.newInstance(),false)
     }
 
 

@@ -13,10 +13,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * Created by Chintan on 01-11-2017.
- */
-
 public class AppSignatureHelper extends ContextWrapper {
     public static final String TAG = AppSignatureHelper.class.getSimpleName();
 

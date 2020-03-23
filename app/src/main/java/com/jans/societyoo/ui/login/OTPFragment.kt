@@ -30,19 +30,16 @@ import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.model.ApiDataObject
 import com.jans.societyoo.model.login.SendOTPData
 import com.jans.societyoo.model.login.UserData
-import com.jans.societyoo.ui.main.MainActivity
-import com.jans.societyoo.utils.Constants
+import com.jans.societyoo.ui.dashboard.DashboardActivity
 import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.PrintMsg
 import com.jans.societyoo.viewmodel.LoginViewModel
 import com.jans.societyoo.viewmodel.LoginViewModelFactory
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.fragment_otp.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import okhttp3.internal.wait
 
 
 /**
@@ -155,7 +152,7 @@ class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE -> {
                         Toast.makeText(context, "OTP : $otpValue", Toast.LENGTH_SHORT).show()
-                        requireContext().startActivity(Intent(context, MainActivity::class.java))
+                        requireContext().startActivity(Intent(context, DashboardActivity::class.java))
                     }
                 }
                 false

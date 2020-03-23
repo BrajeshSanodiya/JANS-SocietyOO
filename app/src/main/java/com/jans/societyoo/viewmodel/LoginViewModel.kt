@@ -7,20 +7,19 @@ import com.jans.societyoo.model.login.OtpRequest
 import com.jans.societyoo.model.login.OtpVerifyRequest
 import com.jans.societyoo.ui.login.*
 import com.jans.societyoo.utils.PrintMsg
-import com.jans.societyoo.data.repository.LoginRepository
+import com.jans.societyoo.data.repository.DataRepository
 import com.jans.societyoo.model.login.FlatDetail
 import com.jans.societyoo.model.login.UserDetail
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.flow
-import okhttp3.internal.wait
 
 
 class LoginViewModel(context: Context) : ViewModel() {
-    private val loginRepository: LoginRepository = LoginRepository(context);
+    private val dataRepository: DataRepository =  DataRepository(context);
     val mobileNumberLiveData = MutableLiveData<String>()
+
     //val flatsDataLiveData = MutableLiveData<List<Flat>>()
-    val flatsDetailLiveData=MutableLiveData<List<FlatDetail>>()
-    val userDetailLiveData=MutableLiveData<UserDetail>()
+    val flatsDetailLiveData = MutableLiveData<List<FlatDetail>>()
+    val userDetailLiveData = MutableLiveData<UserDetail>()
 
     val loginFlatViewState = MutableLiveData<LoginFlatsViewState>()
 
@@ -35,76 +34,77 @@ class LoginViewModel(context: Context) : ViewModel() {
     val loginViewState: LiveData<LoginViewState> = _loginViewState
 
     fun sendOtp(mobile: String) = liveData {
-        var otpRequest= OtpRequest(mobile)
-        val result = loginRepository.sendOtp(otpRequest)
+        var otpRequest = OtpRequest(mobile)
+        val result = dataRepository.sendOtp(otpRequest)
         PrintMsg.println("API Response : sendOtp : ${result.toString()}")
         emit(result)
     }
 
-  /*  fun getAllFlatsDB()= liveData{
-            GlobalScope.launch {
-                val result=loginRepository.getAllFlatsDB()
-                PrintMsg.println("Room DB : All Flats : "+result.toString())
-                emit(result)
-            }
+    /*  fun getAllFlatsDB()= liveData{
+              GlobalScope.launch {
+                  val result=loginRepository.getAllFlatsDB()
+                  PrintMsg.println("Room DB : All Flats : "+result.toString())
+                  emit(result)
+              }
 
-    }*/
+      }*/
 
-    fun getAllFlatsDB(){
+    fun getAllFlatsDB() {
         GlobalScope.launch {
-            val result=loginRepository.getAllFlatsDB()
-            if(result!=null){
-                PrintMsg.println("Room DB : getAllFlatsDB : "+result.toString())
+            val result = dataRepository.getAllFlatsDB()
+            if (result != null) {
+                PrintMsg.println("Room DB : getAllFlatsDB : " + result.toString())
                 flatsDetailLiveData.postValue(result)
             }
         }
     }
 
-    fun getUserDetailDB(){
+    fun getUserDetailDB() {
         GlobalScope.launch {
-            val result=loginRepository.getUserDetailDB()
+            val result = dataRepository.getUserDetailDB()
             userDetailLiveData.postValue(result)
-            if(result!=null){
-                PrintMsg.println("Room DB : getUserDetailDB : "+result.toString())
+            if (result != null) {
+                PrintMsg.println("Room DB : getUserDetailDB : " + result.toString())
             }
         }
     }
-
-    fun setUserDetailDB(userDetail: UserDetail){
-        if(userDetail!=null && userDetail.profileId>0){
-            GlobalScope.launch {
-                var resultDeleted=loginRepository.deleteAllUsersDB()
-                var resultadded=loginRepository.setUserDetailDB(userDetail)
-                PrintMsg.println("Room DB : setUserDetailDB : resultDeleted->"+resultDeleted.toString()+" resultAdded->"+resultadded.toString())
-                PrintMsg.println("Room DB : setUserDetailDB : "+userDetail.toString())
-            }
-        }
-
-    }
-
-    fun setFlatDetailsDB(flatDetails:List<FlatDetail>){
-        if(flatDetails!=null && flatDetails.size>0 && flatDetails.get(0).flatId>0) {
-            GlobalScope.launch {
-                var resultDeleted = loginRepository.deleteAllFlatsDB()
-                var resultadded = loginRepository.setFlatDetailsDB(flatDetails)
-                PrintMsg.println("Room DB : setFlatDetailsDB : resultDeleted->" + resultDeleted.toString() + " resultAdded->" + resultadded.toString())
-                PrintMsg.println("Room DB : setFlatDetailsDB : " + flatDetails.toString())
+    fun setUserDetailDB(userDetail: UserDetail) {
+        GlobalScope.launch {
+            var resultDeleted = dataRepository.deleteAllUsersDB()
+            PrintMsg.println("Room DB : setUserDetailDB : resultDeleted->" + resultDeleted.toString())
+            if (userDetail != null && userDetail.profileId > 0) {
+                var resultadded = dataRepository.setUserDetailDB(userDetail)
+                PrintMsg.println("Room DB : setUserDetailDB : resultAdded->" + resultadded.toString())
             }
         }
     }
 
 
-    fun verifyOtp(mobile: String,otpValue: String) = liveData {
-        var otpVerifyRequest=OtpVerifyRequest(mobile,otpValue)
-        val result = loginRepository.verifyOtp(otpVerifyRequest)
+    fun setFlatDetailsDB(flatDetails: List<FlatDetail>) {
+        GlobalScope.launch {
+            var resultDeleted = dataRepository.deleteAllFlatsDB()
+            PrintMsg.println("Room DB : setFlatDetailsDB : resultDeleted->" + resultDeleted.toString())
+            if (flatDetails != null && flatDetails.size > 0 && flatDetails.get(0).flatId > 0) {
+                var resultadded = dataRepository.setFlatDetailsDB(flatDetails)
+                PrintMsg.println("Room DB : setFlatDetailsDB : resultAdded->" + resultadded.toString())
+            }
+        }
+    }
+
+
+    fun verifyOtp(mobile: String, otpValue: String) = liveData {
+        var otpVerifyRequest = OtpVerifyRequest(mobile, otpValue)
+        val result = dataRepository.verifyOtp(otpVerifyRequest)
         PrintMsg.println("API Response : verifyOtp : ${result.toString()}")
         emit(result)
     }
 
-    fun setFlatsConfirm(selectedId:Int,checked:Boolean){
-        loginFlatViewState.value=LoginFlatsViewState(selectedUserId= selectedId,isItemChecked = checked)
+    fun setFlatsConfirm(selectedId: Int, checked: Boolean) {
+        loginFlatViewState.value =
+            LoginFlatsViewState(selectedUserId = selectedId, isItemChecked = checked)
     }
-    fun setFlatsUsers(flats:List<FlatDetail>, userDetail: UserDetail,mobile: String){
+
+    fun setFlatsUsers(flats: List<FlatDetail>, userDetail: UserDetail, mobile: String) {
         //loginFlatViewState.value=LoginFlatsViewState(flats=flats,userDetail = userDetail)
         //flatsDetailLiveData.value=flats
         //userDetailLiveData.value=userDetail
@@ -112,14 +112,15 @@ class LoginViewModel(context: Context) : ViewModel() {
     }
 
 
-    fun setMobileNumberLiveData(mobile:String){
-        mobileNumberLiveData.value=mobile
+    fun setMobileNumberLiveData(mobile: String) {
+        mobileNumberLiveData.value = mobile
     }
 
 
     fun openAfterLoginScreen() {
         loginFragmentChanged(LoginFragmentState.AFTER_LOGIN)
     }
+
     /*fun callAfterLoginScreen() {
         _loginViewState.value =LoginViewState(loginState)
     }
@@ -130,31 +131,36 @@ class LoginViewModel(context: Context) : ViewModel() {
             loginFragmentChanged(LoginFragmentState.OTP_VERIFY)
         }
     }
+
     fun mobileDataChanged(mobile: String) {
         if (isMobileValid(mobile)) {
             _loginMobileViewState.value =
                 LoginMobileViewState(isDataValid = true)
-        }else{
+        } else {
             _loginMobileViewState.value =
-                LoginMobileViewState(true,isDataValid = false)
+                LoginMobileViewState(true, isDataValid = false)
         }
     }
+
     fun showMobileNextButton(mobile: String) {
-            _loginMobileViewState.value =
-                LoginMobileViewState(
-                    isDataValid = isMobileValid(mobile)
-                )
+        _loginMobileViewState.value =
+            LoginMobileViewState(
+                isDataValid = isMobileValid(mobile)
+            )
     }
-    fun showOtpNextButton(otpValue:String?, isFilled: Boolean) {
+
+    fun showOtpNextButton(otpValue: String?, isFilled: Boolean) {
         _loginOtpViewState.value = LoginOtpViewState(
             otpValue = otpValue,
             isDataValid = isFilled
         )
     }
+
     fun hideNextButton() {
         _loginOtpViewState.value =
             LoginOtpViewState(isDataValid = false)
     }
+
     fun otpResend() {
         _loginOtpViewState.value =
             LoginOtpViewState(isOtpResend = true)
@@ -166,7 +172,7 @@ class LoginViewModel(context: Context) : ViewModel() {
     }
 
     private fun isMobileValid(mobile: String): Boolean {
-        return mobile.length ==10
+        return mobile.length == 10
     }
 
 
@@ -179,7 +185,7 @@ class LoginViewModel(context: Context) : ViewModel() {
         }
     }
 
-      // A placeholder username validation check
+    // A placeholder username validation check
     private fun isNameValid(username: String): Boolean {
         return username.length > 5
     }
@@ -189,7 +195,6 @@ class LoginViewModel(context: Context) : ViewModel() {
     private fun isPasswordValid(password: String): Boolean {
         return password.length > 5
     }
-
 
 
 }

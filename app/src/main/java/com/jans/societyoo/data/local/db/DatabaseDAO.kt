@@ -7,6 +7,9 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.jans.societyoo.model.login.FlatDetail
 import com.jans.societyoo.model.login.UserDetail
+import com.jans.societyoo.model.main.MicroService
+import com.jans.societyoo.model.main.Provider
+import com.jans.societyoo.model.main.Service
 
 @Dao
 interface DatabaseDAO {
@@ -22,6 +25,8 @@ interface DatabaseDAO {
     @Query("SELECT * FROM flat_data_table")
     suspend fun getAllFlats() : List<FlatDetail>
 
+    @Query("SELECT society_id FROM flat_data_table WHERE user_master_id=:defaultUserId")
+    suspend fun getDefaultFlatSocietyId(defaultUserId:Int) : Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUserDetail(userDetail: UserDetail)
@@ -31,4 +36,38 @@ interface DatabaseDAO {
 
     @Query("DELETE FROM user_data_table")
     suspend fun deleteAllUsers()
+
+
+
+
+
+
+    @Query("DELETE FROM society_service")
+    suspend fun deleteAllService()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllService(serviceList: List<Service>)
+
+    @Query("SELECT * FROM society_service")
+    suspend fun getAllService():List<Service>
+
+    @Query("DELETE FROM society_micro_service")
+    suspend fun deleteAllMicroService()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllMicroService(microServiceList: List<MicroService>)
+
+    @Query("SELECT * FROM society_micro_service WHERE serviceId=:serviceID")
+    suspend fun getMicroService(serviceID:Int):List<MicroService>
+
+
+    @Query("DELETE FROM society_service_provider")
+    suspend fun deleteAllServiceProvider()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllServiceProvider(providerList: List<Provider>)
+
+    @Query("SELECT * FROM society_service_provider WHERE microServiceId=:microServiceId")
+    suspend fun getServiceProvider(microServiceId:Int):List<Provider>
+
 }

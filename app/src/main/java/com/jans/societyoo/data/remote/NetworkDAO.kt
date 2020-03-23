@@ -3,6 +3,7 @@ package com.jans.societyoo.data.remote
 import com.jans.societyoo.model.*
 import com.jans.societyoo.model.login.*
 import com.jans.societyoo.model.login.UserData
+import com.jans.societyoo.model.main.Services
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -22,12 +23,17 @@ interface JsonApi {
     @POST("inseruserdetails")
     suspend fun updateUserProfile(@Body userDetail: UserDetail): ApiDataObject<UserData>
 
+
+    @GET("getservices/{id}")
+    suspend fun getDashboardServices(@Path(value = "id") societyId: Int): ApiDataObject<Services>
+
+
+
+
+
     @GET("/users/{id}")
     suspend fun getUser(@Path(value = "id") userId: Int): User
 
     @GET("/users")
     suspend fun getUserList(): List<User>
-
-    @POST("/posts")
-    suspend fun postUserData(@Body userPostData: UserPostData): UserData
 }
