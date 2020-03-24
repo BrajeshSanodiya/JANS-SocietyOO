@@ -9,6 +9,7 @@ import com.jans.societyoo.data.repository.DataRepository
 import com.jans.societyoo.model.ApiDataObject
 import com.jans.societyoo.model.login.UserDetail
 import com.jans.societyoo.model.main.MicroService
+import com.jans.societyoo.model.main.Provider
 import com.jans.societyoo.model.main.Services
 import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.PrintMsg
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 class SocietyServicesViewModel(context: Context) : ViewModel() {
     val dataRepository = DataRepository(context)
     val microServiceLiveData = MutableLiveData<List<MicroService>>()
+    val serviceProviderLiveData = MutableLiveData<List<Provider>>()
 
     /*fun getMicroServices(societyId: Int) = liveData {
             val result = dataRepository.getDashboardServices(societyId)
@@ -30,6 +32,14 @@ class SocietyServicesViewModel(context: Context) : ViewModel() {
             val result = dataRepository.getAllMicroServiceDB(serviceId)
             PrintMsg.println("Room DB : getMicroServicesDB : ${result.toString()}")
             microServiceLiveData.postValue(result)
+        }
+    }
+
+    fun getServiceProviderDB(microServiceId: Int) {
+        GlobalScope.launch {
+            val result = dataRepository.getAllServiceProviderDB(microServiceId)
+            PrintMsg.println("Room DB : getMicroServicesDB : ${result.toString()}")
+            serviceProviderLiveData.postValue(result)
         }
     }
 }

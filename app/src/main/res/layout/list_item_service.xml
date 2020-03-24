@@ -3,7 +3,7 @@
     android:id="@+id/thumbnail_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="1dp">
+    android:padding="8dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/logo_serviceItem"
@@ -25,7 +25,7 @@
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/logo_serviceItem"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:gravity="center_horizontal"
         android:text="dfdfdfdf"
         />

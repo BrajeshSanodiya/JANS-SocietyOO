@@ -2,15 +2,14 @@ package com.jans.societyoo.ui.societyservice
 
 import android.content.Context
 import android.content.Intent
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
+import android.widget.BaseAdapter
 import com.jans.imageload.DefaultImageLoader
+import com.jans.imageload.ImageOptions
 import com.jans.societyoo.R
 import com.jans.societyoo.model.main.MicroService
-import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.list_item_micro_service_grid.view.*
 
 
 /*class ServiceAdapter(private val context: Context,
@@ -37,11 +36,11 @@ class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
 }*/
 
 
-class MicroServiceAdapter( dataSource: List<MicroService>, context: Context) : RecyclerView.Adapter<MicroServiceAdapter.MicroServiceViewHolder>() {
-    private val serviceList: List<MicroService>
+/*class MicroServiceAdapter( dataSource: List<MicroService>, context: Context) : RecyclerView.Adapter<MicroServiceAdapter.MicroServiceViewHolder>() {
+    private val dataSource: List<MicroService>
     var context: Context
     init {
-        this.serviceList = dataSource
+        this.dataSource = dataSource
         this.context = context
     }
 
@@ -54,25 +53,20 @@ class MicroServiceAdapter( dataSource: List<MicroService>, context: Context) : R
         holder: MicroServiceViewHolder,
         position: Int
     ) {
-        //holder.imageView.setImageResource(serviceList[position].getProductImage())
-        holder.title.setText(serviceList[position].headerTitle)
-        holder.name.setText(serviceList[position].name)
-        holder.logo.setOnClickListener(View.OnClickListener {
-           /* val productName: String =
-                serviceList[position].name.toString()
-            //Toast.makeText(context, "$productName is selected", Toast.LENGTH_SHORT).show()
-            var intent= Intent(context, SocietyMicroServicesActivity::class.java)
-            intent.putExtra("microservice_id",serviceList[position].id)
-            intent.putExtra("microservice_headerTitle",serviceList[position].headerTitle)
-            context.startActivity(intent)*/
-        })
-
-        DefaultImageLoader.load(holder.logo, serviceList[position].img,null)
-
+        holder.title.setText(dataSource[position].headerTitle)
+        holder.name.setText(dataSource[position].name)
+        var options = ImageOptions(R.drawable.db_splash_logo)
+        DefaultImageLoader.load(holder.logo, dataSource[position].img,options)
+        holder.itemView.setOnClickListener{
+            var intent= Intent(context, ServiceProviderActivity::class.java)
+            intent.putExtra("microservice_id",dataSource[position].id)
+            intent.putExtra("microservice_headerTitle",dataSource[position].headerTitle)
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int {
-        return serviceList.size
+        return dataSource.size
     }
 
     inner class MicroServiceViewHolder(view: View) :
@@ -86,4 +80,37 @@ class MicroServiceAdapter( dataSource: List<MicroService>, context: Context) : R
             name = view.findViewById(R.id.name_microServiceItem)
         }
     }
+}*/
+
+
+data class MicroServiceAdapter(var dataSource :List<MicroService>, var context: Context) : BaseAdapter(){
+
+    override fun getItem(position: Int): Any {
+        return dataSource.get(position)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getCount(): Int {
+        return dataSource.size
+    }
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        val view: View = View.inflate(context,R.layout.list_item_micro_service_grid,null)
+
+        view.name_microServiceItem.setText(dataSource[position].name)
+        var options = ImageOptions(R.drawable.db_splash_logo)
+        DefaultImageLoader.load(view.logo_microServiceItem, dataSource[position].img,options)
+        view.logo_microServiceItem.setOnClickListener{
+            var intent= Intent(context, ServiceProviderActivity::class.java)
+            intent.putExtra("microservice_id",dataSource[position].id)
+            intent.putExtra("microservice_headerTitle",dataSource[position].headerTitle)
+            context.startActivity(intent)
+        }
+
+        return view
+    }
+
 }

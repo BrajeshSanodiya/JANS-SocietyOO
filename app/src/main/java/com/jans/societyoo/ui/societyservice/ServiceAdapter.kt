@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.jans.imageload.DefaultImageLoader
+import com.jans.imageload.ImageOptions
 import com.jans.societyoo.R
 import com.jans.societyoo.model.main.Service
 import de.hdodenhof.circleimageview.CircleImageView
@@ -41,10 +42,10 @@ class ServiceAdapter(
     dataSource: List<Service>,
     context: Context
 ) : RecyclerView.Adapter<ServiceAdapter.ServiceViewHolder>() {
-    private val serviceList: List<Service>
+    private val dataSource: List<Service>
     var context: Context
     init {
-        this.serviceList = dataSource
+        this.dataSource = dataSource
         this.context = context
     }
 
@@ -61,24 +62,21 @@ class ServiceAdapter(
         holder: ServiceViewHolder,
         position: Int
     ) {
-        //holder.imageView.setImageResource(serviceList[position].getProductImage())
-        holder.title.setText(serviceList[position].name)
-        holder.logo.setOnClickListener(View.OnClickListener {
-            val productName: String =
-                serviceList[position].name.toString()
-            //Toast.makeText(context, "$productName is selected", Toast.LENGTH_SHORT).show()
-            var intent= Intent(context, SocietyMicroServicesActivity::class.java)
-            intent.putExtra("service_id",serviceList[position].id)
-            intent.putExtra("service_headerTitle",serviceList[position].headerTitle)
+        holder.title.setText(dataSource[position].name)
+        var options = ImageOptions(R.drawable.db_splash_logo)
+        DefaultImageLoader.load(holder.logo, dataSource[position].img,options)
+        holder.itemView.setOnClickListener{
+            var intent= Intent(context, MicroServicesActivity::class.java)
+            intent.putExtra("service_id",dataSource[position].id)
+            intent.putExtra("service_headerTitle",dataSource[position].headerTitle)
             context.startActivity(intent)
-        })
+        }
 
-        DefaultImageLoader.load(holder.logo, serviceList[position].img,null)
 
     }
 
     override fun getItemCount(): Int {
-        return serviceList.size
+        return dataSource.size
     }
 
     inner class ServiceViewHolder(view: View) :

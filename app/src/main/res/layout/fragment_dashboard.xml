@@ -29,8 +29,6 @@
             android:id="@+id/service_dashboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_margin="6dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:layout_constraintTop_toTopOf="parent"

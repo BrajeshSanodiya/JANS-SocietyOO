@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.societyservice.SocietyMicroServicesActivity">
+    tools:context=".ui.societyservice.MicroServicesActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
+   <!-- <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_MicroService"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,6 +15,19 @@
         android:gravity="center_vertical"
         app:layout_constraintTop_toTopOf="parent"
         >
-    </androidx.recyclerview.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>-->
+
+    <GridView
+        android:id="@+id/list_MicroService"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        android:numColumns="3"
+        android:verticalSpacing="16dp"
+        android:horizontalSpacing="10dp"
+        android:stretchMode="columnWidth"
+        android:gravity="center"
+        android:divider="@color/grey_300"
+        android:dividerHeight="0dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

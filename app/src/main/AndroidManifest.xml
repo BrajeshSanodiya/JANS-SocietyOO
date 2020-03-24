@@ -13,8 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.societyservice.SocietyMicroServicesActivity"></activity>
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
             android:name=".ui.splash.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -52,13 +51,19 @@
             android:name=".ui.login.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.dashboard.DashboardActivity" />
+        <activity android:name=".ui.societyservice.MicroServicesActivity" />
+        <activity android:name=".ui.societyservice.ServiceProviderActivity" />
+
+
+
         <activity
             android:name="com.facebook.flipper.android.diagnostics.FlipperDiagnosticActivity"
             android:exported="true" />
 
         <receiver
             android:name=".MySMSBroadcastReceiver"
-            android:exported="true">
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
             </intent-filter>

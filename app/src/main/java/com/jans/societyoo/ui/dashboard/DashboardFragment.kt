@@ -19,6 +19,8 @@ import com.jans.societyoo.model.ApiDataObject
 import com.jans.societyoo.model.User
 import com.jans.societyoo.model.login.FlatDetail
 import com.jans.societyoo.model.login.UserDetail
+import com.jans.societyoo.model.main.MicroService
+import com.jans.societyoo.model.main.Service
 import com.jans.societyoo.model.main.Services
 import com.jans.societyoo.ui.FragmentSwitcher
 import com.jans.societyoo.ui.login.FlatsFragment
@@ -154,7 +156,7 @@ class DashboardFragment : Fragment() {
                 view.service_dashboard.adapter=
                     ServiceAdapter(
                         context = requireContext(),
-                        dataSource = result
+                        dataSource =getDummyList(result)
                     )
                 view.service_dashboard.adapter!!.notifyDataSetChanged()
             }else{
@@ -168,7 +170,20 @@ class DashboardFragment : Fragment() {
             }
         })
     }
-
+    fun getDummyList(list: List<Service>): List<Service> {
+        if (list != null && list.size > 0) {
+            val tempList: ArrayList<Service> = ArrayList<Service>()
+            for (item in list) {
+                tempList.add(item)
+            }
+            val tempItem = list.get(0)
+            for (item in 0..9) {
+                tempList.add(tempItem)
+            }
+            return tempList
+        }
+        return list
+    }
 
     private fun getDashboardServicesAPI(view: View,serviceId: Int) {
         viewModel.getDashboardServices(serviceId).observe(viewLifecycleOwner, Observer {
