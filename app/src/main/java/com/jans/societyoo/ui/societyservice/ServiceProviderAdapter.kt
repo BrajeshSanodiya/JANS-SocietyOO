@@ -32,13 +32,13 @@ class ServiceProviderAdapter(dataSource: List<Provider>, context: Context) : Rec
         holder: ServiceProviderViewHolder,
         position: Int
     ) {
-        holder.title.setText(dataSource[position].name)
+        holder.title.setText(dataSource[position].headerTitle)
         holder.name.setText(dataSource[position].name)
-        holder.logo.setOnClickListener(View.OnClickListener {
-            /*var intent= Intent(context, MicroServicesActivity::class.java)
-            intent.putExtra("microservice_id",dataSource[position].id)
-            intent.putExtra("microservice_headerTitle",dataSource[position].headerTitle)
-            context.startActivity(intent)*/
+        holder.itemView.setOnClickListener(View.OnClickListener {
+            var intent= Intent(context, ServiceProviderDetailActivity::class.java)
+            intent.putExtra("provider_id",dataSource[position].id)
+            intent.putExtra("provider_headerTitle",dataSource[position].headerTitle)
+            context.startActivity(intent)
         })
 
 

@@ -150,7 +150,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun getDashboardServices(view: View) {
-        viewModel.getDashboardServicesDB().observe(viewLifecycleOwner, Observer {
+   /*     viewModel.getDashboardServicesDB().observe(viewLifecycleOwner, Observer {
             val result = it
             if(result!=null && result.size>0){
                 view.service_dashboard.adapter=
@@ -159,7 +159,7 @@ class DashboardFragment : Fragment() {
                         dataSource =getDummyList(result)
                     )
                 view.service_dashboard.adapter!!.notifyDataSetChanged()
-            }else{
+            }else{*/
                 viewModel.socityIdLiveData.observe(viewLifecycleOwner, Observer {
                     val result=it
                     if(result!=null && result!=0){
@@ -167,11 +167,12 @@ class DashboardFragment : Fragment() {
                     }
                 })
                 viewModel.getSocityIdDB()
-            }
-        })
+           /* }
+        })*/
     }
+
     fun getDummyList(list: List<Service>): List<Service> {
-        if (list != null && list.size > 0) {
+       /* if (list != null && list.size > 0) {
             val tempList: ArrayList<Service> = ArrayList<Service>()
             for (item in list) {
                 tempList.add(item)
@@ -181,7 +182,7 @@ class DashboardFragment : Fragment() {
                 tempList.add(tempItem)
             }
             return tempList
-        }
+        }*/
         return list
     }
 

@@ -21,11 +21,11 @@ class SocietyServicesViewModel(context: Context) : ViewModel() {
     val microServiceLiveData = MutableLiveData<List<MicroService>>()
     val serviceProviderLiveData = MutableLiveData<List<Provider>>()
 
-    /*fun getMicroServices(societyId: Int) = liveData {
-            val result = dataRepository.getDashboardServices(societyId)
-            PrintMsg.println("API Response : getDashboardServices : ${result.toString()}")
+    fun getProviderDetail(providerId: Int) = liveData {
+            val result = dataRepository.getProviderDetail(providerId)
+            PrintMsg.println("API Response : getProviderDetail : ${result.toString()}")
             emit(result)
-    }*/
+    }
 
     fun getMicroServicesDB(serviceId: Int) {
         GlobalScope.launch {

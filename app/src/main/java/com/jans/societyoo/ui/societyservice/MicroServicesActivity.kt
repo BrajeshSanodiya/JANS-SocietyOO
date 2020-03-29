@@ -49,7 +49,7 @@ class MicroServicesActivity : AppCompatActivity() {
     }
 
     fun getDummyList(list: List<MicroService>): List<MicroService> {
-        if (list != null && list.size > 0) {
+        /*if (list != null && list.size > 0) {
             val tempList: ArrayList<MicroService> = ArrayList<MicroService>()
             for (item in list) {
                 tempList.add(item)
@@ -59,7 +59,7 @@ class MicroServicesActivity : AppCompatActivity() {
                 tempList.add(tempItem)
             }
             return tempList
-        }
+        }*/
         return list
     }
 

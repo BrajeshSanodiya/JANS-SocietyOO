@@ -3,6 +3,7 @@ package com.jans.societyoo.data.remote
 import com.jans.societyoo.model.*
 import com.jans.societyoo.model.login.*
 import com.jans.societyoo.model.login.UserData
+import com.jans.societyoo.model.main.ProviderDetail
 import com.jans.societyoo.model.main.Service
 import com.jans.societyoo.model.main.Services
 import com.jans.societyoo.utils.MyResult
@@ -26,11 +27,11 @@ class NetworkDataSource {
     suspend fun updateUserProfile(userDetail: UserDetail): MyResult<ApiDataObject<UserData>> = tryCatching {
         jsonServices.updateUserProfile(userDetail)
     }
-
-
-
     suspend fun getDashboardServices(societyId: Int): MyResult<ApiDataObject<Services>> = tryCatching {
         jsonServices.getDashboardServices(societyId)
+    }
+    suspend fun getProviderDetail(providerId: Int): MyResult<ApiDataObject<ProviderDetail>> = tryCatching {
+        jsonServices.getProviderDetail(providerId)
     }
 
 

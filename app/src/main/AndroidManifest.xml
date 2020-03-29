@@ -8,12 +8,14 @@
     <application
         android:name=".InitApplication"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+
         <activity
             android:name=".ui.splash.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -53,9 +55,7 @@
         <activity android:name=".ui.dashboard.DashboardActivity" />
         <activity android:name=".ui.societyservice.MicroServicesActivity" />
         <activity android:name=".ui.societyservice.ServiceProviderActivity" />
-
-
-
+        <activity android:name=".ui.societyservice.ServiceProviderDetailActivity" />
         <activity
             android:name="com.facebook.flipper.android.diagnostics.FlipperDiagnosticActivity"
             android:exported="true" />

@@ -10,15 +10,16 @@ data class Service(
     @SerializedName("id")
     val id: Int,
 
-    @SerializedName("header_title")
-    val headerTitle: String,
-
-    @SerializedName("img")
-    val img: String,
+    @SerializedName("name")
+    val name: String,
 
     @SerializedName("is_new")
     val isNew: Int,
 
-    @SerializedName("name")
-    val name: String
+    @SerializedName("header_title")
+    val headerTitle: String,
+
+    @SerializedName("img")
+    val img: String
+
 )

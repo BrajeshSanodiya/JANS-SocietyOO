@@ -10,11 +10,8 @@ data class Provider(
     @SerializedName("id")
     val id: Int,
 
-    @SerializedName("img")
-    val img: String,
-
-    @SerializedName("is_new")
-    val isNew: Int,
+    @SerializedName("service_id")
+    val serviceId: Int,
 
     @SerializedName("micro_service_id")
     val microServiceId: Int,
@@ -22,6 +19,12 @@ data class Provider(
     @SerializedName("name")
     val name: String,
 
-    @SerializedName("service_id")
-    val serviceId: Int
+    @SerializedName("is_new")
+    val isNew: Int,
+
+    @SerializedName("header_title")
+    val headerTitle: String,
+
+    @SerializedName("img")
+    val img: String
 )

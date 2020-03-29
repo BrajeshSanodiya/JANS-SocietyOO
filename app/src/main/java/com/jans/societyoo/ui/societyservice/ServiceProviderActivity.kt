@@ -54,17 +54,17 @@ class ServiceProviderActivity : AppCompatActivity() {
     }
 
     fun getDummyList(list: List<Provider>): List<Provider> {
-        if (list != null && list.size > 0) {
-            val tempList: ArrayList<Provider> = ArrayList<Provider>()
-            for (item in list) {
-                tempList.add(item)
-            }
-            val tempItem = list.get(0)
-            for (item in 0..9) {
-                tempList.add(tempItem)
-            }
-            return tempList
-        }
+//        if (list != null && list.size > 0) {
+//            val tempList: ArrayList<Provider> = ArrayList<Provider>()
+//            for (item in list) {
+//                tempList.add(item)
+//            }
+//            val tempItem = list.get(0)
+//            for (item in 0..9) {
+//                tempList.add(tempItem)
+//            }
+//            return tempList
+//        }
         return list
     }
 

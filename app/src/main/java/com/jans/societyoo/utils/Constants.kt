@@ -2,15 +2,22 @@ package com.jans.societyoo.utils
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ComponentName
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
+import android.net.Uri
+import android.telephony.PhoneNumberUtils
+import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 
 
-class Constants {
-    companion object{
+object Constants {
+   /* companion object{
        // var autoOTPSendAllow:Boolean=false
-    }
+    }*/
     /*object Endpoints {
         const val BASE_ENDPOINT = "http://prod.bhaskarapi.com/"
     }
@@ -54,4 +61,34 @@ class Constants {
         }
     }
 
+    fun openWhatsApp(context: Context, mobileNo:String) {
+        val smsNumber = mobileNo
+        val isWhatsappInstalled = whatsappInstalledOrNot(context,"com.whatsapp")
+        if (isWhatsappInstalled) {
+            val sendIntent = Intent("android.intent.action.MAIN")
+            sendIntent.component = ComponentName("com.whatsapp", "com.whatsapp.Conversation")
+            sendIntent.putExtra(
+                "jid",
+                PhoneNumberUtils.stripSeparators(smsNumber) + "@s.whatsapp.net"
+            ) //phone number without "+" prefix
+            context.startActivity(sendIntent)
+        } else {
+            val uri: Uri = Uri.parse("market://details?id=com.whatsapp")
+            val goToMarket = Intent(Intent.ACTION_VIEW, uri)
+            PrintMsg.toast(context, "WhatsApp not Installed")
+            context.startActivity(goToMarket)
+        }
+    }
+
+    fun whatsappInstalledOrNot(context: Context,uri: String): Boolean {
+        val pm: PackageManager = context.getPackageManager()
+        var app_installed = false
+        app_installed = try {
+            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES)
+            true
+        } catch (e: PackageManager.NameNotFoundException) {
+            false
+        }
+        return app_installed
+    }
 }

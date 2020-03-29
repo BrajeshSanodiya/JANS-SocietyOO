@@ -10,18 +10,18 @@ data class MicroService(
     @SerializedName("id")
     val id: Int,
 
-    @SerializedName("header_title")
-    val headerTitle: String,
-
-    @SerializedName("img")
-    val img: String,
-
-    @SerializedName("is_new")
-    val isNew: Int,
+    @SerializedName("service_id")
+    val serviceId: Int,
 
     @SerializedName("name")
     val name: String,
 
-    @SerializedName("service_id")
-    val serviceId: Int
+    @SerializedName("is_new")
+    val isNew: Int,
+
+    @SerializedName("header_title")
+    val headerTitle: String,
+
+    @SerializedName("img")
+    val img: String
 )

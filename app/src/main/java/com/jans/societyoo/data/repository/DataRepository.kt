@@ -7,10 +7,7 @@ import com.jans.societyoo.data.remote.NetworkDataSource
 import com.jans.societyoo.model.*
 import com.jans.societyoo.model.login.*
 import com.jans.societyoo.model.login.UserData
-import com.jans.societyoo.model.main.MicroService
-import com.jans.societyoo.model.main.Provider
-import com.jans.societyoo.model.main.Service
-import com.jans.societyoo.model.main.Services
+import com.jans.societyoo.model.main.*
 import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.SingleRunner
 
@@ -95,6 +92,9 @@ class DataRepository(context: Context) {
         return databaseDataSource.insertAllServiceProvider(providerList)
     }
 
+    suspend fun getProviderDetail(providerId: Int): MyResult<ApiDataObject<ProviderDetail>>{
+        return networkDataSource.getProviderDetail(providerId)
+    }
 
 
 
