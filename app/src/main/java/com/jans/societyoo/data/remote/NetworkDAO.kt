@@ -1,8 +1,8 @@
 package com.jans.societyoo.data.remote
 
-import com.jans.societyoo.model.*
+import com.jans.societyoo.model.ApiDataObject
+import com.jans.societyoo.model.User
 import com.jans.societyoo.model.login.*
-import com.jans.societyoo.model.login.UserData
 import com.jans.societyoo.model.main.ProviderDetail
 import com.jans.societyoo.model.main.Services
 import retrofit2.http.Body
@@ -30,9 +30,6 @@ interface JsonApi {
 
     @GET("getprovider/{id}")
     suspend fun getProviderDetail(@Path(value = "id") providerID: Int): ApiDataObject<ProviderDetail>
-
-
-
 
     @GET("/users/{id}")
     suspend fun getUser(@Path(value = "id") userId: Int): User

@@ -26,7 +26,10 @@ import com.jans.societyoo.ui.FragmentSwitcher
 import com.jans.societyoo.ui.login.FlatsFragment
 import com.jans.societyoo.ui.login.LoginActivity
 import com.jans.societyoo.ui.login.UserProfileFragment
+import com.jans.societyoo.ui.societyservice.MicroServicesActivity
+import com.jans.societyoo.ui.societyservice.ProviderPostActivity
 import com.jans.societyoo.ui.societyservice.ServiceAdapter
+import com.jans.societyoo.ui.societyservice.ServiceProviderDetailActivity
 import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.PrintMsg
 import com.jans.societyoo.viewmodel.LoginViewModel
@@ -89,9 +92,16 @@ class DashboardFragment : Fragment() {
             list.add(service)
         }*/
 
-        view.service_dashboard.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        //view.service_dashboard.adapter=ServiceAdapter(context = requireContext(), dataSource = list)
 
+
+
+        view.service_dashboard.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+        view.btnPostProvider_dashboard.setOnClickListener {
+            var intent= Intent(context, ProviderPostActivity::class.java)
+            //var intent= Intent(requireContext(), ProviderPostActivity::class.java)
+            requireContext().startActivity(intent)
+        }
 
         view.btnDefaultFlat_dashboard.setOnClickListener{
             fragmentSwitcher.siwtchFragment(FlatsFragment.newInstance(isFromLogin = false),true)

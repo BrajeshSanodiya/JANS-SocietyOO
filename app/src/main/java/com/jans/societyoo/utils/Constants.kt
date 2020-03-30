@@ -7,11 +7,14 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import android.net.Uri
+import android.provider.MediaStore
 import android.telephony.PhoneNumberUtils
-import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
+import id.zelory.compressor.Compressor
+import java.io.ByteArrayOutputStream
+import java.io.File
 
 
 object Constants {
@@ -91,4 +94,49 @@ object Constants {
         }
         return app_installed
     }
+
+    fun getCompressedImage(context: Context,path: String): ByteArray {
+        var thumbFile = File(path)
+        var thumbBitmap = Compressor(context)
+            .setMaxHeight(200)
+            .setMaxWidth(200)
+            .setQuality(10)
+            .compressToBitmap(thumbFile)
+
+        var byteArray = ByteArrayOutputStream()
+        thumbBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArray)
+        var thumbByteArray: ByteArray
+        thumbByteArray = byteArray.toByteArray()
+
+        return thumbByteArray
+    }
+
+    fun getImageSize(context: Context,choosen: Uri): String {
+        val bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), choosen)
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        val imageInByte = stream.toByteArray()
+        val fileSizeInBytes = imageInByte.size.toFloat()
+
+        val fileSizeInKB: Float = fileSizeInBytes / 1024
+        val fileSizeInMB = fileSizeInKB / 1024
+        PrintMsg.println("size in kb $fileSizeInKB ------ size in MB $fileSizeInMB")
+        if(fileSizeInMB>=1)
+                return ""+fileSizeInMB+"MB"
+         else
+            return ""+fileSizeInKB+"kb"
+    }
+
+    fun getImageSize(context: Context,byteArray: ByteArray): String {
+        val fileSizeInBytes = byteArray.size.toFloat()
+        val fileSizeInKB: Float = fileSizeInBytes / 1024
+        val fileSizeInMB = fileSizeInKB / 1024
+
+        PrintMsg.println("size in kb $fileSizeInKB ------ size in MB $fileSizeInMB")
+        if(fileSizeInMB>=1)
+            return ""+fileSizeInMB+"MB"
+        else
+            return ""+fileSizeInKB+"kb"
+    }
+
 }
