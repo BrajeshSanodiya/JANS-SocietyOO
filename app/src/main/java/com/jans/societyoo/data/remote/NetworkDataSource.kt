@@ -1,7 +1,6 @@
 package com.jans.societyoo.data.remote
 
 import com.jans.societyoo.model.ApiDataObject
-import com.jans.societyoo.model.User
 import com.jans.societyoo.model.login.*
 import com.jans.societyoo.model.main.ProviderDetail
 import com.jans.societyoo.model.main.Services
@@ -15,6 +14,7 @@ class NetworkDataSource {
 
     var jsonServices: JsonApi = NetworkInstance.jsonServices
     var jsonServicesTest: JsonApi = NetworkInstance.jsonServicesTest
+    var jsonServicesImgUr:JsonApi = NetworkInstance.jsonServicesImgUr
 
     suspend fun sendOTP(otpRequest: OtpRequest): MyResult<ApiDataObject<SendOTPData>> = tryCatching {
         jsonServices.sendOTP(otpRequest)
@@ -31,15 +31,6 @@ class NetworkDataSource {
     }
     suspend fun getProviderDetail(providerId: Int): MyResult<ApiDataObject<ProviderDetail>> = tryCatching {
         jsonServices.getProviderDetail(providerId)
-    }
-
-
-    suspend fun getUser(userId: Int): MyResult<User> = tryCatching {
-        jsonServicesTest.getUser(userId)
-    }
-
-    suspend fun getUserList(): MyResult<List<User>> = tryCatching {
-        jsonServicesTest.getUserList()
     }
 }
 

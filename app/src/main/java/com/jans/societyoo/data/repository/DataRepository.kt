@@ -96,17 +96,5 @@ class DataRepository(context: Context) {
         return networkDataSource.getProviderDetail(providerId)
     }
 
-
-
-
-
-    suspend fun getUser(userId: Int): MyResult<User>{
-        return networkDataSource.getUser(userId)
-    }
-
-    suspend fun getUserList(): MyResult<List<User>>{
-        return  networkDataSource.getUserList()
-    }
-
 }
 

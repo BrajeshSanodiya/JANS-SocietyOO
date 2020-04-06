@@ -13,6 +13,15 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object NetworkInstance {
+
+    val jsonServicesImgUr by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL_IMGUR)
+            .client(makeHttpClient(/*accessTokenProvidingInterceptor()*/))
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+            .build().create(JsonApi::class.java)
+    }
+
     val jsonServicesTest by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL_TEST)

@@ -69,20 +69,4 @@ class MainActivityViewModel(context: Context) : ViewModel() {
         }
     }
 
-
-
-
-
-    fun getUser(id: Int) = liveData {
-        val result = dataRepository .getUser(id)
-        PrintMsg.println("API Response : postUser : ${result.toString()}")
-        emit(result)
-    }
-
-    fun getUserList() = liveData {
-        val result= dataRepository .getUserList()
-        PrintMsg.println("API Response : postUser : ${result.toString()}")
-        emit(result)
-    }
-
 }

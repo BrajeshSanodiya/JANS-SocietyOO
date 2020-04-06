@@ -1,17 +1,18 @@
 package com.jans.societyoo.data.remote
 
-import com.jans.societyoo.model.ApiDataObject
-import com.jans.societyoo.model.User
+import com.jans.societyoo.model.*
 import com.jans.societyoo.model.login.*
+import com.jans.societyoo.model.login.UserData
 import com.jans.societyoo.model.main.ProviderDetail
 import com.jans.societyoo.model.main.Services
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.http.*
 
+const val BASE_URL_IMGUR = "https://appfeedlight.bhaskar.com/appFeedV3/"
 const val BASE_URL_TEST = "https://jsonplaceholder.typicode.com"
-const val BASE_URL = "https://myapartment.janstechnologies.com/societyooapi/public/api/"
+const val BASE_URL = "https://myapartment.janstechnologies.com/societyooapi/public/api/" //"http://34.93.172.52/societyooapi/public/api/"
 
 interface JsonApi {
 
@@ -31,9 +32,8 @@ interface JsonApi {
     @GET("getprovider/{id}")
     suspend fun getProviderDetail(@Path(value = "id") providerID: Int): ApiDataObject<ProviderDetail>
 
-    @GET("/users/{id}")
-    suspend fun getUser(@Path(value = "id") userId: Int): User
+    @Multipart
+    @POST("uploadfile")
+    fun uploadFile(@Part file: MultipartBody.Part,@PartMap map: HashMap<String,RequestBody>): Call<ApiDataFile>
 
-    @GET("/users")
-    suspend fun getUserList(): List<User>
 }

@@ -4,10 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,24 +16,18 @@ import com.jans.societyoo.R
 import com.jans.societyoo.data.local.db.DatabaseInstance
 import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.model.ApiDataObject
-import com.jans.societyoo.model.User
 import com.jans.societyoo.model.login.FlatDetail
 import com.jans.societyoo.model.login.UserDetail
-import com.jans.societyoo.model.main.MicroService
 import com.jans.societyoo.model.main.Service
 import com.jans.societyoo.model.main.Services
 import com.jans.societyoo.ui.FragmentSwitcher
 import com.jans.societyoo.ui.login.FlatsFragment
 import com.jans.societyoo.ui.login.LoginActivity
 import com.jans.societyoo.ui.login.UserProfileFragment
-import com.jans.societyoo.ui.societyservice.MicroServicesActivity
 import com.jans.societyoo.ui.societyservice.ProviderPostActivity
 import com.jans.societyoo.ui.societyservice.ServiceAdapter
-import com.jans.societyoo.ui.societyservice.ServiceProviderDetailActivity
 import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.PrintMsg
-import com.jans.societyoo.viewmodel.LoginViewModel
-import com.jans.societyoo.viewmodel.LoginViewModelFactory
 import com.jans.societyoo.viewmodel.MainActivityViewModel
 import com.jans.societyoo.viewmodel.MainActivityViewModelFactory
 import com.jans.tracking.PropertyName
@@ -70,30 +64,8 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(viewModelStore,MainActivityViewModelFactory(requireContext())).get(MainActivityViewModel::class.java)
-       /* viewModelUser=ViewModelProvider(viewModelStore,LoginViewModelFactory(requireActivity())).get(LoginViewModel::class.java)
-        viewModelUser.userDetailLiveData.observe(viewLifecycleOwner, Observer {
-            val _userDetail = it
-            if (_userDetail != null) {
-                userDetail = _userDetail
-                viewModelUser.getAllFlatsDB()
-            }
-        })
-        viewModelUser.getUserDetailDB()
-        viewModelUser.flatsDetailLiveData.observe(viewLifecycleOwner, Observer {
-            val _flats = it
-            if (_flats != null && _flats.size > 0) {
-                flats = _flats
-            }
-        })*/
+
         getDashboardServices(view)
-       /*     var list:ArrayList<Service> = ArrayList() //listOf<Service>(Service("Adam", 1,"",1, "test"))
-        for (i in 1..10){
-            var service=Service("testing"+1,i,"",0,"test"+i)
-            list.add(service)
-        }*/
-
-
-
 
         view.service_dashboard.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
@@ -150,12 +122,6 @@ class DashboardFragment : Fragment() {
         view.btnLogin_dashboard.setOnClickListener{
             startActivity(Intent(requireContext(), LoginActivity::class.java))
         }
-
-        view.btnGetUserService_dashboard.setOnClickListener {  getUser(view,1)}
-        view.btnUserList_dashboard.setOnClickListener { getUserList(view) }
-
-        //var userPostData= UserPostData(title="Brajesh",body = "hiii", userId = 1)
-        //view.btnPostData_dashboard.setOnClickListener { postUser(view,userPostData) }
 
     }
 
@@ -215,34 +181,6 @@ class DashboardFragment : Fragment() {
             } else if (result is MyResult.Error) {
                 PrintMsg.toastDebug(context, result.message)
             }
-        })
-    }
-
-
-    private fun getUser(view: View,id: Int) {
-        view.progressBar!!.visibility= View.VISIBLE
-        viewModel.getUser(id).observe(viewLifecycleOwner, Observer {
-            val result = it
-            if (result is MyResult.Success) {
-                val user: User = result.data
-                PrintMsg.toastDebug(requireContext(),user.toString())
-            }else if(result is MyResult.Error){
-                PrintMsg.toastDebug(requireContext(), result.message)
-            }
-            view.progressBar!!.visibility= View.GONE
-        })
-    }
-    private fun getUserList(view: View){
-        view.progressBar!!.visibility= View.VISIBLE
-        viewModel.getUserList().observe(viewLifecycleOwner, Observer {
-            val result = it
-            if (result is MyResult.Success) {
-                val userList: List<User> = result.data
-                PrintMsg.toastDebug(requireContext(),userList.toString())
-            }else if(result is MyResult.Error){
-                PrintMsg.toastDebug(requireContext(), result.message)
-            }
-            view.progressBar!!.visibility= View.GONE
         })
     }
 

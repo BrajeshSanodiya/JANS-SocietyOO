@@ -33,7 +33,6 @@
         android:hint="@string/prompt_mobile"
         android:maxLength="10"
         android:textSize="20sp"
-        android:imeActionLabel="@string/action_sign_in_short"
         android:imeOptions="actionDone"
         android:inputType="number"
         android:background="@drawable/et_box_bg"/>

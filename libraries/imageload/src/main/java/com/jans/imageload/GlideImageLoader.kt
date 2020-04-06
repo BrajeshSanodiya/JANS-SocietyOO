@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.jans.imageload.extension.transform
+import java.io.File
 
 
 class GlideImageLoader :
@@ -16,6 +17,11 @@ class GlideImageLoader :
 
     override fun load(imageView: ImageView, url: String?, options: ImageOptions?) {
         val requestBuilder = Glide.with(imageView).load(url)
+        options?.let { requestBuilder.apply(buildRequestOptions(it)) }
+        requestBuilder.into(imageView)
+    }
+    override fun load(imageView: ImageView, file: File?, options: ImageOptions?) {
+        val requestBuilder = Glide.with(imageView).load(file)
         options?.let { requestBuilder.apply(buildRequestOptions(it)) }
         requestBuilder.into(imageView)
     }
