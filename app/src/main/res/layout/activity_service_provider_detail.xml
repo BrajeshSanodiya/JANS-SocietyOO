@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        tools:context=".ui.societyservice.ServiceProviderDetailActivity">
+        tools:context=".ui.services.ServiceProviderDetailActivity">
 
         <LinearLayout
             android:id="@+id/providerInfoLayout_providerDetail"

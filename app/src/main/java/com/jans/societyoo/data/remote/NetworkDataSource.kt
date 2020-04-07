@@ -1,9 +1,11 @@
 package com.jans.societyoo.data.remote
 
 import com.jans.societyoo.model.ApiDataObject
+import com.jans.societyoo.model.ApiDataWithOutObject
 import com.jans.societyoo.model.login.*
-import com.jans.societyoo.model.main.ProviderDetail
-import com.jans.societyoo.model.main.Services
+import com.jans.societyoo.model.services.ProviderDetail
+import com.jans.societyoo.model.services.ProviderPost
+import com.jans.societyoo.model.services.Services
 import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.tryCatching
 
@@ -31,6 +33,9 @@ class NetworkDataSource {
     }
     suspend fun getProviderDetail(providerId: Int): MyResult<ApiDataObject<ProviderDetail>> = tryCatching {
         jsonServices.getProviderDetail(providerId)
+    }
+    suspend fun postProviderDetail(providerPost: ProviderPost): MyResult<ApiDataWithOutObject> = tryCatching {
+        jsonServices.postProviderDetail(providerPost)
     }
 }
 

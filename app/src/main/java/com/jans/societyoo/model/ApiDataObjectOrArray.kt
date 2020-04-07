@@ -21,6 +21,17 @@ data class ApiDataObject<out T : Any> (
     val dis_msg: Int
 )
 
+data class ApiDataWithOutObject (
+    @SerializedName("success_stat")
+    val success_stat: Int,
+
+    @SerializedName("msg")
+    val msg: String,
+
+    @SerializedName("dis_msg")
+    val dis_msg: Int
+)
+
 /*data class ApiDataArray (
     @SerializedName("success_stat")
     val success_stat: Int,
@@ -49,10 +60,12 @@ data class ApiDataFile(
     @SerializedName("dis_msg")
     val dis_msg: Int
 )
+
 data class imageObject(
     @SerializedName("link")
     val link: String
 )
+
 data class ApiDataFileBhaskar(
     @SerializedName("status")
     val status: String,

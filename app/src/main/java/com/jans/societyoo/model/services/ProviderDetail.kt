@@ -1,4 +1,4 @@
-package com.jans.societyoo.model.main
+package com.jans.societyoo.model.services
 
 
 import com.google.gson.annotations.SerializedName

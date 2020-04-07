@@ -1,4 +1,4 @@
-package com.jans.societyoo.ui.societyservice
+package com.jans.societyoo.ui.services
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,7 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.jans.societyoo.R
 import com.jans.societyoo.model.ApiDataObject
-import com.jans.societyoo.model.main.ProviderDetail
+import com.jans.societyoo.model.services.ProviderDetail
 import com.jans.societyoo.utils.Constants
 import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.PrintMsg

@@ -7,9 +7,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.jans.societyoo.model.login.FlatDetail
 import com.jans.societyoo.model.login.UserDetail
-import com.jans.societyoo.model.main.MicroService
-import com.jans.societyoo.model.main.Provider
-import com.jans.societyoo.model.main.Service
+import com.jans.societyoo.model.services.MicroService
+import com.jans.societyoo.model.services.Provider
+import com.jans.societyoo.model.services.Service
 
 @Database(entities = [FlatDetail::class, UserDetail::class, Service::class, MicroService::class, Provider::class], version = 1, exportSchema = false)
 abstract class DatabaseInstance : RoomDatabase() {

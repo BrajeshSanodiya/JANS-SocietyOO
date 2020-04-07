@@ -1,15 +1,14 @@
 package com.jans.societyoo.data.local.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.jans.societyoo.model.login.FlatDetail
 import com.jans.societyoo.model.login.UserDetail
-import com.jans.societyoo.model.main.MicroService
-import com.jans.societyoo.model.main.Provider
-import com.jans.societyoo.model.main.Service
+import com.jans.societyoo.model.services.MicroService
+import com.jans.societyoo.model.services.Provider
+import com.jans.societyoo.model.services.Service
 
 @Dao
 interface DatabaseDAO {

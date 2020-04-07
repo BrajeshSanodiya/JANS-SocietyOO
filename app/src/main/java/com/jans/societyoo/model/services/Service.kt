@@ -1,17 +1,14 @@
-package com.jans.societyoo.model.main
+package com.jans.societyoo.model.services
 
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-@Entity(tableName = "society_micro_service")
-data class MicroService(
+@Entity(tableName = "society_service")
+data class Service(
     @PrimaryKey
     @SerializedName("id")
     val id: Int,
-
-    @SerializedName("service_id")
-    val serviceId: Int,
 
     @SerializedName("name")
     val name: String,
@@ -24,4 +21,5 @@ data class MicroService(
 
     @SerializedName("img")
     val img: String
+
 )

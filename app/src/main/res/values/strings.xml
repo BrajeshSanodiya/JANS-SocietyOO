@@ -36,16 +36,30 @@
 
 
 
-    <string name="prompt_service_title">Service Title</string>
-    <string name="prompt_service_website">Website</string>
-    <string name="prompt_service_timing">Timing</string>
-    <string name="prompt_service_about">About Services</string>
-    <string name="prompt_service_category">Select Category</string>
-    <string name="prompt_service_sub_category">Select Sub-Category</string>
-    <string name="prompt_service_contact_person">Contact Person</string>
-    <string name="prompt_service_email">Email</string>
-    <string name="prompt_service_phone">Phone No</string>
+    <string name="prompt_provider_title">Service Title</string>
+    <string name="prompt_provider_website">Website</string>
+    <string name="prompt_provider_timing">Timing</string>
+    <string name="prompt_provider_about">About Services</string>
+    <string name="prompt_provider_category">Select Category</string>
+    <string name="prompt_provider_sub_category">Select Sub-Category</string>
+    <string name="prompt_provider_contact_person">Contact Person</string>
+    <string name="prompt_provider_email">Email</string>
+    <string name="prompt_provider_phone">Phone No</string>
+    <string name="prompt_provider_whatsapp">Whatsapp No</string>
 
+    <string name="invalid_provider_logo">Upload a logo</string>
+    <string name="invalid_provider_title">Not a valid title</string>
+    <string name="invalid_provider_images">Upload at least 1 image</string>
+    <string name="invalid_provider_website">Not a valid website</string>
+    <string name="invalid_provider_time">Not a valid time</string>
+    <string name="invalid_provider_about">Not a valid About Us</string>
+    <string name="invalid_provider_category">Category not selected</string>
+    <string name="invalid_provider_subcategory">Sub-Category not selected</string>
+    <string name="invalid_provider_person">Not a valid person name</string>
+    <string name="invalid_provider_email">Not a valid email</string>
+    <string name="invalid_provider_phone">Not a valid Phone No.</string>
+    <string name="invalid_provider_whatsapp">Not a valid Phone No.</string>
+    <string name="invalid_provider_page">There are one or more errors on this page. please correct them and submit again.</string>
 
     <string name="title_activity_on_board">OnBoardActivity</string>
     <string name="dummy_button">Dummy Button</string>

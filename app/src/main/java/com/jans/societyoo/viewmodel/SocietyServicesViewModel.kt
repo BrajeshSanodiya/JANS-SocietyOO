@@ -1,17 +1,12 @@
 package com.jans.societyoo.viewmodel
 
-import android.app.Service
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.jans.societyoo.data.repository.DataRepository
-import com.jans.societyoo.model.ApiDataObject
-import com.jans.societyoo.model.login.UserDetail
-import com.jans.societyoo.model.main.MicroService
-import com.jans.societyoo.model.main.Provider
-import com.jans.societyoo.model.main.Services
-import com.jans.societyoo.utils.MyResult
+import com.jans.societyoo.model.services.MicroService
+import com.jans.societyoo.model.services.Provider
 import com.jans.societyoo.utils.PrintMsg
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

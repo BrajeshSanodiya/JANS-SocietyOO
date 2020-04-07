@@ -17,6 +17,7 @@ import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.jans.societyoo.R
+import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.model.ApiDataObject
 import com.jans.societyoo.model.login.FlatDetail
 import com.jans.societyoo.model.login.UserData
@@ -49,12 +50,13 @@ class UserProfileFragment : Fragment() {
     private var etDate: TextView? = null
     var progressBar:ProgressBar?=null
     private var isFromLogin: Boolean = false
-
+    lateinit var preferences: UserPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             isFromLogin = it.getBoolean(ARG_IS_FROM_LOGIN)
         }
+        preferences = UserPreferences(requireContext())
     }
 
     companion object {
@@ -238,6 +240,7 @@ class UserProfileFragment : Fragment() {
                         GlobalScope.launch(Dispatchers.Main){
                             delay(500)
                             setProgressBarVisibility(false)
+                            UserPreferences::defaultUserId.set(preferences,userDetail!!.defultUserId);
                             if(isFromLogin)
                                 loginViewModel.openAfterLoginScreen()
                             else

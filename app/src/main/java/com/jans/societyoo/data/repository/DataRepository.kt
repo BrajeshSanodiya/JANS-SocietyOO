@@ -1,13 +1,12 @@
 package com.jans.societyoo.data.repository
 
 import android.content.Context
-import com.google.android.gms.common.api.Api
 import com.jans.societyoo.data.local.db.DatabaseDataSource
 import com.jans.societyoo.data.remote.NetworkDataSource
 import com.jans.societyoo.model.*
 import com.jans.societyoo.model.login.*
 import com.jans.societyoo.model.login.UserData
-import com.jans.societyoo.model.main.*
+import com.jans.societyoo.model.services.*
 import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.SingleRunner
 
@@ -91,9 +90,11 @@ class DataRepository(context: Context) {
     suspend fun setAllServiceProviderDB(providerList: List<Provider>) {
         return databaseDataSource.insertAllServiceProvider(providerList)
     }
-
     suspend fun getProviderDetail(providerId: Int): MyResult<ApiDataObject<ProviderDetail>>{
         return networkDataSource.getProviderDetail(providerId)
+    }
+    suspend fun postProviderDetail(providerPost: ProviderPost): MyResult<ApiDataWithOutObject>{
+        return networkDataSource.postProviderDetail(providerPost)
     }
 
 }

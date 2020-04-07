@@ -1,4 +1,4 @@
-package com.jans.societyoo.ui.societyservice
+package com.jans.societyoo.ui.services
 
 import android.content.Context
 import android.content.Intent
@@ -10,8 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jans.imageload.DefaultImageLoader
 import com.jans.imageload.ImageOptions
 import com.jans.societyoo.R
-import com.jans.societyoo.model.main.MicroService
-import com.jans.societyoo.model.main.Provider
+import com.jans.societyoo.model.services.Provider
 import de.hdodenhof.circleimageview.CircleImageView
 
 

@@ -18,14 +18,14 @@ import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.model.ApiDataObject
 import com.jans.societyoo.model.login.FlatDetail
 import com.jans.societyoo.model.login.UserDetail
-import com.jans.societyoo.model.main.Service
-import com.jans.societyoo.model.main.Services
+import com.jans.societyoo.model.services.Service
+import com.jans.societyoo.model.services.Services
 import com.jans.societyoo.ui.FragmentSwitcher
 import com.jans.societyoo.ui.login.FlatsFragment
 import com.jans.societyoo.ui.login.LoginActivity
 import com.jans.societyoo.ui.login.UserProfileFragment
-import com.jans.societyoo.ui.societyservice.ProviderPostActivity
-import com.jans.societyoo.ui.societyservice.ServiceAdapter
+import com.jans.societyoo.ui.services.ProviderPostActivity
+import com.jans.societyoo.ui.services.ServiceAdapter
 import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.PrintMsg
 import com.jans.societyoo.viewmodel.MainActivityViewModel
@@ -104,7 +104,7 @@ class DashboardFragment : Fragment() {
 
         view.btnShowShared_dashboard.setOnClickListener{
             view.tvShowShared_dashboard.setText(preferences.userName.toString())
-            println(preferences.userName)
+            println()
             println(preferences.emailAccount)
         }
 

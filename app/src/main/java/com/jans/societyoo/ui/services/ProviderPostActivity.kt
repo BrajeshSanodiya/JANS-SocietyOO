@@ -1,4 +1,4 @@
-package com.jans.societyoo.ui.societyservice
+package com.jans.societyoo.ui.services
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -7,18 +7,29 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
+import android.widget.AdapterView
+import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.jans.imageload.DefaultImageLoader
 import com.jans.societyoo.R
+import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.data.remote.NetworkInstance
 import com.jans.societyoo.model.ApiDataFile
+import com.jans.societyoo.model.ApiDataObject
+import com.jans.societyoo.model.ApiDataWithOutObject
+import com.jans.societyoo.model.services.*
 import com.jans.societyoo.ui.customviews.ImageWithCrossView
 import com.jans.societyoo.utils.Constants
+import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.PrintMsg
+import com.jans.societyoo.viewmodel.PostProviderViewModel
+import com.jans.societyoo.viewmodel.PostProviderViewModelFactory
 import com.nabinbhandari.android.permissions.PermissionHandler
 import com.nabinbhandari.android.permissions.Permissions
 import com.theartofdev.edmodo.cropper.CropImage
@@ -29,6 +40,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.MultipartBody.Part.Companion.createFormData
 import okhttp3.RequestBody
+import okhttp3.internal.notifyAll
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,6 +55,9 @@ class ProviderPostActivity : AppCompatActivity() {
     val CROP_IMAGE_REQUEST_CODE = 1001
     val CROP_LOGO_REQUEST_CODE = 2001
     var progressBar: ProgressBar? = null
+    private lateinit var postProviderViewModel: PostProviderViewModel
+    lateinit var preferences:UserPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_provider_post)
@@ -50,14 +65,200 @@ class ProviderPostActivity : AppCompatActivity() {
         supportActionBar!!.setTitle("Post Service")
         supportActionBar!!.setDisplayHomeAsUpEnabled(true);
 
+        preferences = UserPreferences(this)
+
         progressBar = progress_bar
 
+        postProviderViewModel = ViewModelProvider(viewModelStore,  PostProviderViewModelFactory(this)).get(PostProviderViewModel::class.java)
+
+       addObserver()
+
         addLogo_providerPost.setOnClickListener {
+            errorTextLogo_providerPost.visibility=View.GONE
             callImagePicker(true)
         }
         addImage_ImageContainer.setOnClickListener {
+            errorTextImages_providerPost.visibility=View.GONE
             callImagePicker(false)
         }
+
+        uploadBtn_providerPost.setOnClickListener {
+          callUploadPostData()
+        }
+    }
+
+    private fun addObserver() {
+
+        postProviderViewModel.postProviderViewState.observe(this,androidx.lifecycle.Observer {
+            var postProviderViewState = it
+                checkValidation(postProviderViewState)
+        })
+        postProviderViewModel.getDashboardServicesDB().observe(this, androidx.lifecycle.Observer {
+            var result=it
+            var spinnerServiceAdapter: ServiceDropDownAdapter =ServiceDropDownAdapter(this, result)
+            categorySpinner_providerPost?.adapter = spinnerServiceAdapter
+            categorySpinner_providerPost?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                    var service:Service= categorySpinner_providerPost.selectedItem as Service
+
+                    postProviderViewModel.getMicroServicesDB(service.id).observe(this@ProviderPostActivity, androidx.lifecycle.Observer {
+                        var result=it
+                        var spinnerMicroServiceAdapter: MicroServiceDropDownAdapter =MicroServiceDropDownAdapter(this@ProviderPostActivity, result)
+                        subcategorySpinner_providerPost?.adapter = spinnerMicroServiceAdapter
+                    })
+
+                }
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                }
+            }
+        })
+
+     /*   postProviderViewModel.getMicroServicesDB(2).observe(this, androidx.lifecycle.Observer {
+            var result=it
+            var spinnerAdapter: ServiceDropDownAdapter =ServiceDropDownAdapter(this, result)
+            categorySpinner_providerPost?.adapter = spinnerAdapter
+        })*/
+
+    }
+
+    private fun checkValidation(postProviderViewState: PostProviderViewState) {
+        if (!postProviderViewState.validLogo) {
+            errorTextLogo_providerPost.text = getString(R.string.invalid_provider_logo)
+            errorTextLogo_providerPost.visibility=View.VISIBLE
+            errorTextPage_providerPost.visibility=View.VISIBLE
+        }
+        if (!postProviderViewState.validServiceTitle) {
+            title_providerPost.error = getString(R.string.invalid_provider_title)
+            errorTextPage_providerPost.visibility=View.VISIBLE
+        }
+        if (!postProviderViewState.validImages) {
+            errorTextImages_providerPost.text = getString(R.string.invalid_provider_images)
+            errorTextImages_providerPost.visibility=View.VISIBLE
+            errorTextPage_providerPost.visibility=View.VISIBLE
+        }
+        if (!postProviderViewState.validWebsite) {
+            website_providerPost.error = getString(R.string.invalid_provider_website)
+            errorTextPage_providerPost.visibility=View.VISIBLE
+        }
+        if (!postProviderViewState.validTime) {
+            time_providerPost.error = getString(R.string.invalid_provider_time)
+            errorTextPage_providerPost.visibility=View.VISIBLE
+        }
+        if (!postProviderViewState.validAbout) {
+            about_providerPost.error = getString(R.string.invalid_provider_about)
+            errorTextPage_providerPost.visibility=View.VISIBLE
+        }
+        if (!postProviderViewState.validCategory) {
+            errorCategory_providerPost.visibility = View.VISIBLE
+            errorTextPage_providerPost.visibility=View.VISIBLE
+        }
+        if (!postProviderViewState.validSubCategory) {
+            errorSubCategory_providerPost.visibility = View.VISIBLE
+            errorTextPage_providerPost.visibility=View.VISIBLE
+        }
+        if (!postProviderViewState.validPerson) {
+            contact_providerPost.error = getString(R.string.invalid_provider_person)
+            errorTextPage_providerPost.visibility=View.VISIBLE
+        }
+        if (!postProviderViewState.validEmail) {
+            email_providerPost.error = getString(R.string.invalid_provider_email)
+            errorTextPage_providerPost.visibility=View.VISIBLE
+        }
+        if (!postProviderViewState.validMobile) {
+            mobile_providerPost.error = getString(R.string.invalid_provider_phone)
+            errorTextPage_providerPost.visibility=View.VISIBLE
+        }
+        if (!postProviderViewState.validWhatsapp) {
+            whatsapp_providerPost.error = getString(R.string.invalid_provider_whatsapp)
+            errorTextPage_providerPost.visibility=View.VISIBLE
+        }
+    }
+
+    private fun callUploadPostData() {
+
+        hideErrorWarning()
+
+        var defaultUserId: Int=0
+        if( preferences.defaultUserId!=null){
+            defaultUserId=preferences.defaultUserId!!
+        }
+        var service:Service= categorySpinner_providerPost.selectedItem as Service
+
+        var microService:MicroService= subcategorySpinner_providerPost.selectedItem as MicroService
+
+
+        var uploadedImage= ArrayList<String>()
+        var imageUploadedCount:Int=layoutImages_ImageContainer.childCount
+        for (index in 0 until imageUploadedCount){
+            var imageView:ImageWithCrossView=layoutImages_ImageContainer.getChildAt(index) as ImageWithCrossView
+            if(imageView.imgPhoto!!.tag!=null){
+                uploadedImage.add(imageView.imgPhoto!!.tag as String)
+            }
+        }
+
+        var contactInformation= ContactInformation(
+            address = "",
+            contactPerson =contact_providerPost.text.toString().trim(),
+            email = email_providerPost.text.toString().trim(),
+            phone = mobile_providerPost.text.toString().trim(),
+            website = website_providerPost.text.toString().trim(),
+            whatsApp = whatsapp_providerPost.text.toString().trim(),
+            workingHours =  time_providerPost.text.toString().trim()
+        )
+
+        var logo:String=""
+        if(logo_providerPost.tag!=null){
+           logo=logo_providerPost.tag as String
+        }
+
+        var providerDetail = ProviderDetail(
+            about =  about_providerPost.text.toString().trim(),
+            contactInformation = contactInformation,
+            images = uploadedImage,
+            location = "",
+            logo = logo,
+            servicesOffered = "",
+            serviceTitle = title_providerPost.text.toString().trim()
+        )
+
+        var providerPost=ProviderPost(
+            defult_user_id = defaultUserId,
+            service_id = service.id,
+            micro_service_id = microService.id,
+            providerDetail = providerDetail
+        )
+
+
+        var postValid=postProviderViewModel.validPostData(providerPost)
+        if(postValid){
+            //TODO submit post
+            PrintMsg.toastDebug(this,"Data Valid")
+            postProviderViewModel.postProviderDetail(providerPost).observe(this, androidx.lifecycle.Observer {
+                var result =it
+                if (result is MyResult.Success) {
+                    var data:ApiDataWithOutObject=result.data
+                    if (data.dis_msg == 1 && !TextUtils.isEmpty(data.msg))
+                        PrintMsg.toast(this, data.msg);
+                    if (data.success_stat == 1) {
+                       //bindUIData(data.data_details)
+                        PrintMsg.toastDebug(this,"Data Posted !!")
+                        finish()
+                    }
+                } else if (result is MyResult.Error) {
+                    PrintMsg.toastDebug(this, result.message)
+                }
+            })
+
+
+        }
+    }
+
+    private fun hideErrorWarning() {
+        errorTextLogo_providerPost.visibility=View.GONE
+        errorTextImages_providerPost.visibility=View.GONE
+        errorCategory_providerPost.visibility=View.GONE
+        errorSubCategory_providerPost.visibility=View.GONE
+        errorTextPage_providerPost.visibility=View.GONE
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -152,7 +353,7 @@ class ProviderPostActivity : AppCompatActivity() {
                     Constants.getCompressedImage(this, resultUri.path!!)
                 compressedSize = Constants.getImageSize(this, compressedByteArray)
 
-                PrintMsg.toast(
+                PrintMsg.toastDebug(
                     this,
                     " Orignal Size : $orignalSize \n Cropped Size : $croppedSize \n Commpressed Size : $compressedSize"
                 )
@@ -201,9 +402,10 @@ class ProviderPostActivity : AppCompatActivity() {
                             var apiDataFile: ApiDataFile = response.body() as ApiDataFile
                             var imageObject = apiDataFile.data_details
                             var link = imageObject.link
-                            PrintMsg.toast(applicationContext, link)
+                            PrintMsg.toastDebug(applicationContext, link)
 
                             if (isLogo) {
+                                logo_providerPost.tag=link
                                 DefaultImageLoader.load(logo_providerPost, link, null)
                             } else {
                                 var imageView = ImageWithCrossView(getBaseContext());
@@ -211,7 +413,7 @@ class ProviderPostActivity : AppCompatActivity() {
                                     layoutImages_ImageContainer.removeView(imageView)
                                 }
                                 layoutImages_ImageContainer.addView(imageView)
-
+                                imageView.imgPhoto!!.tag=link
                                 DefaultImageLoader.load(imageView.imgPhoto!!, link, null)
                             }
                         }

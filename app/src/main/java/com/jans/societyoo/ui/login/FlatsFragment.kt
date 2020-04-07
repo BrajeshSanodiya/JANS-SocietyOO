@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.jans.societyoo.R
+import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.model.ApiDataObject
 import com.jans.societyoo.model.login.FlatDetail
 import com.jans.societyoo.model.login.UserData
@@ -43,7 +44,7 @@ class FlatsFragment : Fragment() {
     var checkedUserId: Int = 0
     var progressBar:ProgressBar?=null
     private var isFromLogin: Boolean = false
-
+    lateinit var preferences: UserPreferences
     companion object {
         @JvmStatic
         fun newInstance(isFromLogin: Boolean) =
@@ -59,6 +60,7 @@ class FlatsFragment : Fragment() {
         arguments?.let {
             isFromLogin = it.getBoolean(ARG_IS_FROM_LOGIN)
         }
+        preferences = UserPreferences(requireContext())
     }
 
     @SuppressLint("FragmentLiveDataObserve")
@@ -135,6 +137,7 @@ class FlatsFragment : Fragment() {
         }
         btnSave.setOnClickListener {
             userDetail!!.defultUserId = checkedUserId
+            UserPreferences::defaultUserId.set(preferences,userDetail!!.defultUserId);
             updateUserProfile()
         }
 

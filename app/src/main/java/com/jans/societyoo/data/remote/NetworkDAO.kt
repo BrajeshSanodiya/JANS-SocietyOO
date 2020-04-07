@@ -3,8 +3,9 @@ package com.jans.societyoo.data.remote
 import com.jans.societyoo.model.*
 import com.jans.societyoo.model.login.*
 import com.jans.societyoo.model.login.UserData
-import com.jans.societyoo.model.main.ProviderDetail
-import com.jans.societyoo.model.main.Services
+import com.jans.societyoo.model.services.ProviderDetail
+import com.jans.societyoo.model.services.ProviderPost
+import com.jans.societyoo.model.services.Services
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -31,6 +32,9 @@ interface JsonApi {
 
     @GET("getprovider/{id}")
     suspend fun getProviderDetail(@Path(value = "id") providerID: Int): ApiDataObject<ProviderDetail>
+
+    @POST("insertprovider")
+    suspend fun postProviderDetail(@Body providerPost: ProviderPost): ApiDataWithOutObject
 
     @Multipart
     @POST("uploadfile")

@@ -1,15 +1,12 @@
-package com.jans.societyoo.ui.societyservice
+package com.jans.societyoo.ui.services
 
-import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jans.societyoo.R
-import com.jans.societyoo.model.main.MicroService
-import com.jans.societyoo.model.main.Provider
+import com.jans.societyoo.model.services.Provider
 import com.jans.societyoo.viewmodel.SocietyServicesViewModel
 import com.jans.societyoo.viewmodel.SocityServicesViewModelFactory
 import kotlinx.android.synthetic.main.activity_services_provider.*

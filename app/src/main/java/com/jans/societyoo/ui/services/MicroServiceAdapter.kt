@@ -1,4 +1,4 @@
-package com.jans.societyoo.ui.societyservice
+package com.jans.societyoo.ui.services
 
 import android.content.Context
 import android.content.Intent
@@ -8,7 +8,7 @@ import android.widget.BaseAdapter
 import com.jans.imageload.DefaultImageLoader
 import com.jans.imageload.ImageOptions
 import com.jans.societyoo.R
-import com.jans.societyoo.model.main.MicroService
+import com.jans.societyoo.model.services.MicroService
 import kotlinx.android.synthetic.main.list_item_micro_service_grid.view.*
 
 
