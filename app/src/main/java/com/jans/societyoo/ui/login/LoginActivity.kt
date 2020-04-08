@@ -75,11 +75,7 @@ class LoginActivity : AppCompatActivity(), FragmentSwitcher {
                 siwtchFragment(UserProfileFragment.newInstance(isFromLogin = true), true)
             }
             LoginFragmentState.AFTER_LOGIN -> {
-                var flatsDetail = loginViewModel.flatsDetailLiveData.value
-                var mobile = flatsDetail?.get(0)!!.umMobile
-                var userDetail = loginViewModel.userDetailLiveData.value
-                UserPreferences::flatsDetail.set(preferences, flatsDetail.toString());
-                UserPreferences::userDetail.set(preferences, userDetail.toString());
+                var mobile = loginViewModel.flatsDetailLiveData.value?.get(0)!!.umMobile
                 UserPreferences::mobileNum.set(preferences, mobile);
 
                 startActivity(Intent(this, DashboardActivity::class.java))

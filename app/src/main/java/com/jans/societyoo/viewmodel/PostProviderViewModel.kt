@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.jans.societyoo.data.repository.DataRepository
+import com.jans.societyoo.model.services.MicroService
 import com.jans.societyoo.model.services.ProviderDetail
 import com.jans.societyoo.model.services.ProviderPost
 import com.jans.societyoo.ui.services.PostProviderViewState
@@ -24,15 +25,20 @@ public class PostProviderViewModel(context: Context) : ViewModel() {
     private val dataRepository: DataRepository = DataRepository(context);
 
 
-    fun getDashboardServicesDB() = liveData {
-        val result=dataRepository.getAllServiceDB()
-        PrintMsg.println("Room DB : getDashboardServicesDB : ${result.toString()}")
+    fun getAllServices() = liveData {
+        val result=dataRepository.getAllServices()
+        PrintMsg.println("API Response : getAllServices : ${result.toString()}")
         emit(result)
     }
 
-    fun getMicroServicesDB(serviceId: Int) = liveData {
-        val result=dataRepository.getAllMicroServiceDB(serviceId)
-        PrintMsg.println("Room DB : getDashboardServicesDB : ${result.toString()}")
+    fun getFilterMicroServices(serviceId: Int,list: List<MicroService>) = liveData {
+        val result=ArrayList<MicroService>()
+        for (item in list){
+          if(item.serviceId==serviceId)
+              result.add(item)
+        }
+
+        PrintMsg.println("Filter Data : getFilterMicroServices : ${result.toString()}")
         emit(result)
     }
 

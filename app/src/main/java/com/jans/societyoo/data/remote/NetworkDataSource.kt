@@ -18,18 +18,21 @@ class NetworkDataSource {
     var jsonServicesTest: JsonApi = NetworkInstance.jsonServicesTest
     var jsonServicesImgUr:JsonApi = NetworkInstance.jsonServicesImgUr
 
-    suspend fun sendOTP(otpRequest: OtpRequest): MyResult<ApiDataObject<SendOTPData>> = tryCatching {
+    suspend fun sendOTP(otpRequest: OtpRequest): MyResult<ApiDataWithOutObject> = tryCatching {
         jsonServices.sendOTP(otpRequest)
     }
     suspend fun verifyOTP(otpVerifyRequest: OtpVerifyRequest): MyResult<ApiDataObject<UserData>> = tryCatching {
         jsonServices.verifyOTP(otpVerifyRequest)
     }
-
     suspend fun updateUserProfile(userDetail: UserDetail): MyResult<ApiDataObject<UserData>> = tryCatching {
         jsonServices.updateUserProfile(userDetail)
     }
-    suspend fun getDashboardServices(societyId: Int): MyResult<ApiDataObject<Services>> = tryCatching {
-        jsonServices.getDashboardServices(societyId)
+
+    suspend fun getAllServices(): MyResult<ApiDataObject<Services>> = tryCatching {
+        jsonServices.getAllServices()
+    }
+    suspend fun getSocietyServices(societyId: Int): MyResult<ApiDataObject<Services>> = tryCatching {
+        jsonServices.getSocietyServices(societyId)
     }
     suspend fun getProviderDetail(providerId: Int): MyResult<ApiDataObject<ProviderDetail>> = tryCatching {
         jsonServices.getProviderDetail(providerId)

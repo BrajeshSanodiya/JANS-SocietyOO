@@ -18,7 +18,7 @@ const val BASE_URL = "https://myapartment.janstechnologies.com/societyooapi/publ
 interface JsonApi {
 
     @POST("getotp")
-    suspend fun sendOTP(@Body otpRequest: OtpRequest): ApiDataObject<SendOTPData>
+    suspend fun sendOTP(@Body otpRequest: OtpRequest): ApiDataWithOutObject
 
     @POST("validotp")
     suspend fun verifyOTP(@Body otpVerifyRequest: OtpVerifyRequest): ApiDataObject<UserData>
@@ -27,14 +27,21 @@ interface JsonApi {
     suspend fun updateUserProfile(@Body userDetail: UserDetail): ApiDataObject<UserData>
 
 
+
+
+    @GET("getallservices")
+    suspend fun getAllServices(): ApiDataObject<Services>
+
     @GET("getservices/{id}")
-    suspend fun getDashboardServices(@Path(value = "id") societyId: Int): ApiDataObject<Services>
+    suspend fun getSocietyServices(@Path(value = "id") societyId: Int): ApiDataObject<Services>
 
     @GET("getprovider/{id}")
     suspend fun getProviderDetail(@Path(value = "id") providerID: Int): ApiDataObject<ProviderDetail>
 
     @POST("insertprovider")
     suspend fun postProviderDetail(@Body providerPost: ProviderPost): ApiDataWithOutObject
+
+
 
     @Multipart
     @POST("uploadfile")

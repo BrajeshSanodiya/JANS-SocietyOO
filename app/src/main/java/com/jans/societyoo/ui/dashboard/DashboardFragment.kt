@@ -84,10 +84,10 @@ class DashboardFragment : Fragment() {
         }
 
         view.btnDeleteShared_dashboard.setOnClickListener{
-            UserPreferences::flatsDetail.set(preferences,"");
-            UserPreferences::userDetail.set(preferences,"");
-            UserPreferences::mobileNum.set(preferences,"");
+            UserPreferences::mobileNum.set(preferences,"")
             UserPreferences::appOpenFirstTime.set(preferences,false)
+            UserPreferences::defaultFlatId.set(preferences,0)
+            UserPreferences::defaultUserId.set(preferences,0)
             PrintMsg.toast(requireContext(),"LogOut Successfully! Kill the app and Open again..")
         }
 
@@ -163,13 +163,13 @@ class DashboardFragment : Fragment() {
     }
 
     private fun getDashboardServicesAPI(view: View,serviceId: Int) {
-        viewModel.getDashboardServices(serviceId).observe(viewLifecycleOwner, Observer {
+        viewModel.getSocietyServices(serviceId).observe(viewLifecycleOwner, Observer {
             val result = it
             if (result is MyResult.Success) {
                 val data: ApiDataObject<Services> = result.data
                 if (data.dis_msg == 1 && !TextUtils.isEmpty(data.msg))
                     PrintMsg.toast(context, data.msg);
-                if (data.success_stat == 1) {
+                if (data.success_stat == 1 && data.data_details!=null) {
                     viewModel.setDashboardServicesDB(result.data.data_details)
                     view.service_dashboard.adapter=
                         ServiceAdapter(

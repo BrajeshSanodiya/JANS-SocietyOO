@@ -5,12 +5,13 @@ import com.jans.societyoo.model.login.UserDetail
 
 
 class UserPreferences(context: Context) : Preferences(context){
-    var flatsDetail by stringPref()
-    var userDetail by stringPref()
+    /*var flatsDetail by stringPref()
+    var userDetail by stringPref()*/
 
     var mobileNum by stringPref()
     var appOpenFirstTime by booleanPref()
     var defaultUserId by intPref()
+    var defaultFlatId by intPref()
 
 
 

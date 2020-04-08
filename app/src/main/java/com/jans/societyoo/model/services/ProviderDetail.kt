@@ -15,7 +15,8 @@ data class ProviderDetail(
     @SerializedName("logo")
     val logo: String,
     @SerializedName("service_title")
-    val serviceTitle: String,
-    @SerializedName("Services_Offered")
-    val servicesOffered: String
+    val serviceTitle: String
+
+   /* @SerializedName("Services_Offered")
+    val servicesOffered: String*/
 )

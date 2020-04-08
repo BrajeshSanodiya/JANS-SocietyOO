@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.*
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -136,8 +135,8 @@ class FlatsFragment : Fragment() {
             }
         }
         btnSave.setOnClickListener {
-            userDetail!!.defultUserId = checkedUserId
-            UserPreferences::defaultUserId.set(preferences,userDetail!!.defultUserId);
+            userDetail!!.defaultUserId = checkedUserId
+            //UserPreferences::defaultUserId.set(preferences,userDetail!!.defultUserId);
             updateUserProfile()
         }
 
@@ -192,8 +191,8 @@ class FlatsFragment : Fragment() {
                 radioButton.layoutParams = lp
                 radioButton.text ="Flat No. " + flat.flatNu + ", " + flat.flatFloorNu + " Floor, " + flat.towerName + " Tower, " + flat.societyName + ", " + flat.societyAddress + ", " + flat.societyCity
                 radioButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16.0f)
-                if(userDetail!=null && userDetail!!.defultUserId!=null && userDetail!!.defultUserId!=0){
-                    if(flat.userId==userDetail!!.defultUserId)
+                if(userDetail!=null && userDetail!!.defaultUserId!=null && userDetail!!.defaultUserId!=0){
+                    if(flat.userId==userDetail!!.defaultUserId)
                         radioButton.isChecked=true
                 }
                 index++
@@ -217,6 +216,8 @@ class FlatsFragment : Fragment() {
                         GlobalScope.launch(Dispatchers.Main) {
                             delay(500)
                             setProgressBarVisibility(false)
+                            UserPreferences::defaultUserId.set(preferences,result.data.data_details.userDetails.defaultUserId);
+                            UserPreferences::defaultFlatId.set(preferences,result.data.data_details.userDetails.defaultFlatId);
                             requireActivity().supportFragmentManager.popBackStack()
                         }
                     }else{

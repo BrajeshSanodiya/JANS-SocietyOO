@@ -3,8 +3,11 @@ package com.jans.societyoo.model.services
 import com.google.gson.annotations.SerializedName
 
 data class ProviderPost (
-    @SerializedName("defult_user_id")
-    val defult_user_id: Int,
+    @SerializedName("default_user_id")
+    val default_user_id: Int,
+
+    @SerializedName("default_flat_id")
+    val default_flat_id: Int,
 
     @SerializedName("service_id")
     val service_id: Int,

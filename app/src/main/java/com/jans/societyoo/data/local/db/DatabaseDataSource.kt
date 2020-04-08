@@ -13,14 +13,12 @@ class DatabaseDataSource(context: Context) {
     suspend fun insertAllFlats(flatDetails: List<FlatDetail>){
         return dbServices.insertAllFlats(flatDetails)
     }
-
     suspend fun getAllFlats(): List<FlatDetail> {
        return dbServices.getAllFlats()
     }
     suspend fun getDefaultFlatSocietyId(defaultUserId:Int): Int {
         return dbServices.getDefaultFlatSocietyId(defaultUserId)
     }
-
     suspend fun deleteAllFlats(){
         return dbServices.deleteAllFlats()
     }
@@ -30,10 +28,10 @@ class DatabaseDataSource(context: Context) {
     suspend fun insertUserDetail(userDetail: UserDetail){
         return dbServices.insertUserDetail(userDetail)
     }
-
     suspend fun getUserDetail(): UserDetail {
         return dbServices.getUserDetail()
     }
+
 
 
     suspend fun deleteAllService(){

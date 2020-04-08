@@ -31,11 +31,10 @@ interface DatabaseDAO {
     suspend fun insertUserDetail(userDetail: UserDetail)
 
     @Query("SELECT * FROM user_data_table")
-    fun getUserDetail() : UserDetail
+    suspend fun getUserDetail() : UserDetail
 
     @Query("DELETE FROM user_data_table")
     suspend fun deleteAllUsers()
-
 
 
 
@@ -58,7 +57,6 @@ interface DatabaseDAO {
 
     @Query("SELECT * FROM society_micro_service WHERE serviceId=:serviceID")
     suspend fun getMicroService(serviceID:Int):List<MicroService>
-
 
     @Query("DELETE FROM society_service_provider")
     suspend fun deleteAllServiceProvider()

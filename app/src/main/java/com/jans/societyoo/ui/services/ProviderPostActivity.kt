@@ -35,6 +35,7 @@ import com.nabinbhandari.android.permissions.Permissions
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_provider_post.*
+import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 import kotlinx.android.synthetic.main.layout_image_container_with_add.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -56,7 +57,7 @@ class ProviderPostActivity : AppCompatActivity() {
     val CROP_LOGO_REQUEST_CODE = 2001
     var progressBar: ProgressBar? = null
     private lateinit var postProviderViewModel: PostProviderViewModel
-    lateinit var preferences:UserPreferences
+    lateinit var preferences: UserPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,108 +70,163 @@ class ProviderPostActivity : AppCompatActivity() {
 
         progressBar = progress_bar
 
-        postProviderViewModel = ViewModelProvider(viewModelStore,  PostProviderViewModelFactory(this)).get(PostProviderViewModel::class.java)
+        postProviderViewModel =
+            ViewModelProvider(viewModelStore, PostProviderViewModelFactory(this)).get(
+                PostProviderViewModel::class.java
+            )
 
-       addObserver()
+        addObserver()
 
         addLogo_providerPost.setOnClickListener {
-            errorTextLogo_providerPost.visibility=View.GONE
+            errorTextLogo_providerPost.visibility = View.GONE
             callImagePicker(true)
         }
         addImage_ImageContainer.setOnClickListener {
-            errorTextImages_providerPost.visibility=View.GONE
+            errorTextImages_providerPost.visibility = View.GONE
             callImagePicker(false)
         }
 
         uploadBtn_providerPost.setOnClickListener {
-          callUploadPostData()
+            callUploadPostData()
         }
     }
 
     private fun addObserver() {
 
-        postProviderViewModel.postProviderViewState.observe(this,androidx.lifecycle.Observer {
+        postProviderViewModel.postProviderViewState.observe(this, androidx.lifecycle.Observer {
             var postProviderViewState = it
-                checkValidation(postProviderViewState)
+            checkValidation(postProviderViewState)
         })
-        postProviderViewModel.getDashboardServicesDB().observe(this, androidx.lifecycle.Observer {
-            var result=it
-            var spinnerServiceAdapter: ServiceDropDownAdapter =ServiceDropDownAdapter(this, result)
-            categorySpinner_providerPost?.adapter = spinnerServiceAdapter
-            categorySpinner_providerPost?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                    var service:Service= categorySpinner_providerPost.selectedItem as Service
+        postProviderViewModel.getAllServices().observe(this, androidx.lifecycle.Observer {
+            var result = it
+            if (result is MyResult.Success) {
+                val data: ApiDataObject<Services> = result.data
+                if (data.dis_msg == 1 && !TextUtils.isEmpty(data.msg))
+                    PrintMsg.toast(this, data.msg);
+                if (data.success_stat == 1 && data.data_details != null && data.data_details.services != null && data.data_details.services.size > 0) {
+                    val serviceList = data.data_details.services
+                    val microServiceList = data.data_details.microServices
+                    val spinnerServiceAdapter = ServiceDropDownAdapter(this, serviceList)
+                    categorySpinner_providerPost?.adapter = spinnerServiceAdapter
+                    categorySpinner_providerPost?.onItemSelectedListener =
+                        object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(
+                                parent: AdapterView<*>,
+                                view: View?,
+                                position: Int,
+                                id: Long
+                            ) {
+                                val service: Service =
+                                    categorySpinner_providerPost.selectedItem as Service
 
-                    postProviderViewModel.getMicroServicesDB(service.id).observe(this@ProviderPostActivity, androidx.lifecycle.Observer {
-                        var result=it
-                        var spinnerMicroServiceAdapter: MicroServiceDropDownAdapter =MicroServiceDropDownAdapter(this@ProviderPostActivity, result)
-                        subcategorySpinner_providerPost?.adapter = spinnerMicroServiceAdapter
-                    })
+                                postProviderViewModel.getFilterMicroServices(
+                                    service.id,
+                                    microServiceList
+                                ).observe(this@ProviderPostActivity, androidx.lifecycle.Observer {
+                                    val filteredMicroService = it
+                                    val spinnerMicroServiceAdapter = MicroServiceDropDownAdapter(
+                                        this@ProviderPostActivity,
+                                        filteredMicroService
+                                    )
+                                    subcategorySpinner_providerPost?.adapter =
+                                        spinnerMicroServiceAdapter
+                                })
 
+                            }
+
+                            override fun onNothingSelected(parent: AdapterView<*>) {
+                            }
+                        }
+
+
+                    /*viewModel.setDashboardServicesDB(result.data.data_details)
+                    view.service_dashboard.adapter=
+                        ServiceAdapter(
+                            context = requireContext(),
+                            dataSource = data.data_details.services
+                        )
+                    view.service_dashboard.adapter!!.notifyDataSetChanged()*/
                 }
-                override fun onNothingSelected(parent: AdapterView<*>) {
-                }
+            } else if (result is MyResult.Error) {
+                PrintMsg.toastDebug(this, result.message)
             }
+
+            /* var spinnerServiceAdapter: ServiceDropDownAdapter =ServiceDropDownAdapter(this, result)
+             categorySpinner_providerPost?.adapter = spinnerServiceAdapter
+             categorySpinner_providerPost?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                 override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                     var service:Service= categorySpinner_providerPost.selectedItem as Service
+
+                     postProviderViewModel.getFilterMicroServices(service.id,ser).observe(this@ProviderPostActivity, androidx.lifecycle.Observer {
+                         var result=it
+                         var spinnerMicroServiceAdapter: MicroServiceDropDownAdapter =MicroServiceDropDownAdapter(this@ProviderPostActivity, result)
+                         subcategorySpinner_providerPost?.adapter = spinnerMicroServiceAdapter
+                     })
+
+                 }
+                 override fun onNothingSelected(parent: AdapterView<*>) {
+                 }
+             }*/
         })
 
-     /*   postProviderViewModel.getMicroServicesDB(2).observe(this, androidx.lifecycle.Observer {
-            var result=it
-            var spinnerAdapter: ServiceDropDownAdapter =ServiceDropDownAdapter(this, result)
-            categorySpinner_providerPost?.adapter = spinnerAdapter
-        })*/
+        /*   postProviderViewModel.getMicroServicesDB(2).observe(this, androidx.lifecycle.Observer {
+               var result=it
+               var spinnerAdapter: ServiceDropDownAdapter =ServiceDropDownAdapter(this, result)
+               categorySpinner_providerPost?.adapter = spinnerAdapter
+           })*/
 
     }
 
     private fun checkValidation(postProviderViewState: PostProviderViewState) {
         if (!postProviderViewState.validLogo) {
             errorTextLogo_providerPost.text = getString(R.string.invalid_provider_logo)
-            errorTextLogo_providerPost.visibility=View.VISIBLE
-            errorTextPage_providerPost.visibility=View.VISIBLE
+            errorTextLogo_providerPost.visibility = View.VISIBLE
+            errorTextPage_providerPost.visibility = View.VISIBLE
         }
         if (!postProviderViewState.validServiceTitle) {
             title_providerPost.error = getString(R.string.invalid_provider_title)
-            errorTextPage_providerPost.visibility=View.VISIBLE
+            errorTextPage_providerPost.visibility = View.VISIBLE
         }
         if (!postProviderViewState.validImages) {
             errorTextImages_providerPost.text = getString(R.string.invalid_provider_images)
-            errorTextImages_providerPost.visibility=View.VISIBLE
-            errorTextPage_providerPost.visibility=View.VISIBLE
+            errorTextImages_providerPost.visibility = View.VISIBLE
+            errorTextPage_providerPost.visibility = View.VISIBLE
         }
         if (!postProviderViewState.validWebsite) {
             website_providerPost.error = getString(R.string.invalid_provider_website)
-            errorTextPage_providerPost.visibility=View.VISIBLE
+            errorTextPage_providerPost.visibility = View.VISIBLE
         }
         if (!postProviderViewState.validTime) {
             time_providerPost.error = getString(R.string.invalid_provider_time)
-            errorTextPage_providerPost.visibility=View.VISIBLE
+            errorTextPage_providerPost.visibility = View.VISIBLE
         }
         if (!postProviderViewState.validAbout) {
             about_providerPost.error = getString(R.string.invalid_provider_about)
-            errorTextPage_providerPost.visibility=View.VISIBLE
+            errorTextPage_providerPost.visibility = View.VISIBLE
         }
         if (!postProviderViewState.validCategory) {
             errorCategory_providerPost.visibility = View.VISIBLE
-            errorTextPage_providerPost.visibility=View.VISIBLE
+            errorTextPage_providerPost.visibility = View.VISIBLE
         }
         if (!postProviderViewState.validSubCategory) {
             errorSubCategory_providerPost.visibility = View.VISIBLE
-            errorTextPage_providerPost.visibility=View.VISIBLE
+            errorTextPage_providerPost.visibility = View.VISIBLE
         }
         if (!postProviderViewState.validPerson) {
             contact_providerPost.error = getString(R.string.invalid_provider_person)
-            errorTextPage_providerPost.visibility=View.VISIBLE
+            errorTextPage_providerPost.visibility = View.VISIBLE
         }
         if (!postProviderViewState.validEmail) {
             email_providerPost.error = getString(R.string.invalid_provider_email)
-            errorTextPage_providerPost.visibility=View.VISIBLE
+            errorTextPage_providerPost.visibility = View.VISIBLE
         }
         if (!postProviderViewState.validMobile) {
             mobile_providerPost.error = getString(R.string.invalid_provider_phone)
-            errorTextPage_providerPost.visibility=View.VISIBLE
+            errorTextPage_providerPost.visibility = View.VISIBLE
         }
         if (!postProviderViewState.validWhatsapp) {
             whatsapp_providerPost.error = getString(R.string.invalid_provider_whatsapp)
-            errorTextPage_providerPost.visibility=View.VISIBLE
+            errorTextPage_providerPost.visibility = View.VISIBLE
         }
     }
 
@@ -178,87 +234,99 @@ class ProviderPostActivity : AppCompatActivity() {
 
         hideErrorWarning()
 
-        var defaultUserId: Int=0
-        if( preferences.defaultUserId!=null){
-            defaultUserId=preferences.defaultUserId!!
+        var defaultUserId: Int = 0
+        if (preferences.defaultUserId != null) {
+            defaultUserId = preferences.defaultUserId!!
         }
-        var service:Service= categorySpinner_providerPost.selectedItem as Service
 
-        var microService:MicroService= subcategorySpinner_providerPost.selectedItem as MicroService
+        var defaultFlatId: Int = 0
+        if (preferences.defaultFlatId != null) {
+            defaultFlatId = preferences.defaultFlatId!!
+        }
+
+        var service = Service()
+        if (categorySpinner_providerPost.selectedItem != null && categorySpinner_providerPost.selectedItem is Service)
+            service = categorySpinner_providerPost.selectedItem as Service
+
+        var microService = MicroService()
+        if (subcategorySpinner_providerPost.selectedItem != null && subcategorySpinner_providerPost.selectedItem is MicroService)
+            microService = subcategorySpinner_providerPost.selectedItem as MicroService
 
 
-        var uploadedImage= ArrayList<String>()
-        var imageUploadedCount:Int=layoutImages_ImageContainer.childCount
-        for (index in 0 until imageUploadedCount){
-            var imageView:ImageWithCrossView=layoutImages_ImageContainer.getChildAt(index) as ImageWithCrossView
-            if(imageView.imgPhoto!!.tag!=null){
+        var uploadedImage = ArrayList<String>()
+        var imageUploadedCount: Int = layoutImages_ImageContainer.childCount
+        for (index in 0 until imageUploadedCount) {
+            var imageView: ImageWithCrossView =
+                layoutImages_ImageContainer.getChildAt(index) as ImageWithCrossView
+            if (imageView.imgPhoto!!.tag != null) {
                 uploadedImage.add(imageView.imgPhoto!!.tag as String)
             }
         }
 
-        var contactInformation= ContactInformation(
+        var contactInformation = ContactInformation(
             address = "",
-            contactPerson =contact_providerPost.text.toString().trim(),
+            contactPerson = contact_providerPost.text.toString().trim(),
             email = email_providerPost.text.toString().trim(),
             phone = mobile_providerPost.text.toString().trim(),
             website = website_providerPost.text.toString().trim(),
             whatsApp = whatsapp_providerPost.text.toString().trim(),
-            workingHours =  time_providerPost.text.toString().trim()
+            workingHours = time_providerPost.text.toString().trim()
         )
 
-        var logo:String=""
-        if(logo_providerPost.tag!=null){
-           logo=logo_providerPost.tag as String
+        var logo: String = ""
+        if (logo_providerPost.tag != null) {
+            logo = logo_providerPost.tag as String
         }
 
         var providerDetail = ProviderDetail(
-            about =  about_providerPost.text.toString().trim(),
+            about = about_providerPost.text.toString().trim(),
             contactInformation = contactInformation,
             images = uploadedImage,
             location = "",
             logo = logo,
-            servicesOffered = "",
             serviceTitle = title_providerPost.text.toString().trim()
         )
 
-        var providerPost=ProviderPost(
-            defult_user_id = defaultUserId,
+        var providerPost = ProviderPost(
+            default_user_id = defaultUserId,
+            default_flat_id = defaultFlatId,
             service_id = service.id,
             micro_service_id = microService.id,
             providerDetail = providerDetail
         )
 
 
-        var postValid=postProviderViewModel.validPostData(providerPost)
-        if(postValid){
+        var postValid = postProviderViewModel.validPostData(providerPost)
+        if (postValid) {
             //TODO submit post
-            PrintMsg.toastDebug(this,"Data Valid")
-            postProviderViewModel.postProviderDetail(providerPost).observe(this, androidx.lifecycle.Observer {
-                var result =it
-                if (result is MyResult.Success) {
-                    var data:ApiDataWithOutObject=result.data
-                    if (data.dis_msg == 1 && !TextUtils.isEmpty(data.msg))
-                        PrintMsg.toast(this, data.msg);
-                    if (data.success_stat == 1) {
-                       //bindUIData(data.data_details)
-                        PrintMsg.toastDebug(this,"Data Posted !!")
-                        finish()
+            PrintMsg.toastDebug(this, "Data Valid")
+            postProviderViewModel.postProviderDetail(providerPost)
+                .observe(this, androidx.lifecycle.Observer {
+                    var result = it
+                    if (result is MyResult.Success) {
+                        var data: ApiDataWithOutObject = result.data
+                        if (data.dis_msg == 1 && !TextUtils.isEmpty(data.msg))
+                            PrintMsg.toast(this, data.msg);
+                        if (data.success_stat == 1) {
+                            //bindUIData(data.data_details)
+                            PrintMsg.toastDebug(this, "Data Posted !!")
+                            finish()
+                        }
+                    } else if (result is MyResult.Error) {
+                        PrintMsg.toastDebug(this, result.message)
                     }
-                } else if (result is MyResult.Error) {
-                    PrintMsg.toastDebug(this, result.message)
-                }
-            })
+                })
 
 
         }
     }
 
     private fun hideErrorWarning() {
-        errorTextLogo_providerPost.visibility=View.GONE
-        errorTextImages_providerPost.visibility=View.GONE
-        errorCategory_providerPost.visibility=View.GONE
-        errorSubCategory_providerPost.visibility=View.GONE
-        errorTextPage_providerPost.visibility=View.GONE
+        errorTextLogo_providerPost.visibility = View.GONE
+        errorTextImages_providerPost.visibility = View.GONE
+        errorCategory_providerPost.visibility = View.GONE
+        errorSubCategory_providerPost.visibility = View.GONE
+        errorTextPage_providerPost.visibility = View.GONE
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -405,7 +473,7 @@ class ProviderPostActivity : AppCompatActivity() {
                             PrintMsg.toastDebug(applicationContext, link)
 
                             if (isLogo) {
-                                logo_providerPost.tag=link
+                                logo_providerPost.tag = link
                                 DefaultImageLoader.load(logo_providerPost, link, null)
                             } else {
                                 var imageView = ImageWithCrossView(getBaseContext());
@@ -413,7 +481,7 @@ class ProviderPostActivity : AppCompatActivity() {
                                     layoutImages_ImageContainer.removeView(imageView)
                                 }
                                 layoutImages_ImageContainer.addView(imageView)
-                                imageView.imgPhoto!!.tag=link
+                                imageView.imgPhoto!!.tag = link
                                 DefaultImageLoader.load(imageView.imgPhoto!!, link, null)
                             }
                         }

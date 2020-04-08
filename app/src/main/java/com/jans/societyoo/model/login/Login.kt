@@ -13,8 +13,3 @@ data class OtpVerifyRequest(
     @SerializedName("otp")
     val otp: String
 )
-
-data class SendOTPData(
-    @SerializedName("data_details")
-    val data_details: Int
-)

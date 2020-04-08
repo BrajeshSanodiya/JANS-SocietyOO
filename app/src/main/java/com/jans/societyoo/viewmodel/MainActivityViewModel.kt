@@ -14,8 +14,8 @@ class MainActivityViewModel(context: Context) : ViewModel() {
     val dataRepository = DataRepository(context)
     val socityIdLiveData = MutableLiveData<Int>()
 
-    fun getDashboardServices(societyId: Int) = liveData {
-            val result = dataRepository .getDashboardServices(societyId)
+    fun getSocietyServices(societyId: Int) = liveData {
+            val result = dataRepository .getSocietyServices(societyId)
             PrintMsg.println("API Response : getDashboardServices : ${result.toString()}")
             emit(result)
     }
@@ -30,8 +30,8 @@ class MainActivityViewModel(context: Context) : ViewModel() {
     fun getSocityIdDB() {
      GlobalScope.launch {
          var userDetail = dataRepository.getUserDetailDB()
-         if (userDetail != null && userDetail.defultUserId != null && userDetail.defultUserId != 0) {
-             val result = dataRepository.getDefaultFlatSocietyId(userDetail.defultUserId!!)
+         if (userDetail != null && userDetail.defaultUserId != null && userDetail.defaultUserId != 0) {
+             val result = dataRepository.getDefaultFlatSocietyId(userDetail.defaultUserId!!)
              PrintMsg.println("Room DB : getSocityIdDB : ${result.toString()}")
              socityIdLiveData.postValue(result)
          } else {

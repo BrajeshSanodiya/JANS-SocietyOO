@@ -8,20 +8,20 @@ import com.google.gson.annotations.SerializedName
 data class MicroService(
     @PrimaryKey
     @SerializedName("id")
-    val id: Int,
+    val id: Int =0,
 
     @SerializedName("service_id")
-    val serviceId: Int,
+    val serviceId: Int = 0,
 
     @SerializedName("name")
-    val name: String,
+    val name: String = "",
 
     @SerializedName("is_new")
-    val isNew: Int,
+    val isNew: Int = 0,
 
     @SerializedName("header_title")
-    val headerTitle: String,
+    val headerTitle: String ="",
 
     @SerializedName("img")
-    val img: String
+    val img: String =""
 )

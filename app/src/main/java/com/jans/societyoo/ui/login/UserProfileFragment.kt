@@ -240,7 +240,8 @@ class UserProfileFragment : Fragment() {
                         GlobalScope.launch(Dispatchers.Main){
                             delay(500)
                             setProgressBarVisibility(false)
-                            UserPreferences::defaultUserId.set(preferences,userDetail!!.defultUserId);
+                            UserPreferences::defaultUserId.set(preferences,result.data.data_details.userDetails.defaultUserId);
+                            UserPreferences::defaultUserId.set(preferences,result.data.data_details.userDetails.defaultFlatId);
                             if(isFromLogin)
                                 loginViewModel.openAfterLoginScreen()
                             else
