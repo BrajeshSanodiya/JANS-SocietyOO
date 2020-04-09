@@ -56,12 +56,21 @@ class GlideImageLoader :
             Priority.LOW -> com.bumptech.glide.Priority.LOW
         }
 
-        return RequestOptions().placeholder(options.placeholder)
-            .error(options.error)
-            .sizeMultiplier(options.sizeMultiplier)
-            .diskCacheStrategy(diskCacheStrategy)
-            .transform(options.transformation)
-            .priority(priority)
+        if(options.placeholderDrawable==null){
+            return RequestOptions().placeholder(options.placeholder)
+                .error(options.error)
+                .sizeMultiplier(options.sizeMultiplier)
+                .diskCacheStrategy(diskCacheStrategy)
+                .transform(options.transformation)
+                .priority(priority)
+        }else{
+            return RequestOptions().placeholder(options.placeholderDrawable)
+                .error(options.error)
+                .sizeMultiplier(options.sizeMultiplier)
+                .diskCacheStrategy(diskCacheStrategy)
+                .transform(options.transformation)
+                .priority(priority)
+        }
     }
 
     override fun clear(imageView: ImageView) {

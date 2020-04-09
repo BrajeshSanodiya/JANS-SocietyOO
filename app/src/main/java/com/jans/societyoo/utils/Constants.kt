@@ -12,6 +12,7 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.provider.MediaStore
 import android.telephony.PhoneNumberUtils
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import id.zelory.compressor.Compressor
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -138,5 +139,14 @@ object Constants {
         else
             return ""+fileSizeInKB+"kb"
     }
+
+    fun getProgressDrawable(context: Context): CircularProgressDrawable {
+        return CircularProgressDrawable(context).apply {
+            strokeWidth = 10f
+            centerRadius = 50f
+            start()
+        }
+    }
+
 
 }
