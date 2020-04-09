@@ -27,7 +27,7 @@
         android:horizontalSpacing="10dp"
         android:stretchMode="columnWidth"
         android:gravity="center"
-        android:divider="@color/grey_300"
+        android:divider="@color/md_grey_300"
         android:dividerHeight="0dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

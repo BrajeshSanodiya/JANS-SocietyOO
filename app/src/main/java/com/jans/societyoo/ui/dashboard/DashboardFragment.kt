@@ -28,8 +28,8 @@ import com.jans.societyoo.ui.services.ProviderPostActivity
 import com.jans.societyoo.ui.services.ServiceAdapter
 import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.PrintMsg
-import com.jans.societyoo.viewmodel.MainActivityViewModel
-import com.jans.societyoo.viewmodel.MainActivityViewModelFactory
+import com.jans.societyoo.viewmodel.DashboardActivityViewModel
+import com.jans.societyoo.viewmodel.DashboardActivityViewModelFactory
 import com.jans.tracking.PropertyName
 import com.jans.tracking.Tracking
 import com.jans.tracking.TrackingOptions
@@ -38,7 +38,7 @@ import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 class DashboardFragment : Fragment() {
     lateinit var fragmentSwitcher: FragmentSwitcher
     lateinit var preferences:UserPreferences
-    lateinit var viewModel: MainActivityViewModel
+    lateinit var viewModel: DashboardActivityViewModel
     //lateinit var viewModelUser: LoginViewModel
     var userDetail: UserDetail? = null
     var flats: List<FlatDetail>? = null
@@ -63,7 +63,7 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(viewModelStore,MainActivityViewModelFactory(requireContext())).get(MainActivityViewModel::class.java)
+        viewModel = ViewModelProvider(viewModelStore,DashboardActivityViewModelFactory(requireContext())).get(DashboardActivityViewModel::class.java)
 
         getDashboardServices(view)
 

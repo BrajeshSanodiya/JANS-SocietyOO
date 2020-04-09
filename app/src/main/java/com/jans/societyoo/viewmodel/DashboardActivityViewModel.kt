@@ -10,7 +10,7 @@ import com.jans.societyoo.utils.PrintMsg
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class MainActivityViewModel(context: Context) : ViewModel() {
+class DashboardActivityViewModel(context: Context) : ViewModel() {
     val dataRepository = DataRepository(context)
     val socityIdLiveData = MutableLiveData<Int>()
 
