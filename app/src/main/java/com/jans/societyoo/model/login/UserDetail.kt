@@ -27,11 +27,11 @@ data class UserDetail(
 
     @ColumnInfo(name = "defult_flat_id")
     @SerializedName("defult_flat_id")
-    val defaultFlatId: Int?=null,
+    val defaultFlatId: Int=0,
 
     @ColumnInfo(name = "defult_user_id")
     @SerializedName("defult_user_id")
-    var defaultUserId: Int?=null,
+    var defaultUserId: Int=0,
 
     @ColumnInfo(name = "dob")
     @SerializedName("dob")

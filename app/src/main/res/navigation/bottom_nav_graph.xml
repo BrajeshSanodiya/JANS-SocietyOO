@@ -8,21 +8,44 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.jans.societyoo.ui.navigation.HomeFragment"
-        android:label="Home"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_home" />
     <fragment
-        android:id="@+id/searchFragment"
-        android:name="com.jans.societyoo.ui.navigation.SearchFragment"
-        android:label="Search"
-        tools:layout="@layout/fragment_search" />
-    <fragment
+        android:id="@+id/createPostFragment"
+        android:name="com.jans.societyoo.ui.navigation.CreatePostFragment"
+        android:label="Create Post"
+        tools:layout="@layout/fragment_create_post" />
+    <!--<fragment
         android:id="@+id/notificationsFragment"
         android:name="com.jans.societyoo.ui.navigation.NotificationsFragment"
         android:label="Notification"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_notifications" />-->
+    <fragment
+        android:id="@+id/providerPostFragment"
+        android:name="com.jans.societyoo.ui.services.ProviderPostFragment"
+        android:label="Post Services"
+        tools:layout="@layout/fragment_provider_post" />
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.jans.societyoo.ui.navigation.ProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_providerPostFragment"
+            app:destination="@id/providerPostFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_flatsFragment"
+            app:destination="@id/flatsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/flatsFragment"
+        android:name="com.jans.societyoo.ui.login.FlatsFragment"
+        android:label="FlatsFragment" />
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.jans.societyoo.ui.login.UserProfileFragment"
+        android:label="UserProfileFragment" />
 </navigation>

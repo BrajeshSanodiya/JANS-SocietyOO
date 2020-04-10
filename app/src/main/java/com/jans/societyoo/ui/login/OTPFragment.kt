@@ -30,7 +30,7 @@ import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.model.ApiDataObject
 import com.jans.societyoo.model.ApiDataWithOutObject
 import com.jans.societyoo.model.login.UserData
-import com.jans.societyoo.ui.dashboard.DashboardActivity
+import com.jans.societyoo.ui.navigation.MainActivity
 import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.PrintMsg
 import com.jans.societyoo.viewmodel.LoginViewModel
@@ -152,7 +152,7 @@ class OTPFragment : Fragment(), OnOtpCompletionListener, MySMSBroadcastReceiver.
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE -> {
                         Toast.makeText(context, "OTP : $otpValue", Toast.LENGTH_SHORT).show()
-                        requireContext().startActivity(Intent(context, DashboardActivity::class.java))
+                        requireContext().startActivity(Intent(context, MainActivity::class.java))
                     }
                 }
                 false

@@ -3,10 +3,13 @@ package com.jans.societyoo.ui.splash
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.text.TextUtils
 import androidx.appcompat.app.AppCompatActivity
 import com.jans.societyoo.R
 import com.jans.societyoo.data.local.prefs.UserPreferences
+import com.jans.societyoo.ui.login.LoginActivity
 import com.jans.societyoo.ui.navigation.MainActivity
+import com.jans.societyoo.ui.onboard.OnBoardActivity
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -19,17 +22,17 @@ class SplashActivity : AppCompatActivity() {
     private val activityLaunchRunnable = Runnable { callNextActivity() }
     var preferences = UserPreferences(this)
     private fun callNextActivity() {
-        /*if (preferences.appOpenFirstTime!!) {
+        if (preferences.appOpenFirstTime!!) {
             if (TextUtils.isEmpty(preferences.mobileNum)) {
                 startActivity(Intent(this, LoginActivity::class.java))
             } else {
-                startActivity(Intent(this, DashboardActivity::class.java))
+                startActivity(Intent(this, MainActivity::class.java))
             }
         } else{
             startActivity(Intent(this, OnBoardActivity::class.java))
-        }*/
+        }
 
-        startActivity(Intent(this, MainActivity::class.java))
+        //startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 

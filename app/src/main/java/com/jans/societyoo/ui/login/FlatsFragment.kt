@@ -1,6 +1,7 @@
 package com.jans.societyoo.ui.login
 
 import android.annotation.SuppressLint
+import android.app.usage.UsageEvents
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.TypedValue
@@ -12,6 +13,9 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI.navigateUp
 import com.jans.societyoo.R
 import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.model.ApiDataObject
@@ -52,8 +56,13 @@ class FlatsFragment : Fragment() {
                     putBoolean(ARG_IS_FROM_LOGIN, isFromLogin)
                 }
             }
+        fun bundleArgs(isFromLogin: Boolean): Bundle {
+            return Bundle().apply {
+                putBoolean(ARG_IS_FROM_LOGIN, isFromLogin)
+            }
+        }
     }
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -218,7 +227,8 @@ class FlatsFragment : Fragment() {
                             setProgressBarVisibility(false)
                             UserPreferences::defaultUserId.set(preferences,result.data.data_details.userDetails.defaultUserId);
                             UserPreferences::defaultFlatId.set(preferences,result.data.data_details.userDetails.defaultFlatId);
-                            requireActivity().supportFragmentManager.popBackStack()
+                            //requireActivity().supportFragmentManager.popBackStack()
+                           findNavController().navigateUp()
                         }
                     }else{
                         setProgressBarVisibility(false)

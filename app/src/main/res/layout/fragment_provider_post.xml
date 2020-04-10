@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.services.ProviderPostFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:id="@+id/layoutLogo_providerPost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                >
+
+                <RelativeLayout
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
+                    >
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/logo_providerPost"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        app:civ_border_color="@color/colorAccent"
+                        app:civ_border_width="2dp"
+                        android:src="@android:drawable/ic_menu_gallery"
+                        tools:ignore="ContentDescription" />
+                    <ImageView
+                        android:id="@+id/addLogo_providerPost"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:src="@android:drawable/ic_menu_camera"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:text="Add/Change Logo"
+                        tools:ignore="HardcodedText" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/errorTextLogo_providerPost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_horizontal"
+                    android:text="Please upload logo first"
+                    android:textColor="@color/md_red_500"
+                    android:visibility="gone"
+                    />
+            </LinearLayout>
+
+
+            <EditText
+                android:id="@+id/title_providerPost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layoutLogo_providerPost"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/et_box_bg"
+                android:hint="@string/prompt_provider_title"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:padding="10dp"
+                android:textSize="20sp" />
+
+            <include
+                android:id="@+id/layoutImages_providerPost"
+                layout="@layout/layout_image_container_with_add"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title_providerPost"
+                android:layout_marginTop="8dp"
+                android:minHeight="100dp" />
+
+            <TextView
+                android:id="@+id/errorTextImages_providerPost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_horizontal"
+                android:layout_below="@+id/layoutImages_providerPost"
+                android:text="Please upload at least 1 image"
+                android:textColor="@color/md_red_500"
+                android:visibility="gone"
+                />
+            <EditText
+                android:id="@+id/website_providerPost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/errorTextImages_providerPost"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/et_box_bg"
+                android:drawableStart="@drawable/ic_website"
+                android:hint="@string/prompt_provider_website"
+                android:imeOptions="actionDone"
+                android:inputType="textWebEditText"
+                android:padding="10dp"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/time_providerPost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/website_providerPost"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/et_box_bg"
+                android:drawableStart="@drawable/ic_time"
+                android:hint="@string/prompt_provider_timing"
+                android:padding="10dp"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/about_providerPost"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_below="@+id/time_providerPost"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:gravity="start|top"
+                android:background="@drawable/et_box_bg"
+                android:hint="@string/prompt_provider_about"
+                android:padding="10dp"
+                android:scrollbars="vertical"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:id="@+id/layoutSpiner_providerPost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/about_providerPost"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
+                tools:ignore="UselessLeaf">
+
+                <Spinner
+                    android:id="@+id/categorySpinner_providerPost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="45dp"
+                    android:hint="@string/prompt_provider_category"
+                    android:lines="1"
+                    android:padding="4dp"
+                    android:background="@drawable/et_box_bg"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/errorCategory_providerPost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/invalid_provider_category"
+                    android:textColor="@color/md_red_500"
+                    android:visibility="gone"/>
+
+                <Spinner
+                    android:id="@+id/subcategorySpinner_providerPost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="45dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="end"
+                    android:hint="@string/prompt_provider_sub_category"
+                    android:drawableEnd="@drawable/ic_arrow_drop_down"
+                    android:lines="1"
+                    android:padding="4dp"
+                    android:background="@drawable/et_box_bg"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/errorSubCategory_providerPost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/invalid_provider_subcategory"
+                    android:textColor="@color/md_red_500"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/contact_providerPost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layoutSpiner_providerPost"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/et_box_bg"
+                android:drawableStart="@drawable/ic_person"
+                android:hint="@string/prompt_provider_contact_person"
+                android:imeOptions="actionDone"
+                android:inputType="textWebEditText"
+                android:padding="10dp"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/email_providerPost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/contact_providerPost"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/et_box_bg"
+                android:drawableStart="@drawable/ic_email"
+                android:hint="@string/prompt_provider_email"
+                android:imeOptions="actionDone"
+                android:inputType="textEmailAddress"
+                android:padding="10dp"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/mobile_providerPost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/email_providerPost"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/et_box_bg"
+                android:drawableStart="@drawable/ic_mobile"
+                android:hint="@string/prompt_provider_phone"
+                android:imeOptions="actionDone"
+                android:inputType="phone"
+                android:padding="10dp"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/whatsapp_providerPost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mobile_providerPost"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/et_box_bg"
+                android:drawableStart="@drawable/ic_whatsapp"
+                android:hint="@string/prompt_provider_whatsapp"
+                android:imeOptions="actionDone"
+                android:inputType="phone"
+                android:padding="10dp"
+                android:textSize="20sp" />
+
+
+            <TextView
+                android:id="@+id/errorTextPage_providerPost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_horizontal"
+                android:layout_below="@+id/whatsapp_providerPost"
+                android:text="@string/invalid_provider_page"
+                android:textColor="@color/md_red_500"
+                android:visibility="gone"
+                />
+            <Button
+                android:id="@+id/uploadBtn_providerPost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_below="@+id/errorTextPage_providerPost"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="start"
+                android:enabled="true"
+                android:background="@drawable/btn_box_bg"
+                android:text="@string/next_btn_mobile" />
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,7 +8,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.google.i18n.phonenumbers.PhoneNumberUtil
+import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.data.repository.DataRepository
+import com.jans.societyoo.model.login.UserDetail
 import com.jans.societyoo.model.services.MicroService
 import com.jans.societyoo.model.services.ProviderDetail
 import com.jans.societyoo.model.services.ProviderPost
@@ -21,14 +23,24 @@ import kotlinx.coroutines.launch
 public class PostProviderViewModel(context: Context) : ViewModel() {
 
     val postProviderViewState = MutableLiveData<PostProviderViewState>()
+    val userDetailLiveData = MutableLiveData<UserDetail>()
 
     private val dataRepository: DataRepository = DataRepository(context);
-
 
     fun getAllServices() = liveData {
         val result=dataRepository.getAllServices()
         PrintMsg.println("API Response : getAllServices : ${result.toString()}")
         emit(result)
+    }
+
+    fun getUserDetailDB() {
+        GlobalScope.launch {
+            val result = dataRepository.getUserDetailDB()
+            userDetailLiveData.postValue(result)
+            if (result != null) {
+                PrintMsg.println("Room DB : getUserDetailDB : " + result.toString())
+            }
+        }
     }
 
     fun getFilterMicroServices(serviceId: Int,list: List<MicroService>) = liveData {
@@ -67,7 +79,7 @@ public class PostProviderViewModel(context: Context) : ViewModel() {
     }
 
     private fun checkTitle(name: String): Boolean {
-        if (name.length > 5)
+        if (name.length > 3)
             return true
         return false
     }
@@ -85,13 +97,13 @@ public class PostProviderViewModel(context: Context) : ViewModel() {
     }
 
     private fun checkTime(text: String): Boolean {
-        if (!TextUtils.isEmpty(text) && text.length > 5)
+        if (!TextUtils.isEmpty(text) && text.length > 3)
             return true
         return false
     }
 
     private fun checkAbout(text: String): Boolean {
-        if (!TextUtils.isEmpty(text) && text.length > 20)
+        if (!TextUtils.isEmpty(text) && text.length > 5)
             return true
         return false
     }
@@ -109,7 +121,7 @@ public class PostProviderViewModel(context: Context) : ViewModel() {
     }
 
     private fun checkPersonName(name: String): Boolean {
-        if (name.length > 5)
+        if (name.length > 3)
             return true
         return false
     }

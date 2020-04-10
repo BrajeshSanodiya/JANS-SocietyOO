@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.jans.societyoo.R
 import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.ui.FragmentSwitcher
-import com.jans.societyoo.ui.dashboard.DashboardActivity
+import com.jans.societyoo.ui.navigation.MainActivity
 import com.jans.societyoo.viewmodel.LoginViewModel
 import com.jans.societyoo.viewmodel.LoginViewModelFactory
 
@@ -78,7 +78,7 @@ class LoginActivity : AppCompatActivity(), FragmentSwitcher {
                 var mobile = loginViewModel.flatsDetailLiveData.value?.get(0)!!.umMobile
                 UserPreferences::mobileNum.set(preferences, mobile);
 
-                startActivity(Intent(this, DashboardActivity::class.java))
+                startActivity(Intent(this, MainActivity::class.java))
                 finish();
             }
         }

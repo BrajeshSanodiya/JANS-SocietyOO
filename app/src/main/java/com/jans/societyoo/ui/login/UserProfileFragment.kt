@@ -16,6 +16,7 @@ import android.widget.*
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.jans.societyoo.R
 import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.model.ApiDataObject
@@ -67,6 +68,11 @@ class UserProfileFragment : Fragment() {
                     putBoolean(ARG_IS_FROM_LOGIN, isFromLogin)
                 }
             }
+        fun bundleArgs(isFromLogin: Boolean): Bundle {
+            return Bundle().apply {
+                putBoolean(ARG_IS_FROM_LOGIN, isFromLogin)
+            }
+        }
     }
 
     @SuppressLint("FragmentLiveDataObserve")
@@ -241,11 +247,13 @@ class UserProfileFragment : Fragment() {
                             delay(500)
                             setProgressBarVisibility(false)
                             UserPreferences::defaultUserId.set(preferences,result.data.data_details.userDetails.defaultUserId);
-                            UserPreferences::defaultUserId.set(preferences,result.data.data_details.userDetails.defaultFlatId);
+                            UserPreferences::defaultFlatId.set(preferences,result.data.data_details.userDetails.defaultFlatId);
                             if(isFromLogin)
                                 loginViewModel.openAfterLoginScreen()
-                            else
-                                requireActivity().supportFragmentManager.popBackStack()
+                            else{
+                                findNavController().navigateUp()
+                                //requireActivity().supportFragmentManager.popBackStack()
+                            }
                         }
                     }else{
                         setProgressBarVisibility(false)
