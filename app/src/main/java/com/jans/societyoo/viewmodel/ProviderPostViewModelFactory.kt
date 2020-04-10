@@ -23,11 +23,11 @@ import androidx.lifecycle.ViewModelProvider
     }
 }*/
 
-class PostProviderViewModelFactory(private val context : Context) : ViewModelProvider.Factory {
+class ProviderPostViewModelFactory(private val context : Context) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(PostProviderViewModel::class.java)) {
-            return PostProviderViewModel(context) as T
+        if (modelClass.isAssignableFrom(ProviderPostViewModel::class.java)) {
+            return ProviderPostViewModel(context) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

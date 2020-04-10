@@ -29,8 +29,8 @@ import com.jans.societyoo.ui.customviews.ImageWithCrossView
 import com.jans.societyoo.utils.Constants
 import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.PrintMsg
-import com.jans.societyoo.viewmodel.PostProviderViewModel
-import com.jans.societyoo.viewmodel.PostProviderViewModelFactory
+import com.jans.societyoo.viewmodel.ProviderPostViewModel
+import com.jans.societyoo.viewmodel.ProviderPostViewModelFactory
 import com.nabinbhandari.android.permissions.PermissionHandler
 import com.nabinbhandari.android.permissions.Permissions
 import com.theartofdev.edmodo.cropper.CropImage
@@ -55,7 +55,7 @@ class ProviderPostFragment : Fragment() {
     val CROP_IMAGE_REQUEST_CODE = 1001
     val CROP_LOGO_REQUEST_CODE = 2001
     var progressBar: ProgressBar? = null
-    private lateinit var postProviderViewModel: PostProviderViewModel
+    private lateinit var postProviderViewModel: ProviderPostViewModel
    // lateinit var preferences: UserPreferences
     lateinit var userDetail: UserDetail
 
@@ -74,8 +74,8 @@ class ProviderPostFragment : Fragment() {
         progressBar = progress_bar
 
         postProviderViewModel =
-            ViewModelProvider(viewModelStore, PostProviderViewModelFactory(requireContext())).get(
-                PostProviderViewModel::class.java
+            ViewModelProvider(viewModelStore, ProviderPostViewModelFactory(requireContext())).get(
+                ProviderPostViewModel::class.java
             )
 
         addObserver()

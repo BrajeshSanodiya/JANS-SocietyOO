@@ -29,8 +29,7 @@ class ImageWithCrossView @JvmOverloads constructor(
         if (inflater != null) customView = inflater.inflate(R.layout.layout_imagewithcross, this)
         if (customView == null) return
         this.root = customView.findViewById(R.id.root)
-        imgPhoto =
-            customView.findViewById<View>(R.id.img_photo) as ImageView
+        imgPhoto = customView.findViewById<View>(R.id.img_photo) as ImageView
         btnClose = customView.findViewById(R.id.btn_close)
     }
 

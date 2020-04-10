@@ -20,7 +20,7 @@ import com.jans.societyoo.utils.PrintMsg
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-public class PostProviderViewModel(context: Context) : ViewModel() {
+public class ProviderPostViewModel(context: Context) : ViewModel() {
 
     val postProviderViewState = MutableLiveData<PostProviderViewState>()
     val userDetailLiveData = MutableLiveData<UserDetail>()

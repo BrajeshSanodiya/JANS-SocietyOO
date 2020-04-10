@@ -22,6 +22,7 @@
     <string name="prompt_flats">Please Select your preference</string>
 
 
+    <!-- Strings related to User Profile -->
     <string name="header_user_profile">Please Enter Your Details</string>
     <string name="prompt_name">FullName</string>
     <string name="prompt_email">Email</string>
@@ -35,6 +36,7 @@
     <string name="invalid_dob">Please select DOB</string>
 
 
+    <!-- Strings related to Provider -->
     <string name="prompt_provider_title">Service Title</string>
     <string name="prompt_provider_website">Website</string>
     <string name="prompt_provider_timing">Timing</string>
@@ -60,9 +62,16 @@
     <string name="invalid_provider_whatsapp">Not a valid Phone No.</string>
     <string name="invalid_provider_page">There are one or more errors on this page. please correct them and submit again.</string>
 
+
+
+
     <string name="title_activity_on_board">OnBoardActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+
+
+
+
 
 
     <!-- <string name="prompt_name">FullName</string>
