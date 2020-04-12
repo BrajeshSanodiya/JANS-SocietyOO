@@ -3,6 +3,7 @@ package com.jans.societyoo.data.remote
 import com.jans.societyoo.model.*
 import com.jans.societyoo.model.login.*
 import com.jans.societyoo.model.login.UserData
+import com.jans.societyoo.model.post.CreatePost
 import com.jans.societyoo.model.services.ProviderDetail
 import com.jans.societyoo.model.services.ProviderPost
 import com.jans.societyoo.model.services.Services
@@ -40,6 +41,9 @@ interface JsonApi {
 
     @POST("insertprovider")
     suspend fun postProviderDetail(@Body providerPost: ProviderPost): ApiDataWithOutObject
+
+    @POST("submitpost")
+    suspend fun insertPost(@Body createPost: CreatePost): ApiDataWithOutObject
 
 
 

@@ -6,6 +6,7 @@ import com.jans.societyoo.data.remote.NetworkDataSource
 import com.jans.societyoo.model.ApiDataObject
 import com.jans.societyoo.model.ApiDataWithOutObject
 import com.jans.societyoo.model.login.*
+import com.jans.societyoo.model.post.CreatePost
 import com.jans.societyoo.model.services.*
 import com.jans.societyoo.utils.MyResult
 
@@ -85,6 +86,10 @@ class DataRepository(context: Context) {
     }
     suspend fun postProviderDetail(providerPost: ProviderPost): MyResult<ApiDataWithOutObject>{
         return networkDataSource.postProviderDetail(providerPost)
+    }
+
+    suspend fun insertPost(createPost: CreatePost): MyResult<ApiDataWithOutObject>{
+        return networkDataSource.insertPost(createPost)
     }
 
 }

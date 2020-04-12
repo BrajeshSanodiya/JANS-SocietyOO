@@ -1,4 +1,4 @@
-package com.jans.societyoo.ui.navigation
+package com.jans.societyoo.ui.post
 
 import android.Manifest
 import android.app.Activity
@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
@@ -16,8 +17,13 @@ import com.jans.societyoo.R
 import com.jans.societyoo.data.remote.NetworkInstance
 import com.jans.societyoo.databinding.FragmentCreatePostBinding
 import com.jans.societyoo.model.ApiDataFile
+import com.jans.societyoo.model.ApiDataWithOutObject
+import com.jans.societyoo.model.login.UserDetail
+import com.jans.societyoo.model.post.CreatePost
+import com.jans.societyoo.model.post.Post
 import com.jans.societyoo.ui.customviews.ImageWithCrossView
 import com.jans.societyoo.utils.Constants
+import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.PrintMsg
 import com.jans.societyoo.viewmodel.PostViewModel
 import com.jans.societyoo.viewmodel.PostViewModelFactory
@@ -43,6 +49,8 @@ class CreatePostFragment : Fragment() {
     val CROP_IMAGE_REQUEST_CODE = 1001
     private lateinit var binding: FragmentCreatePostBinding
     private lateinit var postViewModel: PostViewModel
+    lateinit var userDetail: UserDetail
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -63,6 +71,7 @@ class CreatePostFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.search_menu, menu)
         true
@@ -73,6 +82,81 @@ class CreatePostFragment : Fragment() {
         binding.postViewModel = postViewModel
         binding.addImageImageContainer.setOnClickListener {
             callImagePicker()
+        }
+        binding.btnPostPost.setOnClickListener {
+            postButtonClick()
+        }
+        binding.postViewModel!!.run {
+            getUserDetailDB()
+            userDetailLiveData.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                it?.let {
+                    userDetail = it
+                }
+            })
+        }
+    }
+
+
+    fun postButtonClick() {
+        var defaultUserId = 0
+        var defaultFlatId = 0
+        userDetail?.let {
+            defaultUserId = it.defaultUserId
+            defaultFlatId = it.defaultFlatId
+        }
+        val desc = binding.descPost.text.toString().trim()
+
+        val uploadedImage = ArrayList<String>()
+        val imageUploadedCount: Int = binding.layoutImagesImageContainer.childCount
+        for (index in 0 until imageUploadedCount) {
+            val imageView: ImageWithCrossView =
+                binding.layoutImagesImageContainer.getChildAt(index) as ImageWithCrossView
+            if (imageView.imgPhoto!!.tag != null) {
+                uploadedImage.add(imageView.imgPhoto!!.tag as String)
+            }
+        }
+
+        val post = Post(desc = desc, images = uploadedImage)
+
+        val createPost= CreatePost(
+            default_flat_id = defaultFlatId,
+            default_user_id = defaultUserId,
+            post_details = post
+        )
+
+        if (binding.postViewModel!!.validPostData(createPost.post_details)) {
+            binding.postViewModel!!.insertPost(createPost).observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                it?.let { handlePostResponse(it)}
+            })
+        } else {
+            PrintMsg.toast(context, requireContext().resources.getString(R.string.invalid_post_text))
+        }
+    }
+
+    private fun onClear() {
+        binding.descPost.setText("")
+        binding.layoutImagesImageContainer.removeAllViews()
+    }
+
+
+    fun handlePostResponse(it: MyResult<ApiDataWithOutObject>){
+        when (it) {
+            is MyResult.Success<ApiDataWithOutObject> -> {
+                progressBarVisibility(false)
+                if (it.data.dis_msg == 1 && !TextUtils.isEmpty(it.data.msg))
+                    PrintMsg.toast(context, it.data.msg);
+                if (it.data.success_stat == 1) {
+                    onClear()
+                }
+            }
+
+            is MyResult.Error -> {
+                progressBarVisibility(false)
+            }
+
+            is MyResult.Loading -> {
+                progressBarVisibility(true)
+            }
         }
     }
 
@@ -124,9 +208,7 @@ class CreatePostFragment : Fragment() {
     var orignalSize = ""
     var croppedSize = ""
     var compressedSize = ""
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
         if (requestCode == GALLERY_IMAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             val image: Uri = data!!.data!!
             // start cropping activity for pre-acquired image saved on the device
@@ -148,33 +230,27 @@ class CreatePostFragment : Fragment() {
                      .getIntent(requireContext());
                  startActivityForResult(intent, cropimageRequestCode);*/
         }
-
         if (requestCode == CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val result = CropImage.getActivityResult(data)
             if (resultCode == Activity.RESULT_OK) {
                 val resultUri = result.uri
                 croppedSize = Constants.getImageSize(requireContext(), resultUri)
                 //image_providerPost.setImageURI(resultUri)
-
                 val compressedByteArray: ByteArray =
                     Constants.getCompressedImage(requireContext(), resultUri.path!!)
                 compressedSize = Constants.getImageSize(requireContext(), compressedByteArray)
-
                 PrintMsg.toastDebug(
                     requireContext(),
                     " Orignal Size : $orignalSize \n Cropped Size : $croppedSize \n Commpressed Size : $compressedSize"
                 )
                 uploadFile(compressedByteArray, resultUri.path!!)
-
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 var error = result.error
             }
         }
-
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    // Uploading Image/Video
     private fun uploadFile(byteArray: ByteArray, path: String) {
         if (byteArray == null || byteArray.size == 0) {
             PrintMsg.toast(requireContext(), "please select an image ")

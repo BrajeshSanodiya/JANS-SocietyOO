@@ -11,7 +11,7 @@ import com.jans.societyoo.model.services.MicroService
 import com.jans.societyoo.model.services.Provider
 import com.jans.societyoo.model.services.Service
 
-@Database(entities = [FlatDetail::class, UserDetail::class, Service::class, MicroService::class, Provider::class], version = 1, exportSchema = false)
+@Database(entities = [FlatDetail::class, UserDetail::class, Service::class, MicroService::class, Provider::class], version = 2, exportSchema = false)
 abstract class DatabaseInstance : RoomDatabase() {
     abstract val databaseDAO: DatabaseDAO
 

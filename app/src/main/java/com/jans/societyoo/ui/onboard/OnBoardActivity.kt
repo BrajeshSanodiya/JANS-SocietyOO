@@ -10,15 +10,15 @@ import com.jans.onboarding.OnBoardingView
 import com.jans.societyoo.R
 import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.ui.login.LoginActivity
-import com.jans.societyoo.ui.navigation.MainActivity
+import com.jans.societyoo.ui.dashboard.MainActivity
 import com.jans.societyoo.utils.PrintMsg
 
 
 class OnBoardActivity : AppCompatActivity() {
     var preferences = UserPreferences(this)
     private fun callNextActivity() {
-        UserPreferences::appOpenFirstTime.set(preferences,true)
-        if (TextUtils.isEmpty(preferences.mobileNum)) {
+        UserPreferences::appOpenFirstTimeV2.set(preferences,true)
+        if (TextUtils.isEmpty(preferences.mobileNumV2)) {
             startActivity(Intent(this, LoginActivity::class.java))
         } else {
             startActivity(Intent(this, MainActivity::class.java))

@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.jans.societyoo.R
 import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.ui.login.LoginActivity
-import com.jans.societyoo.ui.navigation.MainActivity
+import com.jans.societyoo.ui.dashboard.MainActivity
 import com.jans.societyoo.ui.onboard.OnBoardActivity
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.Dispatchers
@@ -22,8 +22,8 @@ class SplashActivity : AppCompatActivity() {
     private val activityLaunchRunnable = Runnable { callNextActivity() }
     var preferences = UserPreferences(this)
     private fun callNextActivity() {
-        if (preferences.appOpenFirstTime!!) {
-            if (TextUtils.isEmpty(preferences.mobileNum)) {
+        if (preferences.appOpenFirstTimeV2!!) {
+            if (TextUtils.isEmpty(preferences.mobileNumV2)) {
                 startActivity(Intent(this, LoginActivity::class.java))
             } else {
                 startActivity(Intent(this, MainActivity::class.java))
@@ -56,7 +56,7 @@ class SplashActivity : AppCompatActivity() {
         }
 
         GlobalScope.launch(Dispatchers.Main) {
-            delay(2000)
+            delay(5000)
             callNextActivity()
         }
         //handler.postDelayed(activityLaunchRunnable, 2000)

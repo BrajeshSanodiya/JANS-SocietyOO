@@ -1,4 +1,4 @@
-package com.jans.societyoo.ui.navigation
+package com.jans.societyoo.ui.profile
 
 import android.content.Context
 import android.content.Intent
@@ -14,8 +14,6 @@ import com.jans.societyoo.data.local.db.DatabaseInstance
 import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.ui.login.FlatsFragment
 import com.jans.societyoo.ui.login.LoginActivity
-import com.jans.societyoo.ui.services.ProviderPostActivity
-import com.jans.societyoo.ui.services.ProviderPostFragment
 import com.jans.societyoo.utils.PrintMsg
 import com.jans.tracking.PropertyName
 import com.jans.tracking.Tracking
@@ -59,8 +57,8 @@ class ProfileFragment : Fragment() {
         }
 
         view.btnDeleteShared_profile.setOnClickListener{
-            UserPreferences::mobileNum.set(preferences,"")
-            UserPreferences::appOpenFirstTime.set(preferences,false)
+            UserPreferences::mobileNumV2.set(preferences,"")
+            UserPreferences::appOpenFirstTimeV2.set(preferences,false)
             UserPreferences::defaultFlatId.set(preferences,0)
             UserPreferences::defaultUserId.set(preferences,0)
             PrintMsg.toast(requireContext(),"LogOut Successfully! Kill the app and Open again..")

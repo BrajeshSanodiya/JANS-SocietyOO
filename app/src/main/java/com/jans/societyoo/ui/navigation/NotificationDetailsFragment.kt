@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.jans.societyoo.R
-import com.jans.societyoo.ui.navigation.MainActivity
 
 /**
  * A simple [Fragment] subclass.

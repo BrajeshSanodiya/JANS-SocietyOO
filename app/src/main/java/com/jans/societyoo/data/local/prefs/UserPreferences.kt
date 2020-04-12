@@ -8,8 +8,8 @@ class UserPreferences(context: Context) : Preferences(context){
     /*var flatsDetail by stringPref()
     var userDetail by stringPref()*/
 
-    var mobileNum by stringPref()
-    var appOpenFirstTime by booleanPref()
+    var mobileNumV2 by stringPref()
+    var appOpenFirstTimeV2 by booleanPref()
     var defaultUserId by intPref()
     var defaultFlatId by intPref()
 

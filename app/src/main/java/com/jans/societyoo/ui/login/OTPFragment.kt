@@ -30,7 +30,7 @@ import com.jans.societyoo.data.local.prefs.UserPreferences
 import com.jans.societyoo.model.ApiDataObject
 import com.jans.societyoo.model.ApiDataWithOutObject
 import com.jans.societyoo.model.login.UserData
-import com.jans.societyoo.ui.navigation.MainActivity
+import com.jans.societyoo.ui.dashboard.MainActivity
 import com.jans.societyoo.utils.MyResult
 import com.jans.societyoo.utils.PrintMsg
 import com.jans.societyoo.viewmodel.LoginViewModel

@@ -84,8 +84,8 @@ class DashboardFragment : Fragment() {
         }
 
         view.btnDeleteShared_dashboard.setOnClickListener{
-            UserPreferences::mobileNum.set(preferences,"")
-            UserPreferences::appOpenFirstTime.set(preferences,false)
+            UserPreferences::mobileNumV2.set(preferences,"")
+            UserPreferences::appOpenFirstTimeV2.set(preferences,false)
             UserPreferences::defaultFlatId.set(preferences,0)
             UserPreferences::defaultUserId.set(preferences,0)
             PrintMsg.toast(requireContext(),"LogOut Successfully! Kill the app and Open again..")

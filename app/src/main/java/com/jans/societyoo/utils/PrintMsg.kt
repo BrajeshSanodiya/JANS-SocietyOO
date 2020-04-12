@@ -14,4 +14,6 @@ object PrintMsg {
     fun println(message:String){
         kotlin.io.println(message)
     }
+
+
 }

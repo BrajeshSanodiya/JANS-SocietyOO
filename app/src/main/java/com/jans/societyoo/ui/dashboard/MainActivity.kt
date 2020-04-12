@@ -1,4 +1,4 @@
-package com.jans.societyoo.ui.navigation
+package com.jans.societyoo.ui.dashboard
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

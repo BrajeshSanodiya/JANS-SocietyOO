@@ -63,9 +63,16 @@
     <string name="invalid_provider_page">There are one or more errors on this page. please correct them and submit again.</string>
 
 
+    <!-- Strings related to Post -->
+    <string name="prompt_post_text">What\'s on your mind?</string>
+    <string name="invalid_post_text">Please write something to post</string>
+
 
 
     <string name="title_activity_on_board">OnBoardActivity</string>
+
+
+
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
