@@ -21,6 +21,24 @@ data class ApiDataObject<out T : Any> (
     val dis_msg: Int
 )
 
+data class ApiDataObjectWithCursor<out T : Any> (
+    @SerializedName("success_stat")
+    val success_stat: Int,
+
+    @SerializedName("msg")
+    val msg: String,
+
+    @SerializedName("cursor")
+    val cursor: String,
+
+    @SerializedName("data_details")
+    val data_details: T,
+
+    @SerializedName("dis_msg")
+    val dis_msg: Int
+)
+
+
 data class ApiDataWithOutObject (
     @SerializedName("success_stat")
     val success_stat: Int,

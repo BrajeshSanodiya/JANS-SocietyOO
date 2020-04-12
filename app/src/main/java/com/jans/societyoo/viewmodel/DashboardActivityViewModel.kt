@@ -26,6 +26,18 @@ class DashboardActivityViewModel(context: Context) : ViewModel() {
         emit(result)
     }
 
+    fun getPostList(societyId: Int) = liveData {
+        val result = dataRepository.getPostList(societyId)
+        PrintMsg.println("API Response : getDashboardServices : ${result.toString()}")
+        emit(result)
+    }
+
+    fun getPostList(societyId: Int,cursor:String) = liveData {
+        val result = dataRepository.getPostList(societyId,cursor)
+        PrintMsg.println("API Response : getPostList : ${result.toString()}")
+        emit(result)
+    }
+
 
     fun getSocityIdDB() {
      GlobalScope.launch {

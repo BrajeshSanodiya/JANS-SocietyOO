@@ -1,9 +1,12 @@
 package com.jans.societyoo.data.remote
 
+import android.text.TextUtils
 import com.jans.societyoo.model.ApiDataObject
+import com.jans.societyoo.model.ApiDataObjectWithCursor
 import com.jans.societyoo.model.ApiDataWithOutObject
 import com.jans.societyoo.model.login.*
 import com.jans.societyoo.model.post.CreatePost
+import com.jans.societyoo.model.post.Post
 import com.jans.societyoo.model.services.ProviderDetail
 import com.jans.societyoo.model.services.ProviderPost
 import com.jans.societyoo.model.services.Services
@@ -41,8 +44,15 @@ class NetworkDataSource {
     suspend fun postProviderDetail(providerPost: ProviderPost): MyResult<ApiDataWithOutObject> = tryCatching {
         jsonServices.postProviderDetail(providerPost)
     }
+
     suspend fun insertPost(createPost: CreatePost): MyResult<ApiDataWithOutObject> = tryCatching {
         jsonServices.insertPost(createPost)
+    }
+    suspend fun getPostList(socityId:Int): MyResult<ApiDataObjectWithCursor<List<Post>>> = tryCatching {
+        jsonServices.getPostList(socityId)
+    }
+    suspend fun getPostList(socityId:Int,cursor:String): MyResult<ApiDataObjectWithCursor<List<Post>>> = tryCatching {
+        jsonServices.getPostList(socityId,cursor)
     }
 }
 

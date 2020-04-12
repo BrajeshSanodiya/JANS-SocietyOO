@@ -4,9 +4,11 @@ import android.content.Context
 import com.jans.societyoo.data.local.db.DatabaseDataSource
 import com.jans.societyoo.data.remote.NetworkDataSource
 import com.jans.societyoo.model.ApiDataObject
+import com.jans.societyoo.model.ApiDataObjectWithCursor
 import com.jans.societyoo.model.ApiDataWithOutObject
 import com.jans.societyoo.model.login.*
 import com.jans.societyoo.model.post.CreatePost
+import com.jans.societyoo.model.post.Post
 import com.jans.societyoo.model.services.*
 import com.jans.societyoo.utils.MyResult
 
@@ -91,6 +93,13 @@ class DataRepository(context: Context) {
     suspend fun insertPost(createPost: CreatePost): MyResult<ApiDataWithOutObject>{
         return networkDataSource.insertPost(createPost)
     }
+    suspend fun getPostList(societyId: Int): MyResult<ApiDataObjectWithCursor<List<Post>>>{
+        return networkDataSource.getPostList(societyId)
+    }
+    suspend fun getPostList(societyId: Int,cursor:String): MyResult<ApiDataObjectWithCursor<List<Post>>>{
+        return networkDataSource.getPostList(societyId,cursor)
+    }
+
 
 }
 

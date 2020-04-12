@@ -47,15 +47,11 @@ dependencies {
 
 
     implementation 'de.hdodenhof:circleimageview:3.0.2'                     // circuler ImageView
-    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
-    // Image Croping :- Using in provider form data post
-    implementation 'id.zelory:compressor:2.1.0'
-    // Image Compressor :- Using in provider form data post
-    implementation 'io.github.ivanespitiac:imageslider:1.0.3'
-    // Image Slider :- Using in provider details
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'     // Image Croping :- Using in provider form data post
+    implementation 'id.zelory:compressor:2.1.0'                             // Image Compressor :- Using in provider form data post
+    implementation 'io.github.ivanespitiac:imageslider:1.0.3'               // Image Slider :- Using in provider details
 
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.11.4'
-    //Mobile validation check
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.11.4'    //Mobile validation check
     implementation 'com.nabinbhandari.android:permissions:3.8'              // ask permission
 
     //  Coroutines

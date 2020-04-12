@@ -76,7 +76,7 @@
                 android:padding="8dp"
                 android:autoLink="all"
                 android:linksClickable="true"
-                android:text="@{Html.fromHtml(post.desc)}"
+                android:loadHtmlText="@{post.desc}"
                 android:textColor="@color/md_grey_800"
                 android:textSize="16sp" />
 

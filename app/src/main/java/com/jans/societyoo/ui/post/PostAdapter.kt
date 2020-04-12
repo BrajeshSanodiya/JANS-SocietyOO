@@ -17,7 +17,7 @@ import com.jans.societyoo.utils.PrintMsg
 
 class PostAdapter(dataSource: List<Post>, context: Context) :
     RecyclerView.Adapter<PostAdapter.ServiceProviderViewHolder>() {
-    private val dataSource: List<Post>
+    private var dataSource: List<Post>
     var context: Context
 
     init {
@@ -65,6 +65,11 @@ class PostAdapter(dataSource: List<Post>, context: Context) :
 
     override fun getItemCount(): Int {
         return dataSource.size
+    }
+
+    public fun setData(dataSource: List<Post>){
+        this.dataSource=dataSource
+        this.notifyDataSetChanged()
     }
 
     inner class ServiceProviderViewHolder(val binding: ListItemPostBinding) :

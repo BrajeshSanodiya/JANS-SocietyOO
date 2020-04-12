@@ -9,7 +9,7 @@ data class Post(
     val id: Int ?=null,
 
     @SerializedName("desc")
-    val desc: String,
+    val desc: String="",
 
     @SerializedName("images")
     val images: List<String>,

@@ -4,6 +4,7 @@ import com.jans.societyoo.model.*
 import com.jans.societyoo.model.login.*
 import com.jans.societyoo.model.login.UserData
 import com.jans.societyoo.model.post.CreatePost
+import com.jans.societyoo.model.post.Post
 import com.jans.societyoo.model.services.ProviderDetail
 import com.jans.societyoo.model.services.ProviderPost
 import com.jans.societyoo.model.services.Services
@@ -42,9 +43,16 @@ interface JsonApi {
     @POST("insertprovider")
     suspend fun postProviderDetail(@Body providerPost: ProviderPost): ApiDataWithOutObject
 
+
+
     @POST("submitpost")
     suspend fun insertPost(@Body createPost: CreatePost): ApiDataWithOutObject
 
+    @GET("getPostList/{id}")
+    suspend fun getPostList(@Path(value = "id") socityId: Int): ApiDataObjectWithCursor<List<Post>>
+
+    @GET("getPostList/{id}")
+    suspend fun getPostList(@Path(value = "id") socityId: Int, @Query("cursor") cursor:String): ApiDataObjectWithCursor<List<Post>>
 
 
     @Multipart
