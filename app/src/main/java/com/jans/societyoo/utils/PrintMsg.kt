@@ -6,7 +6,7 @@ import android.widget.Toast
 object PrintMsg {
 
     fun toastDebug(context: Context?, message:String){
-       // Toast.makeText(context!!.applicationContext, message, Toast.LENGTH_LONG).show()
+        //Toast.makeText(context!!.applicationContext, message, Toast.LENGTH_LONG).show()
     }
     fun toast(context: Context?, message:String){
         Toast.makeText(context!!.applicationContext, message, Toast.LENGTH_LONG).show()

@@ -5,19 +5,17 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.custom.sliderimage.logic.SliderImage
 import com.jans.societyoo.BuildConfig
 import com.jans.societyoo.databinding.ListItemPostBinding
 import com.jans.societyoo.model.post.Post
-import com.jans.societyoo.utils.Constants
-import com.jans.societyoo.utils.PrintMsg
+import okhttp3.internal.notifyAll
 
 
-class PostAdapter(dataSource: List<Post>, context: Context) :
+class PostAdapter(dataSource: ArrayList<Post>, context: Context) :
     RecyclerView.Adapter<PostAdapter.ServiceProviderViewHolder>() {
-    private var dataSource: List<Post>
+    private var dataSource: ArrayList<Post>
     var context: Context
 
     init {
@@ -47,6 +45,9 @@ class PostAdapter(dataSource: List<Post>, context: Context) :
             holder.binding.singleImagePostItem.setOnClickListener {
                 SliderImage.openfullScreen(context, data.images, 0)
             }
+        }else{
+            holder.binding.sliderPostItem.visibility = View.GONE
+            holder.binding.singleImagePostItem.visibility = View.GONE
         }
 
         holder.binding.btnSharePostItem.setOnClickListener {
@@ -67,9 +68,30 @@ class PostAdapter(dataSource: List<Post>, context: Context) :
         return dataSource.size
     }
 
-    public fun setData(dataSource: List<Post>){
+
+  /*  public fun setData(dataSource: ArrayList<Post>){
         this.dataSource=dataSource
         this.notifyDataSetChanged()
+    }
+*/
+   fun add(post: Post?) {
+       post?.let {
+           dataSource.add(it)
+           notifyItemInserted(dataSource.size - 1)
+       }
+   }
+
+    fun addAll(postResult: List<Post?>) {
+        for (result in postResult) {
+            add(result)
+        }
+    }
+
+    fun removeAll() {
+
+       dataSource.clear()
+
+
     }
 
     inner class ServiceProviderViewHolder(val binding: ListItemPostBinding) :
