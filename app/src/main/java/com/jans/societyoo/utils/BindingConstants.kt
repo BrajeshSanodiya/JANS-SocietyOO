@@ -31,13 +31,17 @@ fun loadImage(view: ImageView, url: String?){
 fun loadHtmlText(textView: TextView, text: String?){
     if(text!=null && text.isNotEmpty()){
         textView.visibility=View.VISIBLE
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        val tempString=text.trim()
+        val finalString=tempString.replace("\n","<br />", false)
+       // text.replace("\n","<br />", false)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             // FROM_HTML_MODE_LEGACY is the behaviour that was used for versions below android N
             // we are using this flag to give a consistent behaviour
-            textView.text = Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT)
-        } else {*/
-            textView.text = Html.fromHtml(text)
-        /*}*/
+            textView.text = Html.fromHtml(finalString, Html.FROM_HTML_MODE_COMPACT)
+        } else {
+            textView.text = Html.fromHtml(finalString)
+        }
+
     }else{
         textView.visibility=View.GONE
     }

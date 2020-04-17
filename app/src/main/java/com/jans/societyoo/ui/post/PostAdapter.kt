@@ -69,12 +69,7 @@ class PostAdapter(dataSource: ArrayList<Post>, context: Context) :
     }
 
 
-  /*  public fun setData(dataSource: ArrayList<Post>){
-        this.dataSource=dataSource
-        this.notifyDataSetChanged()
-    }
-*/
-   fun add(post: Post?) {
+   /*fun add(post: Post?) {
        post?.let {
            dataSource.add(it)
            notifyItemInserted(dataSource.size - 1)
@@ -88,11 +83,8 @@ class PostAdapter(dataSource: ArrayList<Post>, context: Context) :
     }
 
     fun removeAll() {
-
        dataSource.clear()
-
-
-    }
+    }*/
 
     inner class ServiceProviderViewHolder(val binding: ListItemPostBinding) :
         RecyclerView.ViewHolder(binding.root) {

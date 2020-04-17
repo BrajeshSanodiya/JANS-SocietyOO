@@ -179,7 +179,6 @@ class HomeFragment : Fragment() {
     }
     private fun appendPostList(list: List<Post>){
         listPost.addAll(list)
-        //postAdapter.setData(listPost)
         postAdapter.notifyDataSetChanged()
     }
 
