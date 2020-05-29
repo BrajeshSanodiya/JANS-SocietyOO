@@ -2,6 +2,8 @@
     <string name="app_name">SocietyOO</string>
     <string name="db_app_name">SocietyOO-Database</string>
 
+    <string name="cd_splashlogo">Splash Logo</string>
+
     <!-- Strings related to login -->
     <string name="welcome_splash">Welcome to %s</string>
     <string name="continue_splash">By continuing you agree -></string>

@@ -39,7 +39,7 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_splash)
+        setContentView(R.layout.activity_splash_motion)
 
         /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window: Window = window
@@ -56,7 +56,7 @@ class SplashActivity : AppCompatActivity() {
         }
 
         GlobalScope.launch(Dispatchers.Main) {
-            delay(5000)
+            delay(3000)
             callNextActivity()
         }
         //handler.postDelayed(activityLaunchRunnable, 2000)
